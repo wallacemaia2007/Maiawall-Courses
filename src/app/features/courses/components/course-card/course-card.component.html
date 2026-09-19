@@ -1,0 +1,9 @@
+<article class="course-card">
+  <h3>{{ course().title }}</h3>
+  @if (course().shortDescription) {
+    <p>{{ course().shortDescription }}</p>
+  }
+  @if (progressPercent() !== null) {
+    <div>{{ progressPercent() }}% concluído</div>
+  }
+</article>

@@ -1,0 +1,16 @@
+.rich-text-editor {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-primary);
+}
+
+.rich-text-editor__content {
+  min-height: 160px;
+  padding: 12px 16px;
+  outline: none;
+
+  &:empty::before {
+    color: var(--color-text-muted);
+    content: attr(placeholder);
+  }
+}

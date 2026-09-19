@@ -1,0 +1,15 @@
+<div class="progress-bar" [attr.data-tone]="tone()">
+  @if (label() || showValue()) {
+    <div class="progress-bar__meta">
+      @if (label()) {
+        <span>{{ label() }}</span>
+      }
+      @if (showValue()) {
+        <span>{{ percent() }}%</span>
+      }
+    </div>
+  }
+  <div class="progress-bar__track" role="progressbar" [attr.aria-valuenow]="percent()" aria-valuemin="0" aria-valuemax="100">
+    <span class="progress-bar__fill" [style.width.%]="percent()"></span>
+  </div>
+</div>

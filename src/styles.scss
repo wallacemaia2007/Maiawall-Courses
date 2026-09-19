@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Design tokens — identidade visual do Maiawall Cursos */
+  --color-primary: #c8102e;
+  --color-primary-rgb: 200, 16, 46;
+  --color-primary-hover: #a80d27;
+  --color-primary-soft: #fdeaea;
+  --color-primary-border: #f3b9b9;
+
+  --color-success: #1c7c3e;
+  --color-success-bg: #eaf8ef;
+
+  --color-info: #2362a8;
+  --color-info-bg: #eaf3ff;
+
+  --color-warning: #9c6812;
+  --color-warning-bg: #fff5db;
+
+  --color-danger: #ad3328;
+  --color-danger-bg: #fff0ee;
+
+  --color-neutral: #575a62;
+  --color-neutral-bg: #f0f0ef;
+
+  --color-text-primary: #16171b;
+  --color-text-secondary: #6b6e76;
+  --color-text-muted: #8a8d94;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #fafaf9;
+  --color-bg-tertiary: #f4f4f2;
+
+  --color-border: #e4e4e1;
+  --color-border-light: #ededeb;
+  --color-surface-elevated: #ffffff;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+  --motion-fast: 140ms;
+  --motion-base: 220ms;
+  --motion-slow: 420ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html,
+body {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+button,
+a,
+input,
+textarea {
+  transition:
+    border-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease,
+    background-color var(--motion-fast) ease,
+    color var(--motion-fast) ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

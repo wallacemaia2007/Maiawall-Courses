@@ -1,0 +1,18 @@
+<aside class="sidebar">
+  <a class="sidebar__brand" [routerLink]="brandRoute()">
+    <strong>{{ brandTitle() }}</strong>
+    <span>{{ brandSubtitle() }}</span>
+  </a>
+  <nav class="sidebar__nav">
+    @for (item of navItems(); track item.route) {
+      <a
+        class="sidebar__item"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        [routerLink]="item.route"
+      >
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+</aside>

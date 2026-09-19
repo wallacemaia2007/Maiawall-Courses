@@ -1,0 +1,21 @@
+.progress-bar__track {
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary);
+}
+
+.progress-bar__fill {
+  display: block;
+  height: 8px;
+  border-radius: inherit;
+  background: var(--color-primary);
+  transition: width var(--motion-base) var(--ease-out);
+
+  [data-tone='success'] & {
+    background: var(--color-success);
+  }
+
+  [data-tone='neutral'] & {
+    background: var(--color-neutral);
+  }
+}

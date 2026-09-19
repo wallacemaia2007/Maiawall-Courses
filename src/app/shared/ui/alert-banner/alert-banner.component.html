@@ -1,0 +1,11 @@
+@if (!dismissed) {
+  <div class="alert-banner" [attr.data-tone]="tone()" role="alert">
+    <strong>{{ title() }}</strong>
+    @if (message()) {
+      <p>{{ message() }}</p>
+    }
+    @if (dismissible()) {
+      <button type="button" (click)="dismiss()">Fechar</button>
+    }
+  </div>
+}

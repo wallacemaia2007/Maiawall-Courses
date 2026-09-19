@@ -1,0 +1,10 @@
+<app-modal [title]="title()" [isOpen]="isOpen()" [closeLabel]="cancelLabel()" (closed)="cancelled.emit()">
+  <p>{{ message() }}</p>
+  @if (itemName()) {
+    <strong>{{ itemName() }}</strong>
+  }
+  <div class="confirm-delete__actions">
+    <button type="button" [disabled]="busy()" (click)="cancelled.emit()">{{ cancelLabel() }}</button>
+    <button type="button" [disabled]="busy()" (click)="confirmed.emit()">{{ confirmLabel() }}</button>
+  </div>
+</app-modal>

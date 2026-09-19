@@ -1,0 +1,9 @@
+<header class="topbar">
+  <span class="topbar__title">Maiawall Cursos</span>
+  <div class="topbar__actions">
+    @if (currentUser(); as user) {
+      <span class="topbar__user">{{ user.name }}</span>
+    }
+    <button type="button" (click)="logout()">Sair</button>
+  </div>
+</header>

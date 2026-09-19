@@ -1,0 +1,19 @@
+<dialog class="modal" [open]="isOpen()" (click)="backdropClick($event)">
+  <div class="modal__panel">
+    <header class="modal__header">
+      @if (eyebrow()) {
+        <span class="modal__eyebrow">{{ eyebrow() }}</span>
+      }
+      <h2>{{ title() }}</h2>
+      @if (description()) {
+        <p>{{ description() }}</p>
+      }
+      <button class="modal__close" type="button" [attr.aria-label]="closeLabel()" (click)="closed.emit()">
+        ×
+      </button>
+    </header>
+    <div class="modal__body">
+      <ng-content />
+    </div>
+  </div>
+</dialog>

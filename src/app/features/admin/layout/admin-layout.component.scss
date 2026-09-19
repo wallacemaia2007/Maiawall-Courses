@@ -1,0 +1,10 @@
+.admin-layout {
+  display: grid;
+  grid-template-columns: var(--admin-sidebar-width, 240px) 1fr;
+  min-height: 100vh;
+}
+
+.admin-layout__content {
+  min-width: 0;
+  padding: 24px;
+}

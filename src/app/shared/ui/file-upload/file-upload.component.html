@@ -1,0 +1,15 @@
+<div class="file-upload">
+  <label class="file-upload__trigger">
+    {{ label() }}
+    <input
+      type="file"
+      [accept]="accept()"
+      [multiple]="multiple()"
+      [disabled]="readonly()"
+      hidden
+    />
+  </label>
+  @for (file of files(); track file.name) {
+    <div class="file-upload__item">{{ file.name }}</div>
+  }
+</div>
