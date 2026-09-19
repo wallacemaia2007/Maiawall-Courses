@@ -1,0 +1,107 @@
+<section class="login-page w-full bg-white px-4 py-12">
+  <div class="w-full max-w-md">
+    <div class="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+      <h1 class="mb-1 text-2xl font-semibold tracking-tight text-gray-900">Entrar</h1>
+      <p class="mb-6 text-sm text-gray-600">Acesse sua conta!</p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-5">
+        <div>
+          <label for="loginEmail" class="mb-1 block text-xs font-medium uppercase text-gray-700">
+            E-mail
+          </label>
+          <input
+            id="loginEmail"
+            formControlName="email"
+            type="email"
+            autocomplete="email"
+            placeholder="seuemail@exemplo.com"
+            class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 transition placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+            [class.border-gray-300]="!email.touched || email.valid"
+            [class.border-red-500]="email.touched && email.invalid"
+            [attr.aria-invalid]="email.touched && email.invalid"
+            [attr.aria-describedby]="email.touched && email.invalid ? 'login-email-error' : null"
+          />
+          @if (email.touched && email.invalid) {
+            <small id="login-email-error" role="alert" class="error-animate mt-1 block text-[11px] text-red-600">
+              @if (email.errors?.['required']) { O e-mail e obrigatorio. }
+              @if (email.errors?.['email']) { Formato de e-mail invalido. }
+            </small>
+            <div class="error-underline"></div>
+          }
+        </div>
+
+        <div>
+          <label for="loginPassword" class="mb-1 block text-xs font-medium uppercase text-gray-700">
+            Senha
+          </label>
+          <div class="relative">
+            <input
+              id="loginPassword"
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="******"
+              class="w-full rounded-xl border bg-white px-4 py-3 pr-20 text-sm text-gray-900 transition placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+              [class.border-gray-300]="!password.touched || password.valid"
+              [class.border-red-500]="password.touched && password.invalid"
+              [attr.aria-invalid]="password.touched && password.invalid"
+              [attr.aria-describedby]="password.touched && password.invalid ? 'login-password-error' : null"
+            />
+            <button
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-pressed]="showPassword"
+              class="absolute inset-y-0 right-3 text-xs font-medium text-gray-600 hover:text-gray-900"
+            >
+              {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+          @if (password.dirty && password.invalid) {
+            <small id="login-password-error" role="alert" class="error-animate mt-1 block text-[11px] text-red-600">
+              @if (password.errors?.['required']) { A senha e obrigatoria. }
+              @if (password.errors?.['minlength']) { Minimo de 6 caracteres. }
+            </small>
+            <div class="error-underline"></div>
+          }
+        </div>
+
+        <div class="flex items-center justify-between">
+          <label class="remember-option">
+            <input
+              type="checkbox"
+              formControlName="remember"
+              class="remember-input"
+            />
+            <span class="remember-checkbox" aria-hidden="true"></span>
+            <span class="remember-label">Lembrar de mim</span>
+          </label>
+          <a class="text-xs text-gray-700 underline-offset-2 hover:underline" [routerLink]="['/forgot-password']">
+            Esqueci a senha
+          </a>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="form.invalid"
+          class="w-full rounded-full bg-gradient-to-r from-black to-gray-700 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-sm transition hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-black/50 active:scale-100 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Entrar
+        </button>
+
+        <div class="pt-2 text-center">
+          <span class="text-xs text-gray-600">Nao tem conta?</span>
+          <a
+            [routerLink]="['/signup']"
+            class="ml-1 rounded text-xs font-medium text-gray-900 underline-offset-4 hover:underline focus:outline-none focus:ring-1 focus:ring-black"
+          >
+            Criar conta
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-6 text-center text-[11px] text-gray-500">
+      <p>Protegemos seus dados conforme nossa politica.</p>
+    </div>
+  </div>
+</section>

@@ -1,6 +1,13 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 .auth-layout {
   display: grid;
+  width: 100%;
   min-height: 100vh;
-  place-items: center;
+  min-height: 100dvh;
   background: var(--color-bg-secondary);
 }

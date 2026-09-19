@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.remember-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.remember-checkbox {
+  position: relative;
+  display: grid;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: 0 0 1.125rem;
+  place-items: center;
+  border: 1.5px solid #9ca3af;
+  border-radius: 4px;
+  background: #fff;
+  transition:
+    border-color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease;
+}
+
+.remember-checkbox::after {
+  width: 0.3rem;
+  height: 0.55rem;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  content: '';
+  opacity: 0;
+  transform: translateY(-1px) rotate(45deg) scale(0.7);
+  transition:
+    opacity var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
+}
+
+.remember-input:checked + .remember-checkbox {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+}
+
+.remember-input:checked + .remember-checkbox::after {
+  opacity: 1;
+  transform: translateY(-1px) rotate(45deg) scale(1);
+}
+
+.remember-input:focus-visible + .remember-checkbox {
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.remember-option:hover .remember-checkbox {
+  border-color: var(--color-primary);
+}
+
+.remember-label {
+  color: #374151;
+  font-size: 0.75rem;
+}
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-animate {
+  animation: fadeInError 0.25s ease forwards;
+}
+
+@keyframes underlineGrow {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.error-underline {
+  height: 2px;
+  width: 0;
+  background: #ef4444;
+  animation: underlineGrow 0.25s ease forwards;
+}
