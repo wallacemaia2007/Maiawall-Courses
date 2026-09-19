@@ -1,0 +1,57 @@
+<section class="hero">
+  <div class="hero__container mw-container">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">Formação prática em tecnologia</p>
+      <h1 class="hero__title">
+        Aprenda tecnologia com contexto, prática e
+        <span class="hero__highlight">projetos que saem do papel.</span>
+      </h1>
+      <p class="hero__subtitle">
+        Aulas objetivas para entender o porquê, escrever o código e construir uma base
+        que acompanha você do primeiro comando ao deploy.
+      </p>
+      <div class="hero__actions">
+        <a class="mw-btn mw-btn--primary" routerLink="/cursos">Explorar cursos</a>
+        <a class="hero__secondary-link" routerLink="/signup">Criar minha conta <span aria-hidden="true">→</span></a>
+      </div>
+      <dl class="hero__facts" aria-label="Como você aprende">
+        <div><dt>Aulas</dt><dd>diretas ao ponto</dd></div>
+        <div><dt>Prática</dt><dd>em cada módulo</dd></div>
+        <div><dt>Projetos</dt><dd>para o portfólio</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__lesson" aria-label="Exemplo de uma aula na plataforma">
+      <header class="lesson__header">
+        <div>
+          <span class="lesson__kicker">Docker Compose na Prática</span>
+          <strong>Módulo 02 · Ambiente local</strong>
+        </div>
+        <span class="lesson__duration">12 min</span>
+      </header>
+      <div class="lesson__workspace">
+        <aside class="lesson__outline" aria-label="Conteúdo do módulo">
+          <span class="lesson__outline-title">Neste módulo</span>
+          <ol>
+            <li class="is-complete"><span>✓</span> Estrutura do arquivo</li>
+            <li class="is-current"><span>02</span> Subindo os serviços</li>
+            <li><span>03</span> Variáveis de ambiente</li>
+          </ol>
+        </aside>
+        <div class="lesson__content">
+          <span class="lesson__label">Exemplo da aula</span>
+          <pre><code><span class="code-key">services:</span>
+  api:
+    <span class="code-key">build:</span> ./api
+    <span class="code-key">ports:</span>
+      - <span class="code-value">"8080:8080"</span></code></pre>
+          <p>Agora a API pode subir junto com todo o ambiente.</p>
+        </div>
+      </div>
+      <footer class="lesson__progress">
+        <div><span>Progresso do curso</span><strong>42%</strong></div>
+        <span class="lesson__track"><i></i></span>
+      </footer>
+    </div>
+  </div>
+</section>

@@ -1,4 +1,44 @@
 <footer class="footer">
-  <span>© 2026 Maiawall · Todos os direitos reservados</span>
-  <a href="https://maiawall.com" target="_blank" rel="noopener noreferrer">maiawall.com</a>
+  <div class="footer__top">
+    <div class="footer__brand">
+      <a class="footer__logo" routerLink="/" aria-label="Maiawall Cursos — página inicial">
+        <span class="footer__mark" aria-hidden="true">MW</span>
+        <span class="footer__wordmark">
+          Maiawall <span>Cursos</span>
+        </span>
+      </a>
+      <p class="footer__tagline">
+        Aprenda tecnologia na prática. Conteúdo direto, exercícios e projetos reais para você evoluir.
+      </p>
+    </div>
+
+    <nav class="footer__column" aria-label="Navegação">
+      <h3 class="footer__heading">Plataforma</h3>
+      <ul class="footer__list">
+        <li><a routerLink="/cursos">Cursos</a></li>
+        <li><a routerLink="/" [fragment]="'sobre'">Sobre</a></li>
+        <li><a href="mailto:wallacemaia2007@gmail.com">Contato</a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer__column" aria-label="Maiawall">
+      <h3 class="footer__heading">Maiawall</h3>
+      <ul class="footer__list">
+        <li>
+          <a href="https://maiawall.com" target="_blank" rel="noopener noreferrer">Site oficial</a>
+        </li>
+        <li>
+          <a href="https://github.com/maiawall" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </li>
+        <li>
+          <a href="https://linkedin.com/company/maiawall" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="footer__bottom">
+    <span>© 2026 Maiawall · Todos os direitos reservados</span>
+    <span class="footer__domain">cursos.maiawall.com</span>
+  </div>
 </footer>

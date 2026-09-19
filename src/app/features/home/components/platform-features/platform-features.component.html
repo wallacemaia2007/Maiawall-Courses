@@ -1,0 +1,61 @@
+<section class="platform-features">
+  <div class="platform-features__inner mw-container">
+    <div appReveal>
+      <app-section-head
+        eyebrow="Plataforma"
+        title="Uma plataforma que ajuda você a continuar"
+        subtitle="Recursos úteis para estudar, revisar e enxergar o que já avançou."
+        align="left"
+      />
+    </div>
+
+    <ul class="platform-features__grid">
+      @for (feature of features(); track feature.title; let index = $index) {
+        <li class="platform-features__item" appReveal [appRevealDelay]="(index % 2) * 60">
+          <div class="platform-features__icon" aria-hidden="true">
+            @switch (feature.icon) {
+              @case ('stack') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 8 12 3 3 8l9 5 9-5Z" />
+                  <path d="m3 8 9 5 9-5" />
+                  <path d="m3 12 9 5 9-5" />
+                </svg>
+              }
+              @case ('code') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m8 9-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12" />
+                </svg>
+              }
+              @case ('folder') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" />
+                </svg>
+              }
+              @case ('chart') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 3v18h18" />
+                  <path d="M7 14l4-4 3 3 5-6" />
+                </svg>
+              }
+              @case ('award') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="9" r="5" />
+                  <path d="m8.5 13.5-1.5 7 5-2.5 5 2.5-1.5-7" />
+                </svg>
+              }
+              @case ('users') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9.5" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              }
+            }
+          </div>
+          <h3 class="platform-features__title">{{ feature.title }}</h3>
+          <p class="platform-features__description">{{ feature.description }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

@@ -1,9 +1,71 @@
-<article class="course-card">
-  <h3>{{ course().title }}</h3>
-  @if (course().shortDescription) {
-    <p>{{ course().shortDescription }}</p>
-  }
-  @if (progressPercent() !== null) {
-    <div>{{ progressPercent() }}% concluído</div>
-  }
+<article class="course-card" [attr.data-tone]="tone()">
+  <a
+    class="course-card__link"
+    [routerLink]="['/cursos', course().slug]"
+    [attr.aria-label]="'Ver curso: ' + course().title"
+  >
+    <div class="course-card__cover">
+      <span class="course-card__category">{{ categoryLabel() }}</span>
+
+      <div class="course-card__cover-snippet" aria-hidden="true">
+        <span class="course-card__prompt">›</span>
+        <span class="course-card__snippet-text">{{ coverLine() }}</span>
+      </div>
+
+      <div class="course-card__cover-icon" aria-hidden="true">
+        @switch (course().category) {
+          @case ('devops') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 8 12 3 3 8l9 5 9-5Z" />
+              <path d="m3 8 9 5 9-5" />
+              <path d="m3 12 9 5 9-5" />
+            </svg>
+          }
+          @case ('backend') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="7" rx="2" />
+              <rect x="3" y="13" width="18" height="7" rx="2" />
+              <path d="M6.5 7.5h.01M6.5 16.5h.01M10 7.5h1M10 16.5h1" />
+            </svg>
+          }
+          @default {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m8 9-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12" />
+            </svg>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="course-card__body">
+      <h3 class="course-card__title">{{ course().title }}</h3>
+
+      @if (course().shortDescription) {
+        <p class="course-card__description">{{ course().shortDescription }}</p>
+      }
+
+      <ul class="course-card__meta">
+        <li class="course-card__level">{{ levelLabel() }}</li>
+        @if (course().durationMinutes) {
+          <li class="course-card__duration">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+            {{ course().durationMinutes | duration }}
+          </li>
+        }
+        @if (course().chapterCount) {
+          <li class="course-card__chapters">{{ course().chapterCount }} capítulos</li>
+        }
+      </ul>
+
+      <span class="course-card__action">
+        Ver curso
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
+    </div>
+  </a>
 </article>

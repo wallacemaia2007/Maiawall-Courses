@@ -1,0 +1,28 @@
+<section class="featured-courses">
+  <div class="featured-courses__inner mw-container">
+    <div appReveal>
+      <app-section-head
+        eyebrow="Catálogo"
+        title="Cursos em destaque"
+        subtitle="Escolha um tema, acompanhe as aulas e termine com algo concreto para mostrar."
+        align="left"
+      />
+    </div>
+
+    @if (courses$ | async; as courses) {
+      <div class="featured-courses__grid">
+        @for (course of courses; track course.id; let index = $index) {
+          <app-course-card
+            [course]="course"
+            appReveal
+            [appRevealDelay]="index * 70"
+          />
+        }
+      </div>
+    }
+
+    <div class="featured-courses__more" appReveal>
+      <a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver todos os cursos</a>
+    </div>
+  </div>
+</section>

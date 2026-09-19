@@ -1,0 +1,99 @@
+:host {
+  display: block;
+}
+
+.learning-method {
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+  background: var(--color-bg-primary);
+}
+
+.learning-method__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: clamp(2.5rem, 5vw, 3.5rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.learning-method__step {
+  position: relative;
+  padding-right: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.learning-method__step-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.learning-method__number {
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.learning-method__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-border), transparent);
+}
+
+.learning-method__step:last-child .learning-method__line {
+  background: transparent;
+}
+
+.learning-method__step-body {
+  position: relative;
+  height: 100%;
+  min-height: 180px;
+  padding: 1.25rem 0 0;
+  border-top: 3px solid var(--color-text-primary);
+}
+
+.learning-method__step-icon {
+  display: inline-grid;
+  min-width: 46px;
+  height: 46px;
+  place-items: center;
+  padding: 0 0.75rem;
+  margin-bottom: 1.1rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-tertiary);
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.learning-method__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.learning-method__description {
+  margin: 0.6rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .learning-method__steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 680px;
+  }
+
+  .learning-method__step { padding-right: 0; }
+  .learning-method__step-head { margin-bottom: 0; }
+  .learning-method__line { display: none; }
+}

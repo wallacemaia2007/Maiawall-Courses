@@ -2,6 +2,15 @@ import { Attachment } from '../../../core/models/attachment.model';
 
 export type CourseLevel = 'iniciante' | 'intermediario' | 'avancado' | (string & {});
 
+export type CourseCategory =
+  | 'devops'
+  | 'backend'
+  | 'frontend'
+  | 'desenvolvimento'
+  | 'banco-de-dados'
+  | 'design-ux'
+  | (string & {});
+
 export type LessonType =
   | 'video'
   | 'article'
@@ -24,6 +33,7 @@ export interface Course {
   shortDescription?: string;
   description: string;
   thumbnailUrl?: string;
+  category?: CourseCategory;
   level: CourseLevel;
   durationMinutes?: number;
   instructor: CourseInstructor;
@@ -44,6 +54,7 @@ export interface CourseSummary {
   slug: string;
   shortDescription?: string;
   thumbnailUrl?: string;
+  category?: CourseCategory;
   level: CourseLevel;
   durationMinutes?: number;
   instructorName: string;
@@ -138,4 +149,17 @@ export const COURSE_LEVEL_LABELS: Record<string, string> = {
 
 export function getCourseLevelLabel(level: CourseLevel): string {
   return COURSE_LEVEL_LABELS[level] ?? level;
+}
+
+export const COURSE_CATEGORY_LABELS: Record<string, string> = {
+  devops: 'DevOps',
+  backend: 'Backend',
+  frontend: 'Frontend',
+  desenvolvimento: 'Desenvolvimento',
+  'banco-de-dados': 'Banco de Dados',
+  'design-ux': 'Design & UX',
+};
+
+export function getCourseCategoryLabel(category: CourseCategory | undefined): string {
+  return category ? (COURSE_CATEGORY_LABELS[category] ?? category) : '';
 }

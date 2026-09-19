@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-footer',
+  selector: 'app-hero',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss',
+  templateUrl: './hero.component.html',
+  styleUrl: './hero.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FooterComponent {}
+export class HeroComponent {}

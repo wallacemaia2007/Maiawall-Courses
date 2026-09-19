@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.featured-courses {
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+  background: var(--color-bg-tertiary);
+}
+
+.featured-courses__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.featured-courses__more {
+  display: grid;
+  justify-items: center;
+  margin-top: 2.75rem;
+}
+
+@media (max-width: 1080px) and (min-width: 721px) {
+  .featured-courses__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .featured-courses__grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 480px;
+    margin-inline: auto;
+  }
+}

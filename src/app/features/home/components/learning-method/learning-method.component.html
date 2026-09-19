@@ -1,0 +1,28 @@
+<section class="learning-method" id="sobre">
+  <div class="learning-method__inner mw-container">
+    <div appReveal>
+      <app-section-head
+        eyebrow="Metodologia"
+        title="Do conceito ao projeto, sem atalhos mágicos"
+        subtitle="Cada curso organiza o aprendizado em uma sequência simples: entender, praticar e construir."
+        align="left"
+      />
+    </div>
+
+    <ol class="learning-method__steps">
+      @for (step of steps(); track step.number; let index = $index) {
+        <li class="learning-method__step" appReveal [appRevealDelay]="index * 70">
+          <div class="learning-method__step-head">
+            <span class="learning-method__number">{{ step.number }}</span>
+            <span class="learning-method__line" aria-hidden="true"></span>
+          </div>
+          <div class="learning-method__step-body">
+            <span class="learning-method__step-icon" aria-hidden="true">{{ step.icon }}</span>
+            <h3 class="learning-method__title">{{ step.title }}</h3>
+            <p class="learning-method__description">{{ step.description }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
