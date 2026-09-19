@@ -1,3 +1,12 @@
 .public-layout__content {
   min-height: calc(100vh - var(--public-navbar-height));
 }
+
+/*
+ * Páginas sem hero no topo recebem a altura do header fixo como respiro,
+ * evitando que o conteúdo fique escondido atrás dele. Quando a página tem
+ * hero ([.has-hero]) o próprio hero cobre a área do header.
+ */
+.public-layout__content:not(.has-hero) {
+  padding-top: var(--public-navbar-height);
+}

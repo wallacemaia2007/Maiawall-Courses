@@ -18,10 +18,12 @@
 }
 
 .platform-features__item {
+  position: relative;
   display: grid;
-  grid-template-columns: 52px 1fr;
+  grid-template-columns: 52px 44px 1fr;
   column-gap: 1rem;
-  padding: 1.5rem 1.5rem 1.5rem 0;
+  align-items: start;
+  padding: 2rem 1.5rem 2rem 0;
   border-top: 1px solid var(--color-border);
 }
 
@@ -29,37 +31,58 @@
   padding-left: 1.5rem;
 }
 
+.platform-features__item--featured {
+  grid-column: 1 / -1;
+  grid-template-columns: 52px 44px 1fr;
+}
+
+.platform-features__number {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 48px;
+}
+
 .platform-features__icon {
   display: grid;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   place-items: center;
-  grid-row: 1 / span 2;
   border-radius: var(--radius-sm);
   background: var(--color-bg-tertiary);
   color: var(--color-primary);
 }
 
 .platform-features__icon svg {
-  width: 23px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
 }
 
 .platform-features__title {
-  margin: 0;
+  grid-column: 3;
+  margin: 0.1rem 0 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: 1.08rem;
+  font-size: 1.16rem;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
+.platform-features__item--featured .platform-features__title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+
 .platform-features__description {
-  grid-column: 2;
+  grid-column: 3;
   margin: 0.55rem 0 0;
   color: var(--color-text-secondary);
   font-size: 0.9rem;
   line-height: 1.58;
+}
+
+.platform-features__item--featured .platform-features__description {
+  font-size: 1rem;
+  line-height: 1.65;
 }
 
 @media (max-width: 720px) {
@@ -67,5 +90,17 @@
     grid-template-columns: minmax(0, 1fr);
     max-width: none;
   }
+
+  .platform-features__item,
+  .platform-features__item--featured {
+    grid-column: auto;
+    grid-template-columns: 40px 40px 1fr;
+    gap: 0.85rem;
+    padding: 1.5rem 0;
+  }
+
   .platform-features__item:nth-child(even) { padding-left: 0; }
+  .platform-features__number { line-height: 40px; }
+  .platform-features__icon { width: 40px; height: 40px; }
+  .platform-features__icon svg { width: 20px; height: 20px; }
 }

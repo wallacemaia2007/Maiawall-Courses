@@ -14,6 +14,7 @@
         @for (course of courses; track course.id; let index = $index) {
           <app-course-card
             [course]="course"
+            [index]="index + 1"
             appReveal
             [appRevealDelay]="index * 70"
           />

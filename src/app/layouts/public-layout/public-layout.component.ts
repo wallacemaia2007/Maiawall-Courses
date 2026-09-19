@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { HeaderHeroService } from '../../core/services/header-hero.service';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
@@ -11,4 +12,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   styleUrl: './public-layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PublicLayoutComponent {}
+export class PublicLayoutComponent {
+  private readonly heroService = inject(HeaderHeroService);
+
+  protected readonly hasHeaderHero = this.heroService.element;
+}

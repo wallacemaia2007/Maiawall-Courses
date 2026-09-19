@@ -1,5 +1,5 @@
 <app-navbar />
-<main class="public-layout__content">
+<main class="public-layout__content" [class.has-hero]="hasHeaderHero()">
   <router-outlet />
 </main>
 <app-footer />

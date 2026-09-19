@@ -1,4 +1,9 @@
-<header class="navbar" aria-label="Navegação principal">
+<header
+  class="navbar"
+  [attr.data-state]="headerState()"
+  [attr.data-over-hero]="overHero()"
+  aria-label="Navegação principal"
+>
   <div class="navbar__inner mw-container">
     <a class="navbar__brand" routerLink="/" aria-label="Maiawall Cursos — página inicial">
       <span class="navbar__mark" aria-hidden="true">MW</span>
@@ -28,12 +33,13 @@
     </div>
 
     <button
+      #toggleButton
       class="navbar__toggle"
       type="button"
       (click)="toggleMenu()"
       [attr.aria-expanded]="menuOpen()"
-      [attr.aria-label]="menuOpen() ? 'Fechar menu' : 'Abrir menu'"
       aria-controls="mobile-menu"
+      [attr.aria-label]="menuOpen() ? 'Fechar menu' : 'Abrir menu'"
     >
       <span></span>
       <span></span>
@@ -42,7 +48,14 @@
   </div>
 
   @if (menuOpen()) {
-    <div id="mobile-menu" class="navbar__drawer">
+    <div
+      #mobileMenu
+      id="mobile-menu"
+      class="navbar__drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu de navegação"
+    >
       <nav class="navbar__drawer-links" aria-label="Menu mobile">
         @for (link of links(); track link.label) {
           <a

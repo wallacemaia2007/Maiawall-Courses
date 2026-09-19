@@ -4,7 +4,12 @@ const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config(
   {
-    ignores: ['.angular/**', 'dist/**', 'node_modules/**'],
+    ignores: [
+      '.angular/**',
+      'dist/**',
+      'node_modules/**',
+      'auth-components/**',
+    ],
   },
   {
     files: ['**/*.ts'],

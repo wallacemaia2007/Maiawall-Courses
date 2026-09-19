@@ -39,7 +39,7 @@
 .hero__facts dt { color: var(--color-text-primary); font-size: 0.86rem; font-weight: 750; }
 .hero__facts dd { margin: 0; color: var(--color-text-muted); font-size: 0.78rem; }
 
-.hero__lesson { overflow: hidden; border: 1px solid #d7d5cf; border-radius: var(--radius-lg); background: #fff; box-shadow: 18px 22px 0 #e9e7e1; animation: mw-fade-up 560ms var(--ease-soft) 100ms both; }
+.hero__lesson { overflow: hidden; border: 1px solid #d7d5cf; border-radius: var(--radius-lg); background: #fff; box-shadow: 12px 14px 0 #e9e7e1; animation: mw-fade-up 560ms var(--ease-soft) 100ms both; }
 .lesson__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.4rem; border-bottom: 1px solid var(--color-border); background: #f7f6f2; }
 .lesson__header div { display: grid; gap: 0.25rem; }
 .lesson__kicker { color: var(--color-text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
@@ -80,5 +80,5 @@
   .lesson__workspace { grid-template-columns: 1fr; }
   .lesson__outline { border-right: 0; border-bottom: 1px solid var(--color-border); }
   .lesson__outline li:not(.is-current) { display: none; }
-  .hero__lesson { box-shadow: 8px 10px 0 #e9e7e1; }
+  .hero__lesson { box-shadow: 6px 8px 0 #e9e7e1; }
 }

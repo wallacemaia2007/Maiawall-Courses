@@ -68,11 +68,16 @@
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', Consolas, monospace;
 
-  --public-navbar-height: 72px;
+  --public-navbar-height: 64px;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Respiro para âncoras navegarem sem ficar escondidas atrás do header fixo. */
+[id] {
+  scroll-margin-top: calc(var(--public-navbar-height) + 12px);
 }
 
 body {
@@ -170,12 +175,12 @@ a:active {
 .mw-btn--primary {
   background: var(--color-primary);
   color: #ffffff;
-  box-shadow: 0 6px 14px rgba(var(--color-primary-rgb), 0.18);
+  box-shadow: 0 6px 12px rgba(var(--color-primary-rgb), 0.14);
 }
 
 .mw-btn--primary:hover {
   background: var(--color-primary-hover);
-  box-shadow: 0 8px 18px rgba(var(--color-primary-rgb), 0.22);
+  box-shadow: 0 7px 16px rgba(var(--color-primary-rgb), 0.16);
   transform: translateY(-1px);
 }
 

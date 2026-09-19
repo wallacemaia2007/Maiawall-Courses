@@ -11,7 +11,15 @@
 
     <ul class="platform-features__grid">
       @for (feature of features(); track feature.title; let index = $index) {
-        <li class="platform-features__item" appReveal [appRevealDelay]="(index % 2) * 60">
+        <li
+          class="platform-features__item"
+          [class.platform-features__item--featured]="index === 0"
+          appReveal
+          [appRevealDelay]="(index % 2) * 60"
+        >
+          <span class="platform-features__number" aria-hidden="true">
+            {{ formatNumber(index + 1) }}
+          </span>
           <div class="platform-features__icon" aria-hidden="true">
             @switch (feature.icon) {
               @case ('stack') {

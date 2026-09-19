@@ -57,17 +57,18 @@
 
 .learning-method__step-icon {
   display: inline-grid;
-  min-width: 46px;
+  width: 46px;
   height: 46px;
   place-items: center;
-  padding: 0 0.75rem;
   margin-bottom: 1.1rem;
   border-radius: var(--radius-sm);
-  background: var(--color-bg-tertiary);
+  background: var(--color-primary-soft);
   color: var(--color-primary);
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
-  font-weight: 600;
+}
+
+.learning-method__step-icon svg {
+  width: 24px;
+  height: 24px;
 }
 
 .learning-method__title {

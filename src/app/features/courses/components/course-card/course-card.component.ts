@@ -19,19 +19,16 @@ import {
 export class CourseCardComponent {
   readonly course = input.required<CourseSummary>();
 
+  /** Número do curso na listagem é opcional; vira o "índice" da capa. */
+  readonly index = input(1);
+
   protected readonly levelLabel = computed(() => getCourseLevelLabel(this.course().level));
   protected readonly categoryLabel = computed(() =>
     getCourseCategoryLabel(this.course().category),
   );
   protected readonly tone = computed(() => this.course().category ?? 'desenvolvimento');
 
-  protected readonly coverLine = computed(() => COVER_LINES[this.tone()] ?? 'const aprender = true');
+  protected readonly coverIndex = computed(() =>
+    String(Math.max(1, Math.trunc(this.index()))).padStart(2, '0'),
+  );
 }
-
-const COVER_LINES: Record<string, string> = {
-  devops: 'docker compose up -d',
-  backend: 'GET /api/courses → 200',
-  desenvolvimento: "git commit -m 'feat: evoluindo'",
-  'banco-de-dados': 'SELECT * FROM cursos;',
-  frontend: "console.log('Olá, mundo!')",
-};

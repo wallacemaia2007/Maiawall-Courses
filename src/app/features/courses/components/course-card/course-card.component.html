@@ -7,10 +7,7 @@
     <div class="course-card__cover">
       <span class="course-card__category">{{ categoryLabel() }}</span>
 
-      <div class="course-card__cover-snippet" aria-hidden="true">
-        <span class="course-card__prompt">›</span>
-        <span class="course-card__snippet-text">{{ coverLine() }}</span>
-      </div>
+      <span class="course-card__index" aria-hidden="true">{{ coverIndex() }}</span>
 
       <div class="course-card__cover-icon" aria-hidden="true">
         @switch (course().category) {

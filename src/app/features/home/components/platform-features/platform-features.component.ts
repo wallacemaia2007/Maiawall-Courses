@@ -58,4 +58,8 @@ export class PlatformFeaturesComponent {
         'Troque experiências, dúvidas e soluções com quem também está construindo.',
     },
   ]);
+
+  protected formatNumber(value: number): string {
+    return String(value).padStart(2, '0');
+  }
 }
