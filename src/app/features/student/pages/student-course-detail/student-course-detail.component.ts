@@ -11,6 +11,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
 import { ProgressBarComponent } from '../../../../shared/ui/progress-bar/progress-bar.component';
 import { CourseProgress } from '../../models/progress.model';
 import { ProgressService } from '../../services/progress.service';
+import { COURSE_INSTRUCTOR } from '../../../../core/constants/instructor.data';
 
 type ChapterListItemStatus = 'completed' | 'current' | 'locked' | 'available';
 
@@ -36,6 +37,7 @@ interface StudentCourseDetailState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StudentCourseDetailComponent {
+  protected readonly instructor = COURSE_INSTRUCTOR;
   private readonly route = inject(ActivatedRoute);
   private readonly courseService = inject(CourseService);
   private readonly progressService = inject(ProgressService);

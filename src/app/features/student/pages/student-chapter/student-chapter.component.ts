@@ -10,6 +10,7 @@ import { apiErrorMessage } from '../../../../core/models/api-error.model';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { ArticleComponent } from '../../../../shared/ui/article/article.component';
 import { ChapterProgress, CourseProgress } from '../../models/progress.model';
 import { ProgressService } from '../../services/progress.service';
 
@@ -25,7 +26,7 @@ interface StudentChapterState {
 @Component({
   selector: 'app-student-chapter',
   standalone: true,
-  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent],
+  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, ArticleComponent],
   templateUrl: './student-chapter.component.html',
   styleUrl: './student-chapter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

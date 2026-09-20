@@ -43,37 +43,14 @@
         }
         <div class="lesson-list">
           @for (lesson of lessons(); track trackLesson($index, lesson)) {
-            <article class="lesson-card">
-              <div class="lesson-card__header">
-                <span>{{ lesson.order }}</span>
-                <div>
-                  <h2>{{ lesson.title }}</h2>
-                  <p>
-                    {{ lesson.type }}
-                  </p>
-                </div>
-              </div>
-
-              @if (lesson.content) {
-                <div class="lesson-card__content" [innerHTML]="lesson.content"></div>
-              } @else {
-                <p class="lesson-card__empty">
-                  Esta aula ainda nao possui conteudo publicado.
-                </p>
-              }
-
-              @if (lesson.attachments?.length) {
-                <ul class="lesson-card__attachments">
-                  @for (attachment of lesson.attachments; track attachment.id) {
-                    <li>
-                      <a [href]="attachment.url" target="_blank" rel="noopener">
-                        {{ attachment.name }}
-                      </a>
-                    </li>
-                  }
-                </ul>
-              }
-            </article>
+            <app-article
+              [title]="lesson.title"
+              [order]="lesson.order"
+              [kind]="lesson.type"
+              [content]="lesson.content"
+              [image]="lesson.image"
+              [attachments]="lesson.attachments"
+            />
           }
         </div>
       } @else {

@@ -19,6 +19,15 @@ export type LessonType =
   | 'document'
   | (string & {});
 
+export type LessonImagePosition = 'left' | 'center' | 'right';
+
+export interface LessonImage {
+  url: string;
+  position: LessonImagePosition;
+  alt?: string;
+  caption?: string;
+}
+
 export interface CourseInstructor {
   id: string;
   name: string;
@@ -36,7 +45,6 @@ export interface Course {
   category?: CourseCategory;
   level: CourseLevel;
   durationMinutes?: number;
-  instructor: CourseInstructor;
   objectives?: string[];
   requirements?: string[];
   syllabus?: string[];
@@ -60,7 +68,6 @@ export interface CourseSummary {
   category?: CourseCategory;
   level: CourseLevel;
   durationMinutes?: number;
-  instructorName: string;
   chapterCount: number;
 }
 
@@ -93,6 +100,7 @@ export interface Lesson {
   content?: string;
   isPublic?: boolean;
   attachments?: Attachment[];
+  image?: LessonImage;
   order: number;
 }
 
@@ -118,7 +126,6 @@ export interface CourseCreatePayload {
   level: CourseLevel;
   objectives?: string[];
   published: boolean;
-  instructorId: string;
 }
 
 export type CourseUpdatePayload = Partial<CourseCreatePayload>;

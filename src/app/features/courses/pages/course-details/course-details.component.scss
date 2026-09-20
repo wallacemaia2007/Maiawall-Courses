@@ -376,7 +376,7 @@
 
 .course-content__main {
   display: grid;
-  gap: clamp(4rem, 8vw, 6.5rem);
+  gap: clamp(3rem, 5vw, 4.5rem);
   min-width: 0;
 }
 
@@ -820,13 +820,14 @@
 
 .instructor-card__identity img,
 .instructor-card__identity>span {
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
 }
 
 .instructor-card__identity img {
   object-fit: cover;
+  object-position: center 28%;
 }
 
 .instructor-card__identity>span {

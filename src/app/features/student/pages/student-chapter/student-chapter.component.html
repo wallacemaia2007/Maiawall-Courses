@@ -88,53 +88,21 @@
               </div>
 
               @if (lessons().length > 0) {
-                <ol class="lesson-list">
+                <div class="lesson-list">
                   @for (lesson of lessons(); track trackLesson($index, lesson)) {
-                    <li
-                      class="lesson-card"
-                      [class.is-marked]="markedLessonIds().has(lesson.id)"
-                    >
-                      <div class="lesson-card__head">
-                        <button
-                          type="button"
-                          class="lesson-card__check"
-                          [attr.aria-pressed]="markedLessonIds().has(lesson.id)"
-                          [attr.aria-label]="
-                            (markedLessonIds().has(lesson.id) ? 'Desmarcar' : 'Marcar') +
-                            ' aula como concluída'
-                          "
-                          (click)="toggleLesson(lesson)"
-                        >
-                          <span>{{ markedLessonIds().has(lesson.id) ? '✓' : '' }}</span>
-                        </button>
-                        <div>
-                          <h3>Aula {{ lesson.order }} · {{ lesson.title }}</h3>
-                          <p>{{ lesson.type }}</p>
-                        </div>
-                      </div>
-
-                      @if (lesson.content) {
-                        <div class="lesson-card__content" [innerHTML]="lesson.content"></div>
-                      } @else {
-                        <p class="lesson-card__empty">
-                          Esta aula ainda não possui conteúdo publicado.
-                        </p>
-                      }
-
-                      @if (lesson.attachments?.length) {
-                        <ul class="lesson-card__attachments">
-                          @for (attachment of lesson.attachments; track attachment.id) {
-                            <li>
-                              <a [href]="attachment.url" target="_blank" rel="noopener">
-                                {{ attachment.name }}
-                              </a>
-                            </li>
-                          }
-                        </ul>
-                      }
-                    </li>
+                    <app-article
+                      [title]="lesson.title"
+                      [order]="lesson.order"
+                      [kind]="lesson.type"
+                      [content]="lesson.content"
+                      [image]="lesson.image"
+                      [attachments]="lesson.attachments"
+                      [checkable]="!isCompleted()"
+                      [marked]="markedLessonIds().has(lesson.id)"
+                      (checked)="toggleLesson(lesson)"
+                    />
                   }
-                </ol>
+                </div>
               } @else {
                 <app-empty-state
                   title="Sem aulas neste capítulo"

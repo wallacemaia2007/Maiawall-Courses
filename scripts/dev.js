@@ -1,4 +1,4 @@
-const { spawn } = require('node:child_process');
+const { execFile, spawn } = require('node:child_process');
 
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const children = [];
@@ -34,7 +34,9 @@ function stop(exitCode = 0) {
 
   stopping = true;
   for (const child of children) {
-    if (!child.killed) {
+    if (process.platform === 'win32' && child.pid) {
+      execFile('taskkill', ['/pid', String(child.pid), '/t', '/f'], () => {});
+    } else if (!child.killed) {
       child.kill('SIGTERM');
     }
   }
@@ -44,5 +46,13 @@ function stop(exitCode = 0) {
 process.once('SIGINT', () => stop());
 process.once('SIGTERM', () => stop());
 
-start('Frontend Angular', ['run', 'start', '--', '--proxy-config', 'proxy.conf.json']);
+start('Frontend Angular', [
+  'run',
+  'start',
+  '--',
+  '--host',
+  '0.0.0.0',
+  '--proxy-config',
+  'proxy.conf.json',
+]);
 start('Backend Node', ['--prefix', 'backend', 'run', 'dev']);

@@ -4,6 +4,7 @@ import { catchError, map, of } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { toApiError } from '../../../../core/models/api-error.model';
+import { COURSE_INSTRUCTOR } from '../../../../core/constants/instructor.data';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { CourseCardComponent } from '../../components/course-card/course-card.component';
@@ -85,7 +86,7 @@ export class CourseListComponent {
       const matchesText =
         searchTerm === '' ||
         this.normalize(
-          `${course.title} ${course.shortDescription ?? ''} ${course.instructorName}`,
+          `${course.title} ${course.shortDescription ?? ''} ${COURSE_INSTRUCTOR.name}`,
         ).includes(searchTerm);
 
       const matchesCategory = category === 'todos' || course.category === category;

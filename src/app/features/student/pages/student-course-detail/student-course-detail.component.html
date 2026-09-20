@@ -184,20 +184,20 @@
             <h2>Instrutor</h2>
             <div class="instructor-card">
               <div class="instructor-card__avatar">
-                @if (course.instructor.avatarUrl) {
-                  <img [src]="course.instructor.avatarUrl" [alt]="course.instructor.name" />
+                @if (instructor.avatarUrl) {
+                  <img [src]="instructor.avatarUrl" [alt]="instructor.name" />
                 } @else {
-                  <span aria-hidden="true">{{ course.instructor.name.slice(0, 1) }}</span>
+                  <span aria-hidden="true">{{ instructor.name.slice(0, 1) }}</span>
                 }
               </div>
               <div>
                 <strong>
                   <a href="https://maiawall.com" target="_blank" rel="noopener noreferrer">
-                    {{ course.instructor.name }}
+                    {{ instructor.name }}
                   </a>
                 </strong>
-                @if (course.instructor.bio) {
-                  <p>{{ course.instructor.bio }}</p>
+                @if (instructor.bio) {
+                  <p>{{ instructor.bio }}</p>
                 }
                 <a
                   class="instructor-card__portfolio"

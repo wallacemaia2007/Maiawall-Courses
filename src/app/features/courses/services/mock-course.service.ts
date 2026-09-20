@@ -20,7 +20,6 @@ export class MockCourseService implements CourseCatalogService {
       category: 'devops',
       level: 'iniciante',
       durationMinutes: 48,
-      instructorName: 'Wallace Maia',
       chapterCount: 6,
     },
     {
@@ -32,7 +31,6 @@ export class MockCourseService implements CourseCatalogService {
       category: 'backend',
       level: 'iniciante',
       durationMinutes: 36,
-      instructorName: 'Wallace Maia',
       chapterCount: 5,
     },
     {
@@ -44,7 +42,6 @@ export class MockCourseService implements CourseCatalogService {
       category: 'desenvolvimento',
       level: 'iniciante',
       durationMinutes: 55,
-      instructorName: 'Wallace Maia',
       chapterCount: 7,
     },
   ];

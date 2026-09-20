@@ -1,0 +1,113 @@
+<article class="article" [class.is-marked]="marked()">
+  <header class="article__head">
+    @if (order(); as order) {
+      <span class="article__number" aria-hidden="true">{{ order }}</span>
+    }
+    <div class="article__heading">
+      <h2>{{ title() }}</h2>
+    </div>
+    @if (checkable()) {
+      <button
+        type="button"
+        class="article__check"
+        [class.is-checked]="marked()"
+        [attr.aria-pressed]="marked()"
+        [attr.aria-label]="(marked() ? 'Desmarcar' : 'Marcar') + ' aula como concluída'"
+        (click)="checked.emit()"
+      >
+        <span>{{ marked() ? '✓' : '' }}</span>
+      </button>
+    }
+  </header>
+
+  @if (image(); as image) {
+    @if (image.position !== 'center') {
+      <div class="article__side" [class.article__side--{{ image.position }}]="true">
+        <div class="article__copy">
+          @if (content()) {
+            <div class="article__content" [innerHTML]="content()"></div>
+          } @else {
+            <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
+          }
+        </div>
+        <figure class="article__figure">
+          <button
+            type="button"
+            class="article__figure__open"
+            [attr.aria-label]="'Ampliar imagem: ' + (image.alt || title())"
+            (click)="openLightbox()"
+          >
+            <img [src]="image.url" [alt]="image.alt || title()" loading="lazy" />
+            <span class="article__figure__zoom" aria-hidden="true"></span>
+          </button>
+          @if (image.caption) {
+            <figcaption>{{ image.caption }}</figcaption>
+          }
+        </figure>
+      </div>
+    } @else {
+      <figure class="article__figure article__figure--center">
+        <button
+          type="button"
+          class="article__figure__open"
+          [attr.aria-label]="'Ampliar imagem: ' + (image.alt || title())"
+          (click)="openLightbox()"
+        >
+          <img [src]="image.url" [alt]="image.alt || title()" loading="lazy" />
+          <span class="article__figure__zoom" aria-hidden="true"></span>
+        </button>
+        @if (image.caption) {
+          <figcaption>{{ image.caption }}</figcaption>
+        }
+      </figure>
+      @if (content()) {
+        <div class="article__content article__content--stack" [innerHTML]="content()"></div>
+      } @else {
+        <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
+      }
+    }
+  } @else {
+    @if (content()) {
+      <div class="article__content" [innerHTML]="content()"></div>
+    } @else {
+      <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
+    }
+  }
+
+  @if (attachments()?.length) {
+    <ul class="article__attachments">
+      @for (attachment of attachments() ?? []; track attachment.id) {
+        <li>
+          <a [href]="attachment.url" target="_blank" rel="noopener">
+            {{ attachment.name }}
+          </a>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (lightboxOpen() && image(); as image) {
+    <div
+      class="image-lightbox"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="'Imagem: ' + (image.alt || title())"
+      (click)="closeLightbox()"
+    >
+      <button
+        type="button"
+        class="image-lightbox__close"
+        [attr.aria-label]="'Fechar imagem'"
+        (click)="closeLightbox()"
+      >
+        ×
+      </button>
+      <figure class="image-lightbox__content" (click)="$event.stopPropagation()">
+        <img [src]="image.url" [alt]="image.alt || title()" />
+        @if (image.caption) {
+          <figcaption>{{ image.caption }}</figcaption>
+        }
+      </figure>
+    </div>
+  }
+</article>

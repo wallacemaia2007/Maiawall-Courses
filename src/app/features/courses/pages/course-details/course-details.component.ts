@@ -18,6 +18,7 @@ import {
 import { CourseService } from '../../services/course.service';
 import { AuthStateService } from '../../../../core/auth/auth-state.service';
 import { LearningService } from '../../../learning/services/learning.service';
+import { COURSE_INSTRUCTOR } from '../../../../core/constants/instructor.data';
 
 interface CourseDetailsState {
   course: CourseDetail | null;
@@ -41,6 +42,7 @@ interface CourseDetailsState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseDetailsComponent {
+  protected readonly instructor = COURSE_INSTRUCTOR;
   private readonly route = inject(ActivatedRoute);
   private readonly courseService = inject(CourseService);
   private readonly authState = inject(AuthStateService);

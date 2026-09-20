@@ -15,7 +15,7 @@ function serializeLesson(lesson) {
   return {
     id: toId(lesson._id), chapterId: toId(lesson.chapterId), title: lesson.title,
     type: lesson.type, content: lesson.content, isPublic: Boolean(lesson.isPublic),
-    attachments: lesson.attachments || [], order: lesson.order,
+    attachments: lesson.attachments || [], image: lesson.image || null, order: lesson.order,
   };
 }
 
@@ -33,7 +33,7 @@ function serializeCourse(course, chapters = []) {
     id: toId(course._id), title: course.title, slug: course.slug,
     shortDescription: course.shortDescription, description: course.description,
     thumbnailUrl: course.thumbnailUrl, category: course.category, level: course.level,
-    durationMinutes: course.durationMinutes, instructor: course.instructor,
+    durationMinutes: course.durationMinutes,
     objectives: course.objectives || [], requirements: course.requirements || [],
     syllabus: course.syllabus || [], outcomes: course.outcomes || [],
     published: Boolean(course.published),
@@ -62,7 +62,7 @@ catalogRouter.get('/', async (request, response, next) => {
       id: toId(course._id), title: course.title, slug: course.slug,
       shortDescription: course.shortDescription, thumbnailUrl: course.thumbnailUrl,
       category: course.category, level: course.level, durationMinutes: course.durationMinutes,
-      instructorName: course.instructor?.name || 'Maiawall', chapterCount: chapterCounts.get(toId(course._id)) || 0,
+      chapterCount: chapterCounts.get(toId(course._id)) || 0,
     }));
     response.json(successResponse({ content, page, size, totalElements, totalPages: Math.ceil(totalElements / size) }, 'OK'));
   } catch (error) { next(error); }

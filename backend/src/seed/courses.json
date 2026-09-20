@@ -8,7 +8,6 @@
       "category": "backend",
       "level": "iniciante",
       "durationMinutes": 36,
-      "instructor": { "name": "Wallace Maia", "bio": "Conteúdo prático para quem está começando em tecnologia." },
       "objectives": ["Entender o papel de uma API", "Usar métodos HTTP corretamente", "Ler e escrever JSON", "Interpretar códigos de resposta"],
       "requirements": ["Navegador atualizado", "Curiosidade para testar requisições HTTP"],
       "syllabus": ["Fundamentos de APIs", "Métodos HTTP", "Status codes", "JSON na prática"],
@@ -23,7 +22,7 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "API como contrato entre aplicações", "type": "article", "content": "Uma API define como uma aplicação pede dados ou ações para outra aplicação.", "order": 1, "isPublic": true },
+            { "title": "API como contrato entre aplicações", "type": "article", "content": "Uma API define como uma aplicação pede dados ou ações para outra aplicação.", "image": { "url": "https://placehold.co/1200x600.png", "position": "center", "alt": "Ilustração de uma API como ponte entre aplicações", "caption": "A API é o contrato que conecta cliente e servidor." }, "order": 1, "isPublic": true },
             { "title": "Cliente, servidor e recurso", "type": "article", "content": "Separe quem faz a requisição, quem responde e qual recurso está sendo acessado.", "order": 2, "isPublic": true }
           ]
         },
@@ -47,7 +46,7 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "order": 1, "isPublic": true },
+            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "image": { "url": "https://placehold.co/800x600.png", "position": "right", "alt": "Respostas HTTP de sucesso", "caption": "Cada código de sucesso comunica o que aconteceu com a requisição." }, "order": 1, "isPublic": true },
             { "title": "Erros do cliente e do servidor", "type": "article", "content": "400, 401, 403, 404 e 500 ajudam a diagnosticar onde a requisição falhou.", "order": 2, "isPublic": true }
           ]
         }
@@ -61,7 +60,6 @@
       "category": "devops",
       "level": "iniciante",
       "durationMinutes": 48,
-      "instructor": { "name": "Wallace Maia", "bio": "Conteúdo prático para quem está começando em tecnologia." },
       "objectives": ["Entender containers e imagens", "Criar um compose.yaml", "Conectar serviços", "Persistir dados com volumes"],
       "requirements": ["Docker Desktop instalado", "Terminal disponível"],
       "syllabus": ["Conceitos de container", "Estrutura do Compose", "Rede e variáveis", "Volumes e operação"],
@@ -77,7 +75,7 @@
           "requiresLogin": false,
           "lessons": [
             { "title": "O que um container resolve", "type": "article", "content": "Containers empacotam a aplicação e suas dependências em um ambiente consistente.", "order": 1, "isPublic": true },
-            { "title": "Imagem, container e porta", "type": "article", "content": "A imagem é o molde; o container é sua execução; portas expõem serviços para fora.", "order": 2, "isPublic": true }
+            { "title": "Imagem, container e porta", "type": "article", "content": "A imagem é o molde; o container é sua execução; portas expõem serviços para fora.", "image": { "url": "https://placehold.co/800x600.png", "position": "left", "alt": "Relação entre imagem, container e porta", "caption": "Da imagem nascem os containers; as portas os expõem para o mundo." }, "order": 2, "isPublic": true }
           ]
         },
         {
@@ -101,7 +99,7 @@
           "requiresLogin": false,
           "lessons": [
             { "title": "Comunicação por nome de serviço", "type": "article", "content": "Dentro da rede do Compose, um serviço pode alcançar o outro pelo nome configurado.", "order": 1, "isPublic": true },
-            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "order": 2, "isPublic": true }
+            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "image": { "url": "https://placehold.co/1200x600.png", "position": "center", "alt": "Volumes persistindo dados fora do container", "caption": "O volume vive fora do container e sobrevive às recriações." }, "order": 2, "isPublic": true }
           ]
         }
       ]
@@ -114,7 +112,6 @@
       "category": "desenvolvimento",
       "level": "iniciante",
       "durationMinutes": 55,
-      "instructor": { "name": "Wallace Maia", "bio": "Conteúdo prático para quem está começando em tecnologia." },
       "objectives": ["Entender o histórico do Git", "Criar commits úteis", "Trabalhar com branches", "Enviar mudanças para um remoto"],
       "requirements": ["Git instalado", "Um projeto local para praticar"],
       "syllabus": ["Repositório e histórico", "Área de staging", "Branches", "Remotos"],
@@ -129,7 +126,7 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Por que versionar?", "type": "article", "content": "Git registra a evolução do projeto e permite recuperar, comparar e compartilhar mudanças.", "order": 1, "isPublic": true },
+            { "title": "Por que versionar?", "type": "article", "content": "Git registra a evolução do projeto e permite recuperar, comparar e compartilhar mudanças.", "image": { "url": "https://placehold.co/800x600.png", "position": "right", "alt": "Histórico de versões de um projeto", "caption": "O histórico permite voltar no tempo e entender cada mudança." }, "order": 1, "isPublic": true },
             { "title": "Inicializando um repositório", "type": "code", "content": "git init\ngit status", "order": 2, "isPublic": true }
           ]
         },
