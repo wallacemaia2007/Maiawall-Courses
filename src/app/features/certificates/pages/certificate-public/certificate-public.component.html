@@ -1,3 +1,78 @@
 <section class="certificate-public-page">
-  Validação pública de certificado por código.
+  <div class="mw-container certificate-public-page__inner">
+    <div class="certificate-public-page__intro">
+      <p>Validacao publica</p>
+      <h1>Confira a autenticidade do certificado.</h1>
+      <span>Codigo {{ state().code }}</span>
+    </div>
+
+    @if (state().loading) {
+      <div class="certificate-public-page__status">
+        <app-loading-spinner label="Validando certificado" size="lg" />
+      </div>
+    } @else if (state().errorMessage) {
+      <app-empty-state
+        title="Nao foi possivel validar"
+        [message]="state().errorMessage"
+      >
+        <a class="mw-btn mw-btn--outline" routerLink="/">Ir para a Home</a>
+      </app-empty-state>
+    } @else {
+      @if (validation(); as validation) {
+        @if (validation.certificate; as certificate) {
+          <article class="certificate-card" [attr.data-status]="status()">
+            <div class="certificate-card__status">
+              <span></span>
+              <strong>{{ statusLabel() }}</strong>
+            </div>
+
+            <div class="certificate-card__main">
+              <div>
+                <span>Aluno</span>
+                <strong>{{ studentName() }}</strong>
+              </div>
+
+              <div>
+                <span>Curso</span>
+                <strong>{{ certificate.courseTitle }}</strong>
+              </div>
+
+              <div>
+                <span>Emitido em</span>
+                <strong>{{ certificate.issuedAt | date: 'dd/MM/yyyy' }}</strong>
+              </div>
+
+              @if (certificate.expiresAt) {
+                <div>
+                  <span>Valido ate</span>
+                  <strong>{{ certificate.expiresAt | date: 'dd/MM/yyyy' }}</strong>
+                </div>
+              }
+            </div>
+
+            <footer class="certificate-card__footer">
+              <span>{{ certificate.code }}</span>
+              @if (certificate.url) {
+                <a class="mw-btn mw-btn--outline" [href]="certificate.url" target="_blank" rel="noopener">
+                  Abrir certificado
+                </a>
+              }
+            </footer>
+          </article>
+        } @else {
+          <app-empty-state
+            title="Certificado invalido"
+            [message]="validation.message || 'Nao encontramos um certificado valido para este codigo.'"
+          >
+            <a class="mw-btn mw-btn--outline" routerLink="/">Ir para a Home</a>
+          </app-empty-state>
+        }
+      } @else {
+        <app-empty-state
+          title="Certificado nao encontrado"
+          message="Verifique o codigo informado e tente novamente."
+        />
+      }
+    }
+  </div>
 </section>

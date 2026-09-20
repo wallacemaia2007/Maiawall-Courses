@@ -1,3 +1,115 @@
 <section class="course-list-page">
-  Catalogar e listar os cursos disponíveis.
+  <div class="course-list-page__hero">
+    <div class="mw-container course-list-page__hero-inner">
+      <p class="course-list-page__eyebrow">Catalogo Maiawall</p>
+      <h1>Cursos para evoluir com pratica, criterio e certificado.</h1>
+      <p>
+        Explore trilhas curtas e objetivas para desenvolvimento, infraestrutura e produto.
+        Use os filtros para encontrar o proximo passo sem sair da pagina.
+      </p>
+    </div>
+  </div>
+
+  <div class="mw-container course-list-page__content">
+    <form class="catalog-filters" aria-label="Filtros do catalogo">
+      <label class="catalog-filters__search">
+        <span>Buscar curso</span>
+        <input
+          type="search"
+          name="search"
+          placeholder="Nome, instrutor ou assunto"
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)"
+        />
+      </label>
+
+      <label>
+        <span>Categoria</span>
+        <select
+          name="category"
+          [ngModel]="category()"
+          (ngModelChange)="category.set($event)"
+        >
+          <option value="todos">Todas</option>
+          @for (option of categories(); track option) {
+            <option [value]="option">{{ getCategoryLabel(option) }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Nivel</span>
+        <select name="level" [ngModel]="level()" (ngModelChange)="level.set($event)">
+          <option value="todos">Todos</option>
+          @for (option of levels(); track option) {
+            <option [value]="option">{{ getLevelLabel(option) }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Duracao</span>
+        <select
+          name="duration"
+          [ngModel]="duration()"
+          (ngModelChange)="duration.set($event)"
+        >
+          <option value="todos">Qualquer</option>
+          <option value="curto">Ate 1h</option>
+          <option value="medio">1h a 3h</option>
+          <option value="longo">Mais de 3h</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Status</span>
+        <select name="price" [ngModel]="price()" (ngModelChange)="price.set($event)">
+          <option value="todos">Todos</option>
+          <option value="gratis">Gratuitos</option>
+          <option value="pago">Pagos</option>
+        </select>
+      </label>
+
+      @if (hasActiveFilters()) {
+        <button class="catalog-filters__reset" type="button" (click)="resetFilters()">
+          Limpar
+        </button>
+      }
+    </form>
+
+    @if (state().loading) {
+      <div class="course-list-page__status">
+        <app-loading-spinner label="Carregando catalogo" size="lg" />
+      </div>
+    } @else if (state().errorMessage) {
+      <app-empty-state
+        title="Nao foi possivel carregar os cursos"
+        [message]="state().errorMessage"
+      />
+    } @else if (filteredCourses().length > 0) {
+      <div class="course-list-page__summary">
+        <strong>{{ filteredCourses().length }}</strong>
+        <span>
+          {{ filteredCourses().length === 1 ? 'curso encontrado' : 'cursos encontrados' }}
+        </span>
+      </div>
+
+      <div class="course-list-page__grid">
+        @for (course of filteredCourses(); track course.id; let index = $index) {
+          <app-course-card [course]="course" [index]="index + 1" />
+        }
+      </div>
+    } @else {
+      <app-empty-state
+        title="Nenhum curso encontrado"
+        message="Ajuste os filtros ou limpe a busca para ver outras opcoes do catalogo."
+      >
+        @if (hasActiveFilters()) {
+          <button class="mw-btn mw-btn--outline" type="button" (click)="resetFilters()">
+            Limpar filtros
+          </button>
+        }
+      </app-empty-state>
+    }
+  </div>
 </section>

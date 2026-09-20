@@ -38,6 +38,12 @@ export interface Course {
   durationMinutes?: number;
   instructor: CourseInstructor;
   objectives?: string[];
+  requirements?: string[];
+  syllabus?: string[];
+  outcomes?: string[];
+  isFree?: boolean;
+  priceCents?: number;
+  enrollmentUrl?: string;
   published: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -57,6 +63,8 @@ export interface CourseSummary {
   category?: CourseCategory;
   level: CourseLevel;
   durationMinutes?: number;
+  isFree?: boolean;
+  priceCents?: number;
   instructorName: string;
   chapterCount: number;
 }
@@ -68,6 +76,8 @@ export interface Chapter {
   slug: string;
   description?: string;
   order: number;
+  isPublic?: boolean;
+  requiresLogin?: boolean;
   lessons: Lesson[];
 }
 
@@ -86,6 +96,7 @@ export interface Lesson {
   title: string;
   type: LessonType;
   content?: string;
+  isPublic?: boolean;
   attachments?: Attachment[];
   durationMinutes?: number;
   order: number;

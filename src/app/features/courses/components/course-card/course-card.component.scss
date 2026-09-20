@@ -152,6 +152,7 @@
 }
 
 .course-card__level,
+.course-card__price,
 .course-card__duration,
 .course-card__chapters {
   display: inline-flex;
@@ -167,6 +168,16 @@
 .course-card__level {
   background: var(--color-primary-soft);
   color: var(--color-primary);
+}
+
+.course-card__price {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.course-card__price[data-free='true'] {
+  background: var(--color-success-bg);
+  color: var(--color-success);
 }
 
 .course-card__duration,

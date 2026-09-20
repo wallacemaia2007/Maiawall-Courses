@@ -1,3 +1,184 @@
 <section class="course-details-page">
-  Detalhes gerais, objetivos, instrutor, capítulos, materiais, exercícios e projeto final.
+  @if (state().loading) {
+    <div class="course-details-page__status">
+      <app-loading-spinner label="Carregando curso" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="mw-container course-details-page__empty">
+      <app-empty-state
+        title="Curso nao encontrado"
+        [message]="state().errorMessage"
+      >
+        <a class="mw-btn mw-btn--outline" routerLink="/cursos">Voltar ao catalogo</a>
+      </app-empty-state>
+    </div>
+  } @else {
+    @if (course(); as course) {
+      <header class="course-details-page__hero">
+      <div class="mw-container course-details-page__hero-inner">
+        <a class="course-details-page__back" routerLink="/cursos">Voltar ao catalogo</a>
+
+        <div class="course-details-page__intro">
+          <div>
+            @if (categoryLabel()) {
+              <p class="course-details-page__eyebrow">{{ categoryLabel() }}</p>
+            }
+            <h1>{{ course.title }}</h1>
+            <p>{{ course.shortDescription || course.description }}</p>
+
+            <ul class="course-details-page__meta">
+              @if (levelLabel()) {
+                <li>{{ levelLabel() }}</li>
+              }
+              @if (course.durationMinutes) {
+                <li>{{ course.durationMinutes | duration }}</li>
+              }
+              <li>{{ chapters().length }} capitulos</li>
+              <li>{{ lessonCount() }} aulas</li>
+              <li>{{ isFree() ? 'Gratis' : 'Pago' }}</li>
+            </ul>
+          </div>
+
+          <aside class="course-details-page__cta" aria-label="Matricula">
+            <strong>{{ isFree() ? 'Comece sem custo' : 'Matricule-se para acessar' }}</strong>
+            <p>
+              Tenha acesso ao conteudo do curso, acompanhe seu progresso e emita certificado
+              quando concluir os requisitos.
+            </p>
+            @if (course.enrollmentUrl) {
+              <a class="mw-btn mw-btn--primary" [href]="course.enrollmentUrl">
+                Matricular agora
+              </a>
+            } @else {
+              <a class="mw-btn mw-btn--primary" routerLink="/signup">
+                Matricular agora
+              </a>
+            }
+          </aside>
+        </div>
+      </div>
+      </header>
+
+      <div class="mw-container course-details-page__body">
+      <main class="course-details-page__main">
+        <section class="course-section">
+          <h2>Ementa</h2>
+          @if (course.syllabus?.length) {
+            <ul class="course-section__list">
+              @for (item of course.syllabus; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          } @else if (course.objectives?.length) {
+            <ul class="course-section__list">
+              @for (item of course.objectives; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          } @else {
+            <p>{{ course.description }}</p>
+          }
+        </section>
+
+        <section class="course-section">
+          <h2>Capitulos</h2>
+          @if (chapters().length > 0) {
+            <ol class="chapter-list">
+              @for (chapter of chapters(); track trackChapter($index, chapter)) {
+                <li class="chapter-list__item">
+                  <div>
+                    <span>{{ chapter.order }}</span>
+                    <div>
+                      <h3>{{ chapter.title }}</h3>
+                      @if (chapter.description) {
+                        <p>{{ chapter.description }}</p>
+                      }
+                      <small>{{ chapter.lessons.length }} aulas</small>
+                    </div>
+                  </div>
+
+                  @if (chapter.isPublic || !chapter.requiresLogin) {
+                    <a
+                      class="chapter-list__link"
+                      [routerLink]="['/cursos', course.slug, 'capitulo', chapter.slug]"
+                    >
+                      Abrir aula
+                    </a>
+                  } @else {
+                    <span class="chapter-list__locked">Login necessario</span>
+                  }
+                </li>
+              }
+            </ol>
+          } @else {
+            <app-empty-state
+              title="Capitulos em preparacao"
+              message="A ementa deste curso ainda nao possui capitulos publicados."
+            />
+          }
+        </section>
+      </main>
+
+      <aside class="course-details-page__sidebar">
+        <section class="course-side-block">
+          <h2>Instrutor</h2>
+          <div class="instructor">
+            @if (course.instructor.avatarUrl) {
+              <img [src]="course.instructor.avatarUrl" [alt]="course.instructor.name" />
+            } @else {
+              <span aria-hidden="true">{{ course.instructor.name.slice(0, 1) }}</span>
+            }
+            <div>
+              <strong>{{ course.instructor.name }}</strong>
+              @if (course.instructor.bio) {
+                <p>{{ course.instructor.bio }}</p>
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="course-side-block">
+          <h2>Requisitos</h2>
+          @if (course.requirements?.length) {
+            <ul>
+              @for (requirement of course.requirements; track requirement) {
+                <li>{{ requirement }}</li>
+              }
+            </ul>
+          } @else {
+            <p>Nao ha requisitos obrigatorios publicados para este curso.</p>
+          }
+        </section>
+
+        <section class="course-side-block">
+          <h2>Resultados esperados</h2>
+          @if (course.outcomes?.length) {
+            <ul>
+              @for (outcome of course.outcomes; track outcome) {
+                <li>{{ outcome }}</li>
+              }
+            </ul>
+          } @else if (course.objectives?.length) {
+            <ul>
+              @for (objective of course.objectives; track objective) {
+                <li>{{ objective }}</li>
+              }
+            </ul>
+          } @else {
+            <p>Os resultados do curso serao exibidos quando publicados.</p>
+          }
+        </section>
+      </aside>
+      </div>
+    } @else {
+      <div class="mw-container course-details-page__empty">
+        <app-empty-state
+          title="Curso indisponivel"
+          message="Este curso nao foi encontrado ou ainda nao esta publicado."
+        >
+          <a class="mw-btn mw-btn--outline" routerLink="/cursos">Voltar ao catalogo</a>
+        </app-empty-state>
+      </div>
+    }
+  }
 </section>

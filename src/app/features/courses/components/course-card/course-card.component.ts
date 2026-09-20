@@ -27,6 +27,9 @@ export class CourseCardComponent {
     getCourseCategoryLabel(this.course().category),
   );
   protected readonly tone = computed(() => this.course().category ?? 'desenvolvimento');
+  protected readonly isFree = computed(
+    () => this.course().isFree === true || this.course().priceCents === 0,
+  );
 
   protected readonly coverIndex = computed(() =>
     String(Math.max(1, Math.trunc(this.index()))).padStart(2, '0'),

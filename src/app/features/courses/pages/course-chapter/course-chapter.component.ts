@@ -1,12 +1,26 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { catchError, map, of, switchMap } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
+import { toApiError } from '../../../../core/models/api-error.model';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
+import { ChapterDetail, Lesson } from '../../models/course.model';
 import { ChapterService } from '../../services/chapter.service';
+
+interface CourseChapterState {
+  chapter: ChapterDetail | null;
+  courseSlug: string;
+  loading: boolean;
+  errorMessage: string;
+}
 
 @Component({
   selector: 'app-course-chapter',
   standalone: true,
+  imports: [RouterLink, DurationPipe, EmptyStateComponent, LoadingSpinnerComponent],
   templateUrl: './course-chapter.component.html',
   styleUrl: './course-chapter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,7 +29,63 @@ export class CourseChapterComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly chapterService = inject(ChapterService);
 
-  protected readonly chapter$ = this.route.paramMap.pipe(
-    switchMap((params) => this.chapterService.getBySlug(params.get('chapterSlug') ?? '')),
+  protected readonly state = toSignal(
+    this.route.paramMap.pipe(
+      switchMap((params) => {
+        const courseSlug = params.get('slug') ?? '';
+        const chapterSlug = params.get('chapterSlug') ?? '';
+
+        return this.chapterService.getBySlug(chapterSlug).pipe(
+          map((chapter) => ({
+            chapter,
+            courseSlug,
+            loading: false,
+            errorMessage: '',
+          })),
+          catchError((error: unknown) =>
+            of({
+              chapter: null,
+              courseSlug,
+              loading: false,
+              errorMessage: toApiError(error).message,
+            }),
+          ),
+        );
+      }),
+    ),
+    {
+      initialValue: {
+        chapter: null,
+        courseSlug: '',
+        loading: true,
+        errorMessage: '',
+      } satisfies CourseChapterState,
+    },
   );
+
+  protected readonly chapter = computed(() => this.state().chapter);
+
+  protected readonly lessons = computed(() =>
+    [...(this.state().chapter?.lessons ?? [])].sort((a, b) => a.order - b.order),
+  );
+
+  protected readonly publicLessons = computed(() => {
+    const chapter = this.state().chapter;
+    const lessons = this.lessons();
+
+    if (!chapter?.requiresLogin || chapter.isPublic) {
+      return lessons;
+    }
+
+    return lessons.filter((lesson) => lesson.isPublic);
+  });
+
+  protected readonly isBlocked = computed(() => {
+    const chapter = this.state().chapter;
+    return Boolean(chapter?.requiresLogin && !chapter.isPublic && this.publicLessons().length === 0);
+  });
+
+  protected trackLesson(_index: number, lesson: Lesson): string {
+    return lesson.id;
+  }
 }

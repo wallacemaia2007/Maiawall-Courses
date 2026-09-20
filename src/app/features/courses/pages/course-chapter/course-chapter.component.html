@@ -1,3 +1,103 @@
 <section class="course-chapter-page">
-  Prévia/visão do capítulo em contexto público.
+  @if (state().loading) {
+    <div class="course-chapter-page__status">
+      <app-loading-spinner label="Carregando aula publica" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="mw-container course-chapter-page__empty">
+      <app-empty-state
+        title="Aula nao encontrada"
+        [message]="state().errorMessage"
+      >
+        <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
+          Voltar ao curso
+        </a>
+      </app-empty-state>
+    </div>
+  } @else {
+    @if (chapter(); as chapter) {
+      <header class="course-chapter-page__hero">
+        <div class="mw-container">
+          <a class="course-chapter-page__back" [routerLink]="['/cursos', state().courseSlug]">
+            Voltar ao curso
+          </a>
+          <p class="course-chapter-page__eyebrow">
+            Capitulo {{ chapter.order }}
+          </p>
+          <h1>{{ chapter.title }}</h1>
+          @if (chapter.description) {
+            <p>{{ chapter.description }}</p>
+          }
+        </div>
+      </header>
+
+      <div class="mw-container course-chapter-page__body">
+      @if (isBlocked()) {
+        <app-empty-state
+          title="Conteudo disponivel para alunos"
+          message="Este capitulo exige login ou matricula para liberar as aulas."
+        >
+          <a class="mw-btn mw-btn--primary" routerLink="/login">Entrar para continuar</a>
+        </app-empty-state>
+      } @else if (publicLessons().length > 0) {
+        <div class="lesson-list">
+          @for (lesson of publicLessons(); track trackLesson($index, lesson)) {
+            <article class="lesson-card">
+              <div class="lesson-card__header">
+                <span>{{ lesson.order }}</span>
+                <div>
+                  <h2>{{ lesson.title }}</h2>
+                  <p>
+                    {{ lesson.type }}
+                    @if (lesson.durationMinutes) {
+                      <span> - {{ lesson.durationMinutes | duration }}</span>
+                    }
+                  </p>
+                </div>
+              </div>
+
+              @if (lesson.content) {
+                <div class="lesson-card__content" [innerHTML]="lesson.content"></div>
+              } @else {
+                <p class="lesson-card__empty">
+                  Esta aula publica ainda nao possui conteudo publicado.
+                </p>
+              }
+
+              @if (lesson.attachments?.length) {
+                <ul class="lesson-card__attachments">
+                  @for (attachment of lesson.attachments; track attachment.id) {
+                    <li>
+                      <a [href]="attachment.url" target="_blank" rel="noopener">
+                        {{ attachment.name }}
+                      </a>
+                    </li>
+                  }
+                </ul>
+              }
+            </article>
+          }
+        </div>
+      } @else {
+        <app-empty-state
+          title="Aulas em preparacao"
+          message="Este capitulo ainda nao possui aulas publicas disponiveis."
+        >
+          <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
+            Voltar ao curso
+          </a>
+        </app-empty-state>
+      }
+      </div>
+    } @else {
+      <div class="mw-container course-chapter-page__empty">
+        <app-empty-state
+          title="Aula indisponivel"
+          message="Nao encontramos esse capitulo no catalogo publico."
+        >
+          <a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver catalogo</a>
+        </app-empty-state>
+      </div>
+    }
+  }
 </section>
