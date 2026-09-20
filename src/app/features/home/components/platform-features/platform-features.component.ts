@@ -3,12 +3,17 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RevealDirective } from '../../../../shared/directives/reveal.directive';
 import { SectionHeadComponent } from '../section-head/section-head.component';
 
-type FeatureIcon = 'stack' | 'code' | 'folder' | 'chart' | 'award' | 'users';
+type FeatureIcon = 'stack' | 'code' | 'chart' | 'award' | 'user' | 'shield';
 
 interface PlatformFeature {
   icon: FeatureIcon;
   title: string;
   description: string;
+}
+
+interface PlatformProof {
+  label: string;
+  value: string;
 }
 
 @Component({
@@ -23,40 +28,46 @@ export class PlatformFeaturesComponent {
   protected readonly features = signal<PlatformFeature[]>([
     {
       icon: 'stack',
-      title: 'Cursos estruturados',
+      title: 'Trilhas guiadas',
       description:
-        'Siga uma trilha clara, do fundamento ao avançado, sabendo o que vem depois.',
+        'Percurso estruturado, do fundamento ao avançado: você sempre sabe qual é o próximo passo.',
     },
     {
       icon: 'code',
-      title: 'Exercícios práticos',
+      title: 'Exercícios com correção',
       description:
-        'Resolva desafios próximos do trabalho real e valide o conteúdo enquanto aprende.',
-    },
-    {
-      icon: 'folder',
-      title: 'Materiais de apoio',
-      description:
-        'Consulte arquivos, exemplos e resumos das aulas sempre que precisar revisar.',
+        'Pratique em cada módulo e receba feedback claro sobre o que acertou e o que pode melhorar.',
     },
     {
       icon: 'chart',
-      title: 'Acompanhe seu progresso',
+      title: 'Progresso acompanhado',
       description:
-        'Veja onde parou, o que concluiu e qual é o próximo passo da sua trilha.',
+        'A plataforma registra onde você parou, o que concluiu e quanto falta para terminar a trilha.',
     },
     {
       icon: 'award',
       title: 'Certificados',
       description:
-        'Registre cada conclusão e compartilhe os conhecimentos que conquistou.',
+        'Ao concluir, receba um certificado com código de validação para comprovar e compartilhar.',
     },
     {
-      icon: 'users',
-      title: 'Comunidade',
+      icon: 'user',
+      title: 'Área do aluno',
       description:
-        'Troque experiências, dúvidas e soluções com quem também está construindo.',
+        'Aulas, exercícios, submissões e certificados reunidos em um só lugar, em qualquer dispositivo.',
     },
+    {
+      icon: 'shield',
+      title: 'Gestão admin',
+      description:
+        'Administradores e instrutores criam cursos, organizam capítulos, corrigem submissões e emitem certificados.',
+    },
+  ]);
+
+  protected readonly proofs = signal<PlatformProof[]>([
+    { label: 'Cursos publicados', value: '3' },
+    { label: 'Fluxos da plataforma', value: 'Aluno + Admin' },
+    { label: 'Certificados verificáveis', value: 'Código público' },
   ]);
 
   protected formatNumber(value: number): string {

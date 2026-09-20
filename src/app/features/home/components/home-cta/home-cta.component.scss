@@ -52,7 +52,8 @@
   margin-top: 0.5rem;
 }
 
-.home-cta__link {
+.home-cta__link,
+.home-cta__login {
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.9rem;
   font-weight: 700;
@@ -64,12 +65,25 @@
   transition: transform var(--motion-base) ease;
 }
 
+.home-cta__link:hover,
+.home-cta__login:hover {
+  color: #ffffff;
+}
+
 .home-cta__link:hover span {
   transform: translateX(3px);
+}
+
+.home-cta__login {
+  color: rgba(255, 255, 255, 0.64);
 }
 
 @media (max-width: 480px) {
   .home-cta__actions .mw-btn {
     width: 100%;
+  }
+
+  .home-cta__actions {
+    gap: 1rem;
   }
 }

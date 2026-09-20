@@ -85,6 +85,78 @@
   line-height: 1.65;
 }
 
+.platform-features__proof {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  margin-top: clamp(2.5rem, 5vw, 3.75rem);
+  padding-block: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.platform-features__proof-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--color-primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.platform-features__proof h3 {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
+  font-weight: 650;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.platform-features__proof p:last-child {
+  max-width: 62ch;
+  margin: 1rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.platform-features__proof-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.platform-features__proof-list div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  min-height: 64px;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+}
+
+.platform-features__proof-list dt {
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.platform-features__proof-list dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: right;
+}
+
 @media (max-width: 720px) {
   .platform-features__grid {
     grid-template-columns: minmax(0, 1fr);
@@ -103,4 +175,7 @@
   .platform-features__number { line-height: 40px; }
   .platform-features__icon { width: 40px; height: 40px; }
   .platform-features__icon svg { width: 20px; height: 20px; }
+  .platform-features__proof { grid-template-columns: 1fr; }
+  .platform-features__proof-list div { grid-template-columns: 1fr; }
+  .platform-features__proof-list dd { text-align: left; }
 }

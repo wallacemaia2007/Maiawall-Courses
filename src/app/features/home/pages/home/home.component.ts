@@ -9,7 +9,7 @@ import { PlatformFeaturesComponent } from '../../components/platform-features/pl
 
 const PAGE_TITLE = 'Maiawall Cursos — Aprenda tecnologia na prática';
 const PAGE_DESCRIPTION =
-  'Aprenda tecnologia na prática com conteúdos objetivos, exercícios e projetos reais. Git, Docker, APIs e mais — do primeiro comando ao deploy.';
+  'Plataforma de cursos da Maiawall com aulas objetivas, exercícios, trilhas guiadas e certificados. Aprenda tecnologia na prática, do primeiro comando ao deploy.';
 
 @Component({
   selector: 'app-home',

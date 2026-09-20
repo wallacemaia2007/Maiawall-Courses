@@ -22,6 +22,8 @@
   --color-danger: #ad3328;
   --color-danger-bg: #fff0ee;
 
+  --color-focus-ring: #2563eb;
+
   --color-neutral: #575a62;
   --color-neutral-bg: #f0f0ef;
 
@@ -109,6 +111,22 @@ a:active {
   transform: scale(var(--press-scale));
 }
 
+/* Foco visível para navegação por teclado (contrastado em fundos claros e escuros). */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:not([tabindex='-1']):focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
+}
+
 /* Entrada suave das páginas (mesmo padrão do Maiawall Homolog) */
 [class$='-page'] {
   animation: mw-fade-in var(--motion-slow) var(--ease-soft) both;
@@ -138,6 +156,7 @@ a:active {
 
 /* Container centralizado padrão das páginas públicas */
 .mw-container {
+  box-sizing: border-box;
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
@@ -146,6 +165,7 @@ a:active {
 
 /* Botões */
 .mw-btn {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -170,6 +190,15 @@ a:active {
 
 .mw-btn:active {
   transform: scale(var(--press-scale));
+}
+
+.mw-btn[aria-busy='true'],
+.mw-btn:disabled,
+.mw-btn[aria-disabled='true'] {
+  opacity: 0.68;
+  pointer-events: none;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .mw-btn--primary {

@@ -2,9 +2,9 @@
   <div class="learning-method__inner mw-container">
     <div appReveal>
       <app-section-head
-        eyebrow="Metodologia"
-        title="Do conceito ao projeto, sem atalhos mágicos"
-        subtitle="Cada curso organiza o aprendizado em uma sequência simples: entender, praticar e construir."
+        eyebrow="Método de ensino"
+        title="Uma jornada simples para evoluir de verdade"
+        subtitle="Cada curso segue a mesma sequência: aprender, praticar, receber feedback e certificar."
         align="left"
       />
     </div>
@@ -31,17 +31,23 @@
                     <path d="M10 9h4M6.5 13h.01M10 13h4M14.5 13h.01M17 9h.01M7 9h.01M6.5 9h.01M17 13h.01" />
                   </svg>
                 }
-                @case ('rocket') {
+                @case ('chat') {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 15c-1.5 1.4-2 4-2 4s2.6-.5 4-2" />
-                    <path d="M9.5 14.5 14 10a5 5 0 0 0 3-3c-2 .5-4 .2-5.5-1-1.2-1.2-1.5-3.5-1-5.5a5 5 0 0 0-3 3c-1 1.3-1.4 3-1.2 4.6" />
-                    <path d="M13 11l-4.5 4.5c.5 2 0 4-1.5 6 2.5-1 4.5-1.5 6 0L17.5 14" />
+                    <path d="M21 12a8 8 0 0 1-8 8H3l2-2.4A8 8 0 1 1 21 12Z" />
+                    <path d="M8 10.5h8M8 14h5" />
+                  </svg>
+                }
+                @case ('award') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="9" r="5" />
+                    <path d="m8.5 13.5-1.5 7 5-2.5 5 2.5-1.5-7" />
                   </svg>
                 }
               }
             </span>
             <h3 class="learning-method__title">{{ step.title }}</h3>
             <p class="learning-method__description">{{ step.description }}</p>
+            <p class="learning-method__outcome">{{ step.outcome }}</p>
           </div>
         </li>
       }

@@ -5,9 +5,10 @@ import { SectionHeadComponent } from '../section-head/section-head.component';
 
 interface LearningStep {
   number: string;
-  icon: 'book' | 'keyboard' | 'rocket';
+  icon: 'book' | 'keyboard' | 'chat' | 'award';
   title: string;
   description: string;
+  outcome: string;
 }
 
 @Component({
@@ -23,23 +24,34 @@ export class LearningMethodComponent {
     {
       number: '01',
       icon: 'book',
-      title: 'Conteúdo direto',
+      title: 'Aprender',
       description:
-        'Aprenda os conceitos essenciais sem enrolação, com exemplos que você encontra no dia a dia de verdade.',
+        'Aulas objetivas que explicam o porquê antes do como, com exemplos do dia a dia de quem trabalha com tecnologia.',
+      outcome: 'Você entende o conceito antes de copiar comandos.',
     },
     {
       number: '02',
       icon: 'keyboard',
-      title: 'Pratique',
+      title: 'Praticar',
       description:
-        'Resolva exercícios e coloque o conhecimento em prática imediatamente — é praticando que a fixação acontece.',
+        'Exercícios em cada módulo para aplicar o conteúdo na hora e fixar o aprendizado com mão na massa.',
+      outcome: 'Você transforma aula em execução.',
     },
     {
       number: '03',
-      icon: 'rocket',
-      title: 'Construa',
+      icon: 'chat',
+      title: 'Receber feedback',
       description:
-        'Aplique o que aprendeu em projetos reais, dos pequenos ao deploy. É assim que você evolui de verdade.',
+        'Envie suas respostas e receba correção com orientações claras sobre o que ajustar e por quê.',
+      outcome: 'Você sabe exatamente onde melhorar.',
+    },
+    {
+      number: '04',
+      icon: 'award',
+      title: 'Certificar',
+      description:
+        'Conclua a trilha e conquiste o certificado da Maiawall para comprovar o que aprendeu.',
+      outcome: 'Você fecha a trilha com comprovação.',
     },
   ]);
 }
