@@ -191,10 +191,22 @@
                 }
               </div>
               <div>
-                <strong>{{ course.instructor.name }}</strong>
+                <strong>
+                  <a href="https://maiawall.com" target="_blank" rel="noopener noreferrer">
+                    {{ course.instructor.name }}
+                  </a>
+                </strong>
                 @if (course.instructor.bio) {
                   <p>{{ course.instructor.bio }}</p>
                 }
+                <a
+                  class="instructor-card__portfolio"
+                  href="https://maiawall.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Sobre mim
+                </a>
               </div>
             </div>
           </section>

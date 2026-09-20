@@ -41,9 +41,6 @@ export interface Course {
   requirements?: string[];
   syllabus?: string[];
   outcomes?: string[];
-  isFree?: boolean;
-  priceCents?: number;
-  enrollmentUrl?: string;
   published: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -63,8 +60,6 @@ export interface CourseSummary {
   category?: CourseCategory;
   level: CourseLevel;
   durationMinutes?: number;
-  isFree?: boolean;
-  priceCents?: number;
   instructorName: string;
   chapterCount: number;
 }

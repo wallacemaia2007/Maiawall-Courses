@@ -7,6 +7,7 @@ import { toApiError } from '../../../../core/models/api-error.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { HeroMarkerDirective } from '../../../../shared/directives/hero-marker.directive';
+import { RevealDirective } from '../../../../shared/directives/reveal.directive';
 import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
 import {
   Chapter,
@@ -33,6 +34,7 @@ interface CourseDetailsState {
     EmptyStateComponent,
     LoadingSpinnerComponent,
     HeroMarkerDirective,
+    RevealDirective,
   ],
   templateUrl: './course-details.component.html',
   styleUrl: './course-details.component.scss',
@@ -83,6 +85,31 @@ export class CourseDetailsComponent {
     this.chapters().reduce((total, chapter) => total + (chapter.lessons?.length ?? 0), 0),
   );
 
+  protected readonly completedChapterCount = computed(() =>
+    this.chapters().filter((chapter) => this.completedChapterIds().has(chapter.id)).length,
+  );
+
+  protected readonly completionPercentage = computed(() => {
+    const chapterCount = this.chapters().length;
+    return chapterCount > 0
+      ? Math.round((this.completedChapterCount() / chapterCount) * 100)
+      : 0;
+  });
+
+  protected readonly nextChapter = computed(() => {
+    const chapters = this.chapters();
+    return (
+      chapters.find((chapter) => !this.completedChapterIds().has(chapter.id)) ??
+      chapters[0] ??
+      null
+    );
+  });
+
+  protected readonly learningOutcomes = computed(() => {
+    const course = this.course();
+    return course?.outcomes?.length ? course.outcomes : (course?.objectives ?? []);
+  });
+
   protected readonly categoryLabel = computed(() =>
     getCourseCategoryLabel(this.state().course?.category),
   );
@@ -90,11 +117,6 @@ export class CourseDetailsComponent {
   protected readonly levelLabel = computed(() => {
     const level = this.state().course?.level;
     return level ? getCourseLevelLabel(level) : '';
-  });
-
-  protected readonly isFree = computed(() => {
-    const course = this.state().course;
-    return course?.isFree === true || course?.priceCents === 0;
   });
 
   protected readonly isAuthenticated = this.authState.isAuthenticated;
@@ -123,16 +145,15 @@ export class CourseDetailsComponent {
     });
   }
 
-  protected canAccess(chapter: Chapter): boolean {
-    return Boolean(chapter.isPublic || !chapter.requiresLogin || this.isAuthenticated());
-  }
-
-  protected isPreview(chapter: Chapter): boolean {
-    return !this.isAuthenticated() && Boolean(chapter.isPublic || !chapter.requiresLogin);
-  }
-
   protected isCompleted(chapter: Chapter): boolean {
     return this.completedChapterIds().has(chapter.id);
+  }
+
+  protected chapterDuration(chapter: Chapter): number {
+    return chapter.lessons.reduce(
+      (total, lesson) => total + (lesson.durationMinutes ?? 0),
+      0,
+    );
   }
 
   protected trackChapter(_index: number, chapter: Chapter): string {

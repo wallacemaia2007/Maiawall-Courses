@@ -6,9 +6,9 @@ import { HeroComponent } from '../../components/hero/hero.component';
 import { HomeCtaComponent } from '../../components/home-cta/home-cta.component';
 import { LearningMethodComponent } from '../../components/learning-method/learning-method.component';
 
-const PAGE_TITLE = 'Maiawall Cursos — Aprenda tecnologia na prática';
+const PAGE_TITLE = 'Maiawall Cursos — Conteúdos dos cursos que ministrei';
 const PAGE_DESCRIPTION =
-  'Plataforma de cursos da Maiawall com aulas objetivas, exercícios, trilhas guiadas e certificados. Aprenda tecnologia na prática, do primeiro comando ao deploy.';
+  'Acervo dos cursos ministrados pela Maiawall, com capítulos, aulas e materiais para consulta. Crie uma conta apenas se quiser salvar seu progresso.';
 
 @Component({
   selector: 'app-home',

@@ -32,14 +32,7 @@
       </header>
 
       <div class="mw-container course-chapter-page__body">
-      @if (isBlocked()) {
-        <app-empty-state
-          title="Conteudo disponivel para alunos"
-          message="Este capitulo exige login ou matricula para liberar as aulas."
-        >
-          <a class="mw-btn mw-btn--primary" routerLink="/login">Entrar para continuar</a>
-        </app-empty-state>
-      } @else if (publicLessons().length > 0) {
+      @if (lessons().length > 0) {
         @if (isAuthenticated()) {
           <div class="course-chapter-page__completion">
             <span>@if (completionStatus() === 'completed') { Capitulo concluido } @else { Terminou a leitura? }</span>
@@ -49,7 +42,7 @@
           </div>
         }
         <div class="lesson-list">
-          @for (lesson of publicLessons(); track trackLesson($index, lesson)) {
+          @for (lesson of lessons(); track trackLesson($index, lesson)) {
             <article class="lesson-card">
               <div class="lesson-card__header">
                 <span>{{ lesson.order }}</span>
@@ -68,7 +61,7 @@
                 <div class="lesson-card__content" [innerHTML]="lesson.content"></div>
               } @else {
                 <p class="lesson-card__empty">
-                  Esta aula publica ainda nao possui conteudo publicado.
+                  Esta aula ainda nao possui conteudo publicado.
                 </p>
               }
 
@@ -89,7 +82,7 @@
       } @else {
         <app-empty-state
           title="Aulas em preparacao"
-          message="Este capitulo ainda nao possui aulas publicas disponiveis."
+          message="Este capitulo ainda nao possui aulas disponiveis."
         >
           <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
             Voltar ao curso

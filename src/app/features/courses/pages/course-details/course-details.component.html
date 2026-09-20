@@ -5,219 +5,343 @@
     </div>
   } @else if (state().errorMessage) {
     <div class="mw-container course-details-page__empty">
-      <app-empty-state
-        title="Curso nao encontrado"
-        [message]="state().errorMessage"
-      >
-        <a class="mw-btn mw-btn--outline" routerLink="/cursos">Voltar ao catalogo</a>
+      <app-empty-state title="Curso não encontrado" [message]="state().errorMessage">
+        <a class="mw-btn mw-btn--outline" routerLink="/cursos">Voltar ao catálogo</a>
       </app-empty-state>
     </div>
   } @else {
     @if (course(); as course) {
-      <header class="course-details-page__hero" appHeroMarker>
-        <div class="mw-container course-details-page__hero-inner">
-          <a class="course-details-page__back" routerLink="/cursos">Voltar ao catálogo</a>
+      <header class="course-hero" appHeroMarker>
+        <div class="course-hero__ambient" aria-hidden="true"></div>
 
-          <div class="course-details-page__intro">
-            <div>
-              @if (categoryLabel()) {
-                <p class="course-details-page__eyebrow">{{ categoryLabel() }}</p>
-              }
+        <div class="mw-container course-hero__container">
+          <nav class="course-hero__breadcrumb" aria-label="Navegação estrutural">
+            <a routerLink="/cursos">Cursos</a>
+            <span aria-hidden="true">/</span>
+            <span>{{ categoryLabel() || 'Tecnologia' }}</span>
+          </nav>
+
+          <div class="course-hero__grid">
+            <div class="course-hero__copy">
+              <p class="course-hero__eyebrow">
+                <span></span>
+                Curso ministrado · {{ categoryLabel() }}
+              </p>
+
               <h1>{{ course.title }}</h1>
-              <p>{{ course.shortDescription || course.description }}</p>
+              <p class="course-hero__description">
+                {{ course.shortDescription || course.description }}
+              </p>
 
-              <ul class="course-details-page__meta">
+              <ul class="course-hero__meta" aria-label="Informações do curso">
                 @if (levelLabel()) {
-                  <li>{{ levelLabel() }}</li>
+                  <li>
+                    <span class="course-hero__meta-icon" aria-hidden="true">01</span>
+                    <span><small>Nível</small><strong>{{ levelLabel() }}</strong></span>
+                  </li>
                 }
                 @if (course.durationMinutes) {
-                  <li>{{ course.durationMinutes | duration }}</li>
+                  <li>
+                    <span class="course-hero__meta-icon" aria-hidden="true">◷</span>
+                    <span><small>Duração</small><strong>{{ course.durationMinutes | duration }}</strong></span>
+                  </li>
                 }
-                <li>{{ chapters().length }} capítulos</li>
-                <li>{{ lessonCount() }} aulas</li>
-                <li>{{ isFree() ? 'Grátis' : 'Pago' }}</li>
+                <li>
+                  <span class="course-hero__meta-icon" aria-hidden="true">≡</span>
+                  <span><small>Conteúdo</small><strong>{{ chapters().length }} capítulos</strong></span>
+                </li>
               </ul>
             </div>
 
-            <aside class="course-details-page__cta" aria-label="Acesso ao curso">
-              <strong>{{ isAuthenticated() ? 'Sua leitura fica salva' : 'Leia no seu ritmo' }}</strong>
-              <p>
-                Abra os módulos abaixo. Entre para registrar os capítulos lidos e continuar
-                depois pelo seu perfil.
-              </p>
-              <a
-                class="mw-btn mw-btn--primary"
-                [routerLink]="isAuthenticated() ? '/perfil' : '/login'"
-                [queryParams]="isAuthenticated() ? {} : { redirect: '/cursos/' + course.slug }"
-              >
-                {{ isAuthenticated() ? 'Ver meu perfil' : 'Entrar para salvar progresso' }}
-              </a>
+            <aside class="course-access" aria-label="Acesso ao curso">
+              <div class="course-access__topline">
+                <span>Conteúdo do curso</span>
+                <span class="course-access__signal" aria-hidden="true"></span>
+              </div>
+
+              @if (isAuthenticated()) {
+                <p class="course-access__kicker">Seu progresso</p>
+                <strong>{{ completionPercentage() }}% concluído</strong>
+                <p>
+                  {{ completedChapterCount() }} de {{ chapters().length }} capítulos finalizados.
+                  Continue exatamente de onde parou.
+                </p>
+                <div
+                  class="course-access__progress"
+                  role="progressbar"
+                  aria-label="Progresso no curso"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [attr.aria-valuenow]="completionPercentage()"
+                >
+                  <span [style.width.%]="completionPercentage()"></span>
+                </div>
+              } @else {
+                <p class="course-access__kicker">Leitura aberta</p>
+                <strong>Consulte todo o conteúdo</strong>
+                <p>
+                  Todos os capítulos publicados estão disponíveis. A conta é opcional e serve
+                  para identificar você e salvar seu progresso.
+                </p>
+              }
+
+              @if (nextChapter(); as chapter) {
+                <a
+                  class="mw-btn mw-btn--primary course-access__primary"
+                  [routerLink]="['/cursos', course.slug, 'capitulo', chapter.slug]"
+                >
+                  {{ isAuthenticated() ? 'Continuar curso' : 'Abrir conteúdo' }}
+                  <span aria-hidden="true">→</span>
+                </a>
+              }
+
+              @if (isAuthenticated()) {
+                <a class="course-access__secondary" routerLink="/perfil">Ver meu perfil</a>
+              } @else {
+                <a
+                  class="course-access__secondary"
+                  routerLink="/login"
+                  [queryParams]="{ redirect: '/cursos/' + course.slug }"
+                >
+                  Entrar para salvar progresso
+                </a>
+              }
             </aside>
           </div>
         </div>
       </header>
 
-      <div class="mw-container course-details-page__body">
-        <main class="course-details-page__main">
-        <section class="course-section">
-          <h2>Ementa</h2>
-          @if (course.syllabus?.length) {
-            <ul class="course-section__list">
-              @for (item of course.syllabus; track item) {
-                <li>{{ item }}</li>
-              }
-            </ul>
-          } @else if (course.objectives?.length) {
-            <ul class="course-section__list">
-              @for (item of course.objectives; track item) {
-                <li>{{ item }}</li>
-              }
-            </ul>
-          } @else {
-            <p>{{ course.description }}</p>
-          }
-        </section>
-
-        <section class="course-section">
-          <div class="course-section__heading">
-            <div>
-              <p class="course-section__eyebrow">Conteúdo do curso</p>
-              <h2>Capítulos</h2>
-            </div>
-            <span>{{ chapters().length }} módulos</span>
+      <section class="course-facts" aria-label="Como o curso funciona">
+        <div class="mw-container course-facts__grid">
+          <div>
+            <span aria-hidden="true">A</span>
+            <p><small>Formato</small><strong>Leitura prática</strong></p>
           </div>
-          @if (chapters().length > 0) {
-            <ol class="chapter-list chapter-list--accordion">
-              @for (chapter of chapters(); track trackChapter($index, chapter)) {
-                <li class="chapter-list__item">
-                  <details [attr.open]="$first ? true : null">
-                    <summary>
-                      <span class="chapter-list__number" aria-hidden="true">
-                        {{ chapter.order.toString().padStart(2, '0') }}
-                      </span>
-                      <span class="chapter-list__copy">
-                        <h3>{{ chapter.title }}</h3>
-                        <small>{{ chapter.lessons.length }} aulas</small>
-                      </span>
-                      @if (isCompleted(chapter)) {
-                        <span class="chapter-list__status chapter-list__status--completed">
-                          <span aria-hidden="true">✓</span> Concluído
+          <div>
+            <span aria-hidden="true">B</span>
+            <p><small>Ritmo</small><strong>Você escolhe</strong></p>
+          </div>
+          <div>
+            <span aria-hidden="true">C</span>
+            <p><small>Estrutura</small><strong>{{ lessonCount() }} aulas objetivas</strong></p>
+          </div>
+          <div>
+            <span aria-hidden="true">D</span>
+            <p><small>Progresso</small><strong>Salvo no perfil</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="mw-container course-content">
+        <main class="course-content__main">
+          <section class="course-overview" appReveal>
+            <div class="section-heading">
+              <span class="section-heading__index">01</span>
+              <div>
+                <p class="section-heading__eyebrow">Visão geral</p>
+                <h2>Entenda antes de praticar</h2>
+              </div>
+            </div>
+
+            <div class="course-overview__grid">
+              <p class="course-overview__lead">{{ course.description }}</p>
+
+              @if (course.syllabus?.length) {
+                <div class="course-overview__syllabus">
+                  <span class="course-overview__label">Você vai percorrer</span>
+                  <ol>
+                    @for (item of course.syllabus; track item; let index = $index) {
+                      <li><span>{{ (index + 1).toString().padStart(2, '0') }}</span>{{ item }}</li>
+                    }
+                  </ol>
+                </div>
+              }
+            </div>
+          </section>
+
+          @if (learningOutcomes().length) {
+            <section class="learning-outcomes" appReveal [appRevealDelay]="80">
+              <div class="section-heading">
+                <span class="section-heading__index">02</span>
+                <div>
+                  <p class="section-heading__eyebrow">Ao concluir</p>
+                  <h2>O que você leva deste curso</h2>
+                </div>
+              </div>
+
+              <div class="learning-outcomes__grid">
+                @for (outcome of learningOutcomes(); track outcome; let index = $index) {
+                  <article>
+                    <span aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+                    <p>{{ outcome }}</p>
+                  </article>
+                }
+              </div>
+            </section>
+          }
+
+          <section id="conteudo" class="curriculum" appReveal [appRevealDelay]="120">
+            <div class="section-heading section-heading--split">
+              <span class="section-heading__index">03</span>
+              <div>
+                <p class="section-heading__eyebrow">Conteúdo do curso</p>
+                <h2>Capítulo por capítulo</h2>
+              </div>
+              <p>{{ chapters().length }} capítulos · {{ lessonCount() }} aulas</p>
+            </div>
+
+            @if (chapters().length > 0) {
+              <ol class="chapter-list">
+                @for (chapter of chapters(); track trackChapter($index, chapter)) {
+                  <li class="chapter-list__item">
+                    <details [attr.open]="$first ? true : null">
+                      <summary>
+                        <span class="chapter-list__number" aria-hidden="true">
+                          {{ chapter.order.toString().padStart(2, '0') }}
                         </span>
-                      } @else if (isPreview(chapter)) {
-                        <span class="chapter-list__status chapter-list__status--preview">
-                          Prévia grátis
+                        <span class="chapter-list__copy">
+                          <span class="chapter-list__chapter-label">Capítulo {{ chapter.order }}</span>
+                          <h3>{{ chapter.title }}</h3>
+                          <small>
+                            {{ chapter.lessons.length }} aulas
+                            @if (chapterDuration(chapter)) {
+                              · {{ chapterDuration(chapter) | duration }}
+                            }
+                          </small>
                         </span>
-                      } @else if (!canAccess(chapter)) {
-                        <span class="chapter-list__status chapter-list__status--locked">
-                          <span aria-hidden="true">●</span> Login necessário
-                        </span>
-                      } @else {
-                        <span class="chapter-list__status">Disponível</span>
-                      }
-                      <span class="chapter-list__chevron" aria-hidden="true"></span>
-                    </summary>
-                    <div class="chapter-list__panel">
-                      @if (chapter.description) {
-                        <p>{{ chapter.description }}</p>
-                      }
-                      @if (canAccess(chapter)) {
+
+                        @if (isCompleted(chapter)) {
+                          <span class="chapter-list__status chapter-list__status--completed">
+                            <span aria-hidden="true">✓</span> Concluído
+                          </span>
+                        } @else {
+                          <span class="chapter-list__status">Disponível</span>
+                        }
+
+                        <span class="chapter-list__chevron" aria-hidden="true"></span>
+                      </summary>
+
+                      <div class="chapter-list__panel">
+                        <div>
+                          @if (chapter.description) {
+                            <p>{{ chapter.description }}</p>
+                          }
+                          <ul aria-label="Aulas deste capítulo">
+                            @for (lesson of chapter.lessons; track lesson.id) {
+                              <li>
+                                <span aria-hidden="true">{{ lesson.order }}</span>
+                                <span>{{ lesson.title }}</span>
+                                @if (lesson.durationMinutes) {
+                                  <small>{{ lesson.durationMinutes }} min</small>
+                                }
+                              </li>
+                            }
+                          </ul>
+                        </div>
+
                         <a
-                          class="chapter-list__link"
+                          class="chapter-list__action"
                           [routerLink]="['/cursos', course.slug, 'capitulo', chapter.slug]"
                         >
-                          {{ isCompleted(chapter) ? 'Rever capítulo' : isPreview(chapter) ? 'Começar prévia' : 'Abrir capítulo' }}
+                          {{ isCompleted(chapter) ? 'Rever capítulo' : 'Abrir capítulo' }}
                           <span aria-hidden="true">→</span>
                         </a>
-                      } @else {
-                        <div class="chapter-list__login-prompt">
-                          <span>Entre para liberar este capítulo e salvar seu progresso.</span>
-                          <a
-                            class="chapter-list__locked"
-                            routerLink="/login"
-                            [queryParams]="{
-                              redirect:
-                                '/cursos/' +
-                                course.slug +
-                                '/capitulo/' +
-                                chapter.slug
-                            }"
-                          >
-                            Entrar e continuar
-                          </a>
-                        </div>
-                      }
-                    </div>
-                  </details>
-                </li>
-              }
-            </ol>
-          } @else {
-            <app-empty-state
-              title="Capitulos em preparacao"
-              message="A ementa deste curso ainda nao possui capitulos publicados."
-            />
-          }
-        </section>
+                      </div>
+                    </details>
+                  </li>
+                }
+              </ol>
+            } @else {
+              <app-empty-state
+                title="Capítulos em preparação"
+                message="A ementa deste curso ainda não possui capítulos publicados."
+              />
+            }
+          </section>
         </main>
 
-        <aside class="course-details-page__sidebar">
-        <section class="course-side-block">
-          <h2>Instrutor</h2>
-          <div class="instructor">
-            @if (course.instructor.avatarUrl) {
-              <img [src]="course.instructor.avatarUrl" [alt]="course.instructor.name" />
-            } @else {
-              <span aria-hidden="true">{{ course.instructor.name.slice(0, 1) }}</span>
-            }
-            <div>
-              <strong>{{ course.instructor.name }}</strong>
-              @if (course.instructor.bio) {
-                <p>{{ course.instructor.bio }}</p>
+        <aside class="course-sidebar" aria-label="Informações complementares">
+          <section class="instructor-card" appReveal [appRevealDelay]="80">
+            <p class="sidebar-label">Quem ensina</p>
+            <div class="instructor-card__identity">
+              @if (course.instructor.avatarUrl) {
+                <img [src]="course.instructor.avatarUrl" [alt]="course.instructor.name" />
+              } @else {
+                <span aria-hidden="true">{{ course.instructor.name.slice(0, 1) }}</span>
               }
+              <div>
+                <strong>
+                  <a href="https://maiawall.com" target="_blank" rel="noopener noreferrer">
+                    {{ course.instructor.name }}
+                  </a>
+                </strong>
+                <small>Instrutor do curso</small>
+              </div>
             </div>
-          </div>
-        </section>
+            @if (course.instructor.bio) {
+              <p>{{ course.instructor.bio }}</p>
+            }
+            <a
+              class="instructor-card__portfolio"
+              href="https://maiawall.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Sobre mim
+            </a>
+          </section>
 
-        <section class="course-side-block">
-          <h2>Requisitos</h2>
-          @if (course.requirements?.length) {
-            <ul>
-              @for (requirement of course.requirements; track requirement) {
-                <li>{{ requirement }}</li>
-              }
-            </ul>
-          } @else {
-            <p>Nao ha requisitos obrigatorios publicados para este curso.</p>
-          }
-        </section>
+          <section class="requirements-card" appReveal [appRevealDelay]="120">
+            <p class="sidebar-label">Antes de começar</p>
+            <h2>Requisitos</h2>
+            @if (course.requirements?.length) {
+              <ul>
+                @for (requirement of course.requirements; track requirement) {
+                  <li><span aria-hidden="true">✓</span>{{ requirement }}</li>
+                }
+              </ul>
+            } @else {
+              <p>Não há requisitos obrigatórios para este curso.</p>
+            }
+          </section>
 
-        <section class="course-side-block">
-          <h2>Resultados esperados</h2>
-          @if (course.outcomes?.length) {
-            <ul>
-              @for (outcome of course.outcomes; track outcome) {
-                <li>{{ outcome }}</li>
-              }
-            </ul>
-          } @else if (course.objectives?.length) {
-            <ul>
-              @for (objective of course.objectives; track objective) {
-                <li>{{ objective }}</li>
-              }
-            </ul>
-          } @else {
-            <p>Os resultados do curso serao exibidos quando publicados.</p>
-          }
-        </section>
+          <section class="course-summary-card" appReveal [appRevealDelay]="160">
+            <p class="sidebar-label">Resumo</p>
+            <dl>
+              <div><dt>Nível</dt><dd>{{ levelLabel() }}</dd></div>
+              <div><dt>Capítulos</dt><dd>{{ chapters().length }}</dd></div>
+              <div><dt>Aulas</dt><dd>{{ lessonCount() }}</dd></div>
+              <div><dt>Publicação</dt><dd>Conteúdo integral</dd></div>
+            </dl>
+          </section>
         </aside>
       </div>
+
+      <section class="course-final-cta" appReveal>
+        <div class="mw-container course-final-cta__inner">
+          <div>
+            <p>Seu próximo passo</p>
+            <h2>{{ isAuthenticated() ? 'Continue construindo seu progresso.' : 'Comece pela primeira aula.' }}</h2>
+          </div>
+
+          @if (nextChapter(); as chapter) {
+            <a
+              class="mw-btn mw-btn--primary"
+              [routerLink]="['/cursos', course.slug, 'capitulo', chapter.slug]"
+            >
+              {{ isAuthenticated() ? 'Continuar curso' : 'Abrir conteúdo' }}
+              <span aria-hidden="true">→</span>
+            </a>
+          }
+        </div>
+      </section>
     } @else {
       <div class="mw-container course-details-page__empty">
         <app-empty-state
-          title="Curso indisponivel"
-          message="Este curso nao foi encontrado ou ainda nao esta publicado."
+          title="Curso indisponível"
+          message="Este curso não foi encontrado ou ainda não está publicado."
         >
-          <a class="mw-btn mw-btn--outline" routerLink="/cursos">Voltar ao catalogo</a>
+          <a class="mw-btn mw-btn--outline" routerLink="/cursos">Voltar ao catálogo</a>
         </app-empty-state>
       </div>
     }

@@ -8,13 +8,11 @@
       "category": "backend",
       "level": "iniciante",
       "durationMinutes": 36,
-      "instructor": { "name": "Equipe Maiawall", "bio": "Conteúdo prático para quem está começando em tecnologia." },
+      "instructor": { "name": "Wallace Maia", "bio": "Conteúdo prático para quem está começando em tecnologia." },
       "objectives": ["Entender o papel de uma API", "Usar métodos HTTP corretamente", "Ler e escrever JSON", "Interpretar códigos de resposta"],
       "requirements": ["Navegador atualizado", "Curiosidade para testar requisições HTTP"],
       "syllabus": ["Fundamentos de APIs", "Métodos HTTP", "Status codes", "JSON na prática"],
       "outcomes": ["Consumir APIs com mais segurança", "Identificar erros comuns de integração"],
-      "isFree": true,
-      "priceCents": 0,
       "published": true,
       "chapters": [
         {
@@ -34,11 +32,11 @@
           "title": "Métodos HTTP",
           "description": "Escolha o verbo correto para cada intenção.",
           "order": 2,
-          "isPublic": false,
-          "requiresLogin": true,
+          "isPublic": true,
+          "requiresLogin": false,
           "lessons": [
-            { "title": "GET e POST", "type": "code", "content": "GET /courses\nPOST /courses", "durationMinutes": 7, "order": 1, "isPublic": false },
-            { "title": "PUT, PATCH e DELETE", "type": "code", "content": "Use PUT para substituição, PATCH para alteração parcial e DELETE para remoção.", "durationMinutes": 6, "order": 2, "isPublic": false }
+            { "title": "GET e POST", "type": "code", "content": "GET /courses\nPOST /courses", "durationMinutes": 7, "order": 1, "isPublic": true },
+            { "title": "PUT, PATCH e DELETE", "type": "code", "content": "Use PUT para substituição, PATCH para alteração parcial e DELETE para remoção.", "durationMinutes": 6, "order": 2, "isPublic": true }
           ]
         },
         {
@@ -46,11 +44,11 @@
           "title": "Status codes sem mistério",
           "description": "O que a resposta HTTP está dizendo.",
           "order": 3,
-          "isPublic": false,
-          "requiresLogin": true,
+          "isPublic": true,
+          "requiresLogin": false,
           "lessons": [
-            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "durationMinutes": 5, "order": 1, "isPublic": false },
-            { "title": "Erros do cliente e do servidor", "type": "article", "content": "400, 401, 403, 404 e 500 ajudam a diagnosticar onde a requisição falhou.", "durationMinutes": 4, "order": 2, "isPublic": false }
+            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "durationMinutes": 5, "order": 1, "isPublic": true },
+            { "title": "Erros do cliente e do servidor", "type": "article", "content": "400, 401, 403, 404 e 500 ajudam a diagnosticar onde a requisição falhou.", "durationMinutes": 4, "order": 2, "isPublic": true }
           ]
         }
       ]
@@ -63,13 +61,11 @@
       "category": "devops",
       "level": "iniciante",
       "durationMinutes": 48,
-      "instructor": { "name": "Equipe Maiawall", "bio": "Conteúdo prático para quem está começando em tecnologia." },
+      "instructor": { "name": "Wallace Maia", "bio": "Conteúdo prático para quem está começando em tecnologia." },
       "objectives": ["Entender containers e imagens", "Criar um compose.yaml", "Conectar serviços", "Persistir dados com volumes"],
       "requirements": ["Docker Desktop instalado", "Terminal disponível"],
       "syllabus": ["Conceitos de container", "Estrutura do Compose", "Rede e variáveis", "Volumes e operação"],
       "outcomes": ["Subir uma aplicação com dependências", "Ler e adaptar arquivos Compose"],
-      "isFree": true,
-      "priceCents": 0,
       "published": true,
       "chapters": [
         {
@@ -89,11 +85,11 @@
           "title": "Seu primeiro Compose",
           "description": "Defina a aplicação em um arquivo declarativo.",
           "order": 2,
-          "isPublic": false,
-          "requiresLogin": true,
+          "isPublic": true,
+          "requiresLogin": false,
           "lessons": [
-            { "title": "Estrutura do compose.yaml", "type": "code", "content": "services:\n  app:\n    image: node:22-alpine", "durationMinutes": 8, "order": 1, "isPublic": false },
-            { "title": "Subir e parar serviços", "type": "code", "content": "docker compose up -d\ndocker compose down", "durationMinutes": 5, "order": 2, "isPublic": false }
+            { "title": "Estrutura do compose.yaml", "type": "code", "content": "services:\n  app:\n    image: node:22-alpine", "durationMinutes": 8, "order": 1, "isPublic": true },
+            { "title": "Subir e parar serviços", "type": "code", "content": "docker compose up -d\ndocker compose down", "durationMinutes": 5, "order": 2, "isPublic": true }
           ]
         },
         {
@@ -101,11 +97,11 @@
           "title": "Redes, volumes e variáveis",
           "description": "Conecte serviços sem perder os dados locais.",
           "order": 3,
-          "isPublic": false,
-          "requiresLogin": true,
+          "isPublic": true,
+          "requiresLogin": false,
           "lessons": [
-            { "title": "Comunicação por nome de serviço", "type": "article", "content": "Dentro da rede do Compose, um serviço pode alcançar o outro pelo nome configurado.", "durationMinutes": 7, "order": 1, "isPublic": false },
-            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "durationMinutes": 5, "order": 2, "isPublic": false }
+            { "title": "Comunicação por nome de serviço", "type": "article", "content": "Dentro da rede do Compose, um serviço pode alcançar o outro pelo nome configurado.", "durationMinutes": 7, "order": 1, "isPublic": true },
+            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "durationMinutes": 5, "order": 2, "isPublic": true }
           ]
         }
       ]
@@ -118,13 +114,11 @@
       "category": "desenvolvimento",
       "level": "iniciante",
       "durationMinutes": 55,
-      "instructor": { "name": "Equipe Maiawall", "bio": "Conteúdo prático para quem está começando em tecnologia." },
+      "instructor": { "name": "Wallace Maia", "bio": "Conteúdo prático para quem está começando em tecnologia." },
       "objectives": ["Entender o histórico do Git", "Criar commits úteis", "Trabalhar com branches", "Enviar mudanças para um remoto"],
       "requirements": ["Git instalado", "Um projeto local para praticar"],
       "syllabus": ["Repositório e histórico", "Área de staging", "Branches", "Remotos"],
       "outcomes": ["Versionar projetos com confiança", "Resolver o fluxo diário de Git"],
-      "isFree": true,
-      "priceCents": 0,
       "published": true,
       "chapters": [
         {
@@ -144,11 +138,11 @@
           "title": "Staging e commits",
           "description": "Selecione mudanças e registre intenções claras.",
           "order": 2,
-          "isPublic": false,
-          "requiresLogin": true,
+          "isPublic": true,
+          "requiresLogin": false,
           "lessons": [
-            { "title": "Área de staging", "type": "code", "content": "git add src/app.js\ngit status", "durationMinutes": 7, "order": 1, "isPublic": false },
-            { "title": "Commits que explicam a mudança", "type": "code", "content": "git commit -m \"feat: adiciona tela de login\"", "durationMinutes": 6, "order": 2, "isPublic": false }
+            { "title": "Área de staging", "type": "code", "content": "git add src/app.js\ngit status", "durationMinutes": 7, "order": 1, "isPublic": true },
+            { "title": "Commits que explicam a mudança", "type": "code", "content": "git commit -m \"feat: adiciona tela de login\"", "durationMinutes": 6, "order": 2, "isPublic": true }
           ]
         },
         {
@@ -156,11 +150,11 @@
           "title": "Branches e remotos",
           "description": "Isole trabalho e compartilhe o projeto.",
           "order": 3,
-          "isPublic": false,
-          "requiresLogin": true,
+          "isPublic": true,
+          "requiresLogin": false,
           "lessons": [
-            { "title": "Criando uma branch", "type": "code", "content": "git switch -c feature/minha-mudanca", "durationMinutes": 6, "order": 1, "isPublic": false },
-            { "title": "Push e pull", "type": "code", "content": "git push -u origin feature/minha-mudanca\ngit pull --rebase", "durationMinutes": 7, "order": 2, "isPublic": false }
+            { "title": "Criando uma branch", "type": "code", "content": "git switch -c feature/minha-mudanca", "durationMinutes": 6, "order": 1, "isPublic": true },
+            { "title": "Push e pull", "type": "code", "content": "git push -u origin feature/minha-mudanca\ngit pull --rebase", "durationMinutes": 7, "order": 2, "isPublic": true }
           ]
         }
       ]

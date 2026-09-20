@@ -35,8 +35,8 @@ function serializeCourse(course, chapters = []) {
     thumbnailUrl: course.thumbnailUrl, category: course.category, level: course.level,
     durationMinutes: course.durationMinutes, instructor: course.instructor,
     objectives: course.objectives || [], requirements: course.requirements || [],
-    syllabus: course.syllabus || [], outcomes: course.outcomes || [], isFree: course.isFree,
-    priceCents: course.priceCents, published: Boolean(course.published),
+    syllabus: course.syllabus || [], outcomes: course.outcomes || [],
+    published: Boolean(course.published),
     chapters: chapters.sort((a, b) => a.order - b.order),
   };
 }
@@ -62,7 +62,6 @@ catalogRouter.get('/', async (request, response, next) => {
       id: toId(course._id), title: course.title, slug: course.slug,
       shortDescription: course.shortDescription, thumbnailUrl: course.thumbnailUrl,
       category: course.category, level: course.level, durationMinutes: course.durationMinutes,
-      isFree: course.isFree, priceCents: course.priceCents,
       instructorName: course.instructor?.name || 'Maiawall', chapterCount: chapterCounts.get(toId(course._id)) || 0,
     }));
     response.json(successResponse({ content, page, size, totalElements, totalPages: Math.ceil(totalElements / size) }, 'OK'));
@@ -93,9 +92,7 @@ catalogRouter.get('/:courseSlug/capitulos/:chapterSlug', async (request, respons
     if (!course) throw new AppError(404, 'COURSE_NOT_FOUND', 'Curso nao encontrado');
     const chapter = await database.collection('chapters').findOne({ courseId: course._id, slug: request.params.chapterSlug });
     if (!chapter) throw new AppError(404, 'CHAPTER_NOT_FOUND', 'Capitulo nao encontrado');
-    const canReadFullChapter = Boolean(request.auth);
-    const lessonFilter = { chapterId: chapter._id, ...(canReadFullChapter ? {} : { isPublic: true }) };
-    const lessons = await database.collection('lessons').find(lessonFilter).sort({ order: 1 }).toArray();
+    const lessons = await database.collection('lessons').find({ chapterId: chapter._id }).sort({ order: 1 }).toArray();
     response.json(successResponse(serializeChapter(chapter, lessons), 'OK'));
   } catch (error) { next(error); }
 });

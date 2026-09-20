@@ -24,34 +24,34 @@ export class LearningMethodComponent {
     {
       number: '01',
       icon: 'book',
-      title: 'Aprender',
+      title: 'Conhecer o curso',
       description:
-        'Aulas objetivas que explicam o porquê antes do como, com exemplos do dia a dia de quem trabalha com tecnologia.',
-      outcome: 'Você entende o conceito antes de copiar comandos.',
+        'Veja o tema, o nível, a duração e o contexto do curso antes de entrar nos capítulos.',
+      outcome: 'Você entende o que foi abordado no curso.',
     },
     {
       number: '02',
       icon: 'keyboard',
-      title: 'Praticar',
+      title: 'Percorrer os capítulos',
       description:
-        'Exercícios em cada módulo para aplicar o conteúdo na hora e fixar o aprendizado com mão na massa.',
-      outcome: 'Você transforma aula em execução.',
+        'Consulte o conteúdo na mesma organização de módulos e capítulos usada no curso ministrado.',
+      outcome: 'Você encontra cada assunto em sua sequência original.',
     },
     {
       number: '03',
       icon: 'chat',
-      title: 'Receber feedback',
+      title: 'Consultar materiais',
       description:
-        'Envie suas respostas e receba correção com orientações claras sobre o que ajustar e por quê.',
-      outcome: 'Você sabe exatamente onde melhorar.',
+        'Acesse textos, exemplos, comandos e links de apoio reunidos em cada capítulo.',
+      outcome: 'Você revisita o material sempre que precisar.',
     },
     {
       number: '04',
-      icon: 'award',
-      title: 'Certificar',
+      icon: 'book',
+      title: 'Retomar a leitura',
       description:
-        'Conclua a trilha e conquiste o certificado da Maiawall para comprovar o que aprendeu.',
-      outcome: 'Você fecha a trilha com comprovação.',
+        'Se quiser, use uma conta para marcar o que concluiu e continuar exatamente de onde parou.',
+      outcome: 'Seu histórico fica salvo no perfil.',
     },
   ]);
 }

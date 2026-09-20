@@ -14,7 +14,6 @@ import {
 } from '../../models/course.model';
 import { CourseService } from '../../services/course.service';
 
-type PriceFilter = 'todos' | 'gratis' | 'pago';
 type DurationFilter = 'todos' | 'curto' | 'medio' | 'longo';
 
 interface CourseListState {
@@ -43,7 +42,6 @@ export class CourseListComponent {
   protected readonly category = signal('todos');
   protected readonly level = signal('todos');
   protected readonly duration = signal<DurationFilter>('todos');
-  protected readonly price = signal<PriceFilter>('todos');
 
   protected readonly state = toSignal(
     this.courseService.list({ size: 100 }).pipe(
@@ -82,7 +80,6 @@ export class CourseListComponent {
     const category = this.category();
     const level = this.level();
     const duration = this.duration();
-    const price = this.price();
 
     return this.state().courses.filter((course) => {
       const matchesText =
@@ -94,9 +91,7 @@ export class CourseListComponent {
       const matchesCategory = category === 'todos' || course.category === category;
       const matchesLevel = level === 'todos' || course.level === level;
       const matchesDuration = this.matchesDuration(course.durationMinutes, duration);
-      const matchesPrice = this.matchesPrice(course, price);
-
-      return matchesText && matchesCategory && matchesLevel && matchesDuration && matchesPrice;
+      return matchesText && matchesCategory && matchesLevel && matchesDuration;
     });
   });
 
@@ -105,8 +100,7 @@ export class CourseListComponent {
       this.search().trim() !== '' ||
       this.category() !== 'todos' ||
       this.level() !== 'todos' ||
-      this.duration() !== 'todos' ||
-      this.price() !== 'todos',
+      this.duration() !== 'todos',
   );
 
   protected getCategoryLabel(category: string): string {
@@ -122,7 +116,6 @@ export class CourseListComponent {
     this.category.set('todos');
     this.level.set('todos');
     this.duration.set('todos');
-    this.price.set('todos');
   }
 
   private matchesDuration(minutes: number | undefined, filter: DurationFilter): boolean {
@@ -143,16 +136,6 @@ export class CourseListComponent {
     }
 
     return minutes > 180;
-  }
-
-  private matchesPrice(course: CourseSummary, filter: PriceFilter): boolean {
-    if (filter === 'todos') {
-      return true;
-    }
-
-    const isFree = course.isFree === true || course.priceCents === 0;
-
-    return filter === 'gratis' ? isFree : !isFree;
   }
 
   private normalize(value: string): string {

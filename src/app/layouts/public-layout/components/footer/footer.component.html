@@ -8,12 +8,12 @@
         </span>
       </a>
       <p class="footer__tagline">
-        Aprenda tecnologia na prática. Conteúdo direto, exercícios e projetos reais para você evoluir.
+        Conteúdos dos cursos ministrados pela Maiawall, organizados para consulta e continuidade da leitura.
       </p>
     </div>
 
     <nav class="footer__column" aria-label="Navegação">
-      <h3 class="footer__heading">Plataforma</h3>
+      <h3 class="footer__heading">Acervo</h3>
       <ul class="footer__list">
         @for (link of navLinks; track link.label) {
           <li><a [routerLink]="link.route" [fragment]="link.fragment">{{ link.label }}</a></li>

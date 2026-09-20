@@ -74,22 +74,6 @@ export class CourseChapterComponent {
     [...(this.state().chapter?.lessons ?? [])].sort((a, b) => a.order - b.order),
   );
 
-  protected readonly publicLessons = computed(() => {
-    const chapter = this.state().chapter;
-    const lessons = this.lessons();
-
-    if (this.authState.isAuthenticated() || !chapter?.requiresLogin || chapter.isPublic) {
-      return lessons;
-    }
-
-    return lessons.filter((lesson) => lesson.isPublic);
-  });
-
-  protected readonly isBlocked = computed(() => {
-    const chapter = this.state().chapter;
-    return Boolean(chapter?.requiresLogin && !chapter.isPublic && this.publicLessons().length === 0);
-  });
-
   protected readonly isAuthenticated = this.authState.isAuthenticated;
 
   constructor() {
