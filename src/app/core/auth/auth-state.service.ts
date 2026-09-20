@@ -15,24 +15,29 @@ import { TokenStorageService } from './token-storage.service';
 export class AuthStateService {
   private readonly userSignal = signal<User | null>(null);
   private readonly accessTokenSignal = signal<string | null>(null);
+  private readonly refreshTokenSignal = signal<string | null>(null);
 
   readonly user = this.userSignal.asReadonly();
   readonly accessToken = this.accessTokenSignal.asReadonly();
+  readonly refreshToken = this.refreshTokenSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.userSignal() !== null);
 
   constructor(private readonly tokenStorage: TokenStorageService) {
     this.accessTokenSignal.set(this.tokenStorage.getAccessToken());
+    this.refreshTokenSignal.set(this.tokenStorage.getRefreshToken());
   }
 
   setSession(session: AuthSession): void {
     this.tokenStorage.setTokens(session.tokens);
     this.accessTokenSignal.set(session.tokens.accessToken);
+    this.refreshTokenSignal.set(session.tokens.refreshToken ?? null);
     this.userSignal.set(session.user);
   }
 
   setTokens(tokens: AuthSession['tokens']): void {
     this.tokenStorage.setTokens(tokens);
     this.accessTokenSignal.set(tokens.accessToken);
+    this.refreshTokenSignal.set(tokens.refreshToken ?? null);
   }
 
   setUser(user: User): void {
@@ -51,6 +56,7 @@ export class AuthStateService {
   clearSession(): void {
     this.tokenStorage.clear();
     this.accessTokenSignal.set(null);
+    this.refreshTokenSignal.set(null);
     this.userSignal.set(null);
   }
 }

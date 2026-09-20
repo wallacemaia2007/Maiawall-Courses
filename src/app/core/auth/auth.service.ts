@@ -43,8 +43,10 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
+    const refreshToken = this.authState.refreshToken();
+
     return this.http
-      .post<void>(this.authUrl(AUTH_ENDPOINTS.logout), {})
+      .post<void>(this.authUrl(AUTH_ENDPOINTS.logout), { refreshToken })
       .pipe(
         map(() => void 0),
         tap(() => this.authState.clearSession()),
@@ -52,7 +54,7 @@ export class AuthService {
   }
 
   refreshSession(): Observable<AuthSession | null> {
-    const refreshToken = this.authState.accessToken();
+    const refreshToken = this.authState.refreshToken();
 
     if (!refreshToken) {
       return of(null);
