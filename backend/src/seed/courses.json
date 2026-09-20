@@ -1,0 +1,169 @@
+{
+  "courses": [
+    {
+      "slug": "apis-metodos-http-e-json",
+      "title": "APIs, Métodos HTTP e JSON",
+      "shortDescription": "Entenda como as APIs funcionam por dentro: métodos HTTP, status codes, JSON e boas práticas para consumir serviços.",
+      "description": "Um minicurso prático para compreender a comunicação entre aplicações web. Você vai montar requisições, interpretar respostas e reconhecer os principais contratos de uma API HTTP.",
+      "category": "backend",
+      "level": "iniciante",
+      "durationMinutes": 36,
+      "instructor": { "name": "Equipe Maiawall", "bio": "Conteúdo prático para quem está começando em tecnologia." },
+      "objectives": ["Entender o papel de uma API", "Usar métodos HTTP corretamente", "Ler e escrever JSON", "Interpretar códigos de resposta"],
+      "requirements": ["Navegador atualizado", "Curiosidade para testar requisições HTTP"],
+      "syllabus": ["Fundamentos de APIs", "Métodos HTTP", "Status codes", "JSON na prática"],
+      "outcomes": ["Consumir APIs com mais segurança", "Identificar erros comuns de integração"],
+      "isFree": true,
+      "priceCents": 0,
+      "published": true,
+      "chapters": [
+        {
+          "slug": "o-que-e-uma-api",
+          "title": "O que é uma API?",
+          "description": "A base da comunicação entre clientes, serviços e dados.",
+          "order": 1,
+          "isPublic": true,
+          "requiresLogin": false,
+          "lessons": [
+            { "title": "API como contrato entre aplicações", "type": "article", "content": "Uma API define como uma aplicação pede dados ou ações para outra aplicação.", "durationMinutes": 6, "order": 1, "isPublic": true },
+            { "title": "Cliente, servidor e recurso", "type": "article", "content": "Separe quem faz a requisição, quem responde e qual recurso está sendo acessado.", "durationMinutes": 5, "order": 2, "isPublic": true }
+          ]
+        },
+        {
+          "slug": "metodos-http",
+          "title": "Métodos HTTP",
+          "description": "Escolha o verbo correto para cada intenção.",
+          "order": 2,
+          "isPublic": false,
+          "requiresLogin": true,
+          "lessons": [
+            { "title": "GET e POST", "type": "code", "content": "GET /courses\nPOST /courses", "durationMinutes": 7, "order": 1, "isPublic": false },
+            { "title": "PUT, PATCH e DELETE", "type": "code", "content": "Use PUT para substituição, PATCH para alteração parcial e DELETE para remoção.", "durationMinutes": 6, "order": 2, "isPublic": false }
+          ]
+        },
+        {
+          "slug": "status-codes",
+          "title": "Status codes sem mistério",
+          "description": "O que a resposta HTTP está dizendo.",
+          "order": 3,
+          "isPublic": false,
+          "requiresLogin": true,
+          "lessons": [
+            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "durationMinutes": 5, "order": 1, "isPublic": false },
+            { "title": "Erros do cliente e do servidor", "type": "article", "content": "400, 401, 403, 404 e 500 ajudam a diagnosticar onde a requisição falhou.", "durationMinutes": 4, "order": 2, "isPublic": false }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "docker-compose-na-pratica",
+      "title": "Docker Compose na Prática",
+      "shortDescription": "Subir ambientes com múltiplos serviços nunca foi tão simples. Aprenda a definir e orquestrar containers com Docker Compose.",
+      "description": "Crie um ambiente local reproduzível com serviços conectados, variáveis de ambiente, volumes e comandos de operação do Docker Compose.",
+      "category": "devops",
+      "level": "iniciante",
+      "durationMinutes": 48,
+      "instructor": { "name": "Equipe Maiawall", "bio": "Conteúdo prático para quem está começando em tecnologia." },
+      "objectives": ["Entender containers e imagens", "Criar um compose.yaml", "Conectar serviços", "Persistir dados com volumes"],
+      "requirements": ["Docker Desktop instalado", "Terminal disponível"],
+      "syllabus": ["Conceitos de container", "Estrutura do Compose", "Rede e variáveis", "Volumes e operação"],
+      "outcomes": ["Subir uma aplicação com dependências", "Ler e adaptar arquivos Compose"],
+      "isFree": true,
+      "priceCents": 0,
+      "published": true,
+      "chapters": [
+        {
+          "slug": "containers-e-imagens",
+          "title": "Containers e imagens",
+          "description": "Os conceitos mínimos antes de orquestrar serviços.",
+          "order": 1,
+          "isPublic": true,
+          "requiresLogin": false,
+          "lessons": [
+            { "title": "O que um container resolve", "type": "article", "content": "Containers empacotam a aplicação e suas dependências em um ambiente consistente.", "durationMinutes": 6, "order": 1, "isPublic": true },
+            { "title": "Imagem, container e porta", "type": "article", "content": "A imagem é o molde; o container é sua execução; portas expõem serviços para fora.", "durationMinutes": 6, "order": 2, "isPublic": true }
+          ]
+        },
+        {
+          "slug": "primeiro-compose",
+          "title": "Seu primeiro Compose",
+          "description": "Defina a aplicação em um arquivo declarativo.",
+          "order": 2,
+          "isPublic": false,
+          "requiresLogin": true,
+          "lessons": [
+            { "title": "Estrutura do compose.yaml", "type": "code", "content": "services:\n  app:\n    image: node:22-alpine", "durationMinutes": 8, "order": 1, "isPublic": false },
+            { "title": "Subir e parar serviços", "type": "code", "content": "docker compose up -d\ndocker compose down", "durationMinutes": 5, "order": 2, "isPublic": false }
+          ]
+        },
+        {
+          "slug": "redes-volumes-e-variaveis",
+          "title": "Redes, volumes e variáveis",
+          "description": "Conecte serviços sem perder os dados locais.",
+          "order": 3,
+          "isPublic": false,
+          "requiresLogin": true,
+          "lessons": [
+            { "title": "Comunicação por nome de serviço", "type": "article", "content": "Dentro da rede do Compose, um serviço pode alcançar o outro pelo nome configurado.", "durationMinutes": 7, "order": 1, "isPublic": false },
+            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "durationMinutes": 5, "order": 2, "isPublic": false }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "git-para-iniciantes",
+      "title": "Git para Iniciantes",
+      "shortDescription": "Versionamento sem medo. Aprenda os comandos essenciais do Git e organize seu código com segurança.",
+      "description": "Aprenda o fluxo essencial de versionamento para registrar mudanças, trabalhar com branches e sincronizar um projeto com um repositório remoto.",
+      "category": "desenvolvimento",
+      "level": "iniciante",
+      "durationMinutes": 55,
+      "instructor": { "name": "Equipe Maiawall", "bio": "Conteúdo prático para quem está começando em tecnologia." },
+      "objectives": ["Entender o histórico do Git", "Criar commits úteis", "Trabalhar com branches", "Enviar mudanças para um remoto"],
+      "requirements": ["Git instalado", "Um projeto local para praticar"],
+      "syllabus": ["Repositório e histórico", "Área de staging", "Branches", "Remotos"],
+      "outcomes": ["Versionar projetos com confiança", "Resolver o fluxo diário de Git"],
+      "isFree": true,
+      "priceCents": 0,
+      "published": true,
+      "chapters": [
+        {
+          "slug": "conceitos-fundamentais-do-git",
+          "title": "Conceitos fundamentais",
+          "description": "Histórico, repositório e estado do trabalho.",
+          "order": 1,
+          "isPublic": true,
+          "requiresLogin": false,
+          "lessons": [
+            { "title": "Por que versionar?", "type": "article", "content": "Git registra a evolução do projeto e permite recuperar, comparar e compartilhar mudanças.", "durationMinutes": 6, "order": 1, "isPublic": true },
+            { "title": "Inicializando um repositório", "type": "code", "content": "git init\ngit status", "durationMinutes": 5, "order": 2, "isPublic": true }
+          ]
+        },
+        {
+          "slug": "staging-e-commits",
+          "title": "Staging e commits",
+          "description": "Selecione mudanças e registre intenções claras.",
+          "order": 2,
+          "isPublic": false,
+          "requiresLogin": true,
+          "lessons": [
+            { "title": "Área de staging", "type": "code", "content": "git add src/app.js\ngit status", "durationMinutes": 7, "order": 1, "isPublic": false },
+            { "title": "Commits que explicam a mudança", "type": "code", "content": "git commit -m \"feat: adiciona tela de login\"", "durationMinutes": 6, "order": 2, "isPublic": false }
+          ]
+        },
+        {
+          "slug": "branches-e-remotos",
+          "title": "Branches e remotos",
+          "description": "Isole trabalho e compartilhe o projeto.",
+          "order": 3,
+          "isPublic": false,
+          "requiresLogin": true,
+          "lessons": [
+            { "title": "Criando uma branch", "type": "code", "content": "git switch -c feature/minha-mudanca", "durationMinutes": 6, "order": 1, "isPublic": false },
+            { "title": "Push e pull", "type": "code", "content": "git push -u origin feature/minha-mudanca\ngit pull --rebase", "durationMinutes": 7, "order": 2, "isPublic": false }
+          ]
+        }
+      ]
+    }
+  ]
+}
