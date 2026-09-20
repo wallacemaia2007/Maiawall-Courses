@@ -149,13 +149,6 @@ export class CourseDetailsComponent {
     return this.completedChapterIds().has(chapter.id);
   }
 
-  protected chapterDuration(chapter: Chapter): number {
-    return chapter.lessons.reduce(
-      (total, lesson) => total + (lesson.durationMinutes ?? 0),
-      0,
-    );
-  }
-
   protected trackChapter(_index: number, chapter: Chapter): string {
     return chapter.id;
   }

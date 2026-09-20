@@ -6,7 +6,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { toApiError } from '../../../../core/models/api-error.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
-import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
 import { ChapterDetail, Lesson } from '../../models/course.model';
 import { ChapterService } from '../../services/chapter.service';
 import { AuthStateService } from '../../../../core/auth/auth-state.service';
@@ -22,7 +21,7 @@ interface CourseChapterState {
 @Component({
   selector: 'app-course-chapter',
   standalone: true,
-  imports: [RouterLink, DurationPipe, EmptyStateComponent, LoadingSpinnerComponent],
+  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent],
   templateUrl: './course-chapter.component.html',
   styleUrl: './course-chapter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

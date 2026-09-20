@@ -23,8 +23,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "API como contrato entre aplicações", "type": "article", "content": "Uma API define como uma aplicação pede dados ou ações para outra aplicação.", "durationMinutes": 6, "order": 1, "isPublic": true },
-            { "title": "Cliente, servidor e recurso", "type": "article", "content": "Separe quem faz a requisição, quem responde e qual recurso está sendo acessado.", "durationMinutes": 5, "order": 2, "isPublic": true }
+            { "title": "API como contrato entre aplicações", "type": "article", "content": "Uma API define como uma aplicação pede dados ou ações para outra aplicação.", "order": 1, "isPublic": true },
+            { "title": "Cliente, servidor e recurso", "type": "article", "content": "Separe quem faz a requisição, quem responde e qual recurso está sendo acessado.", "order": 2, "isPublic": true }
           ]
         },
         {
@@ -35,8 +35,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "GET e POST", "type": "code", "content": "GET /courses\nPOST /courses", "durationMinutes": 7, "order": 1, "isPublic": true },
-            { "title": "PUT, PATCH e DELETE", "type": "code", "content": "Use PUT para substituição, PATCH para alteração parcial e DELETE para remoção.", "durationMinutes": 6, "order": 2, "isPublic": true }
+            { "title": "GET e POST", "type": "code", "content": "GET /courses\nPOST /courses", "order": 1, "isPublic": true },
+            { "title": "PUT, PATCH e DELETE", "type": "code", "content": "Use PUT para substituição, PATCH para alteração parcial e DELETE para remoção.", "order": 2, "isPublic": true }
           ]
         },
         {
@@ -47,8 +47,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "durationMinutes": 5, "order": 1, "isPublic": true },
-            { "title": "Erros do cliente e do servidor", "type": "article", "content": "400, 401, 403, 404 e 500 ajudam a diagnosticar onde a requisição falhou.", "durationMinutes": 4, "order": 2, "isPublic": true }
+            { "title": "Respostas de sucesso", "type": "article", "content": "200, 201 e 204 comunicam resultados bem-sucedidos em contextos diferentes.", "order": 1, "isPublic": true },
+            { "title": "Erros do cliente e do servidor", "type": "article", "content": "400, 401, 403, 404 e 500 ajudam a diagnosticar onde a requisição falhou.", "order": 2, "isPublic": true }
           ]
         }
       ]
@@ -76,8 +76,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "O que um container resolve", "type": "article", "content": "Containers empacotam a aplicação e suas dependências em um ambiente consistente.", "durationMinutes": 6, "order": 1, "isPublic": true },
-            { "title": "Imagem, container e porta", "type": "article", "content": "A imagem é o molde; o container é sua execução; portas expõem serviços para fora.", "durationMinutes": 6, "order": 2, "isPublic": true }
+            { "title": "O que um container resolve", "type": "article", "content": "Containers empacotam a aplicação e suas dependências em um ambiente consistente.", "order": 1, "isPublic": true },
+            { "title": "Imagem, container e porta", "type": "article", "content": "A imagem é o molde; o container é sua execução; portas expõem serviços para fora.", "order": 2, "isPublic": true }
           ]
         },
         {
@@ -88,8 +88,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Estrutura do compose.yaml", "type": "code", "content": "services:\n  app:\n    image: node:22-alpine", "durationMinutes": 8, "order": 1, "isPublic": true },
-            { "title": "Subir e parar serviços", "type": "code", "content": "docker compose up -d\ndocker compose down", "durationMinutes": 5, "order": 2, "isPublic": true }
+            { "title": "Estrutura do compose.yaml", "type": "code", "content": "services:\n  app:\n    image: node:22-alpine", "order": 1, "isPublic": true },
+            { "title": "Subir e parar serviços", "type": "code", "content": "docker compose up -d\ndocker compose down", "order": 2, "isPublic": true }
           ]
         },
         {
@@ -100,8 +100,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Comunicação por nome de serviço", "type": "article", "content": "Dentro da rede do Compose, um serviço pode alcançar o outro pelo nome configurado.", "durationMinutes": 7, "order": 1, "isPublic": true },
-            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "durationMinutes": 5, "order": 2, "isPublic": true }
+            { "title": "Comunicação por nome de serviço", "type": "article", "content": "Dentro da rede do Compose, um serviço pode alcançar o outro pelo nome configurado.", "order": 1, "isPublic": true },
+            { "title": "Dados persistentes com volumes", "type": "article", "content": "Volumes mantêm os dados quando um container é recriado.", "order": 2, "isPublic": true }
           ]
         }
       ]
@@ -129,8 +129,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Por que versionar?", "type": "article", "content": "Git registra a evolução do projeto e permite recuperar, comparar e compartilhar mudanças.", "durationMinutes": 6, "order": 1, "isPublic": true },
-            { "title": "Inicializando um repositório", "type": "code", "content": "git init\ngit status", "durationMinutes": 5, "order": 2, "isPublic": true }
+            { "title": "Por que versionar?", "type": "article", "content": "Git registra a evolução do projeto e permite recuperar, comparar e compartilhar mudanças.", "order": 1, "isPublic": true },
+            { "title": "Inicializando um repositório", "type": "code", "content": "git init\ngit status", "order": 2, "isPublic": true }
           ]
         },
         {
@@ -141,8 +141,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Área de staging", "type": "code", "content": "git add src/app.js\ngit status", "durationMinutes": 7, "order": 1, "isPublic": true },
-            { "title": "Commits que explicam a mudança", "type": "code", "content": "git commit -m \"feat: adiciona tela de login\"", "durationMinutes": 6, "order": 2, "isPublic": true }
+            { "title": "Área de staging", "type": "code", "content": "git add src/app.js\ngit status", "order": 1, "isPublic": true },
+            { "title": "Commits que explicam a mudança", "type": "code", "content": "git commit -m \"feat: adiciona tela de login\"", "order": 2, "isPublic": true }
           ]
         },
         {
@@ -153,8 +153,8 @@
           "isPublic": true,
           "requiresLogin": false,
           "lessons": [
-            { "title": "Criando uma branch", "type": "code", "content": "git switch -c feature/minha-mudanca", "durationMinutes": 6, "order": 1, "isPublic": true },
-            { "title": "Push e pull", "type": "code", "content": "git push -u origin feature/minha-mudanca\ngit pull --rebase", "durationMinutes": 7, "order": 2, "isPublic": true }
+            { "title": "Criando uma branch", "type": "code", "content": "git switch -c feature/minha-mudanca", "order": 1, "isPublic": true },
+            { "title": "Push e pull", "type": "code", "content": "git push -u origin feature/minha-mudanca\ngit pull --rebase", "order": 2, "isPublic": true }
           ]
         }
       ]

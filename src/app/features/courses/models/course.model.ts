@@ -93,7 +93,6 @@ export interface Lesson {
   content?: string;
   isPublic?: boolean;
   attachments?: Attachment[];
-  durationMinutes?: number;
   order: number;
 }
 

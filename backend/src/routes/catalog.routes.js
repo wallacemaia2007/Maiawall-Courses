@@ -15,7 +15,7 @@ function serializeLesson(lesson) {
   return {
     id: toId(lesson._id), chapterId: toId(lesson.chapterId), title: lesson.title,
     type: lesson.type, content: lesson.content, isPublic: Boolean(lesson.isPublic),
-    attachments: lesson.attachments || [], durationMinutes: lesson.durationMinutes, order: lesson.order,
+    attachments: lesson.attachments || [], order: lesson.order,
   };
 }
 
