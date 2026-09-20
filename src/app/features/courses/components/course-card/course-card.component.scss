@@ -48,15 +48,14 @@
   min-height: 168px;
   padding: 1.25rem;
   overflow: hidden;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--tone) 7%, transparent), transparent 55%),
-    var(--tone-bg);
+  background: #ffffff;
 }
 
 .course-card__cover::after {
   content: '';
   position: absolute;
   inset: auto 0 0;
+  z-index: 2;
   height: 3px;
   background: var(--tone);
   pointer-events: none;
@@ -64,66 +63,13 @@
 
 .course-card__sponsor-logo {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 0;
-  width: min(72%, 210px);
-  height: auto;
-  max-height: 74%;
-  object-fit: contain;
-  opacity: 0.18;
-  mix-blend-mode: multiply;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
   pointer-events: none;
-}
-
-.course-card__category {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1;
-  padding: 0.3rem 0.7rem;
-  border-radius: var(--radius-sm);
-  background: var(--tone);
-  color: #ffffff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.course-card__index {
-  position: absolute;
-  right: 0.9rem;
-  bottom: 0.35rem;
-  z-index: 0;
-  color: color-mix(in srgb, var(--tone) 18%, transparent);
-  font-family: var(--font-display);
-  font-size: 4.5rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  user-select: none;
-}
-
-.course-card__cover-icon {
-  position: absolute;
-  top: 1.05rem;
-  right: 1.05rem;
-  z-index: 1;
-  display: grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border: 1px solid color-mix(in srgb, var(--tone) 22%, transparent);
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--tone) 8%, transparent);
-  color: var(--tone);
-}
-
-.course-card__cover-icon svg {
-  width: 20px;
-  height: 20px;
 }
 
 /* ---------- Corpo ---------- */
