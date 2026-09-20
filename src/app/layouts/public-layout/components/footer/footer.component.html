@@ -18,7 +18,18 @@
         @for (link of navLinks; track link.label) {
           <li><a [routerLink]="link.route" [fragment]="link.fragment">{{ link.label }}</a></li>
         }
-        <li><a href="mailto:wallacemaia2007@gmail.com">Contato</a></li>
+        <li>
+          <a class="footer__link" href="mailto:wallacemaia2007@gmail.com">
+            <img
+              class="footer__link-icon"
+              src="/assets/icons/gmail.svg"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
+            Contato
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -26,13 +37,31 @@
       <h3 class="footer__heading">Maiawall</h3>
       <ul class="footer__list">
         <li>
-          <a href="https://maiawall.com" target="_blank" rel="noopener noreferrer">Site oficial</a>
+          <a class="footer__link" href="https://maiawall.com" target="_blank" rel="noopener noreferrer">Site oficial</a>
         </li>
         <li>
-          <a href="https://github.com/maiawall" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="footer__link" href="https://github.com/maiawall" target="_blank" rel="noopener noreferrer">
+            <img
+              class="footer__link-icon footer__link-icon--github"
+              src="/assets/icons/github.svg"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
+            GitHub
+          </a>
         </li>
         <li>
-          <a href="https://linkedin.com/company/maiawall" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a class="footer__link" href="https://linkedin.com/company/maiawall" target="_blank" rel="noopener noreferrer">
+            <img
+              class="footer__link-icon"
+              src="/assets/icons/linkedin.svg"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
+            LinkedIn
+          </a>
         </li>
       </ul>
     </nav>

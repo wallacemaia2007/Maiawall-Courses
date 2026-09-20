@@ -107,8 +107,13 @@
 }
 
 .sobre-page__link-icon {
+  display: block;
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
+}
+
+svg.sobre-page__link-icon {
   color: var(--color-text-muted);
   transition: color var(--motion-base) ease;
 }
@@ -117,7 +122,7 @@
   color: var(--color-primary);
 }
 
-.sobre-page__link:hover .sobre-page__link-icon {
+.sobre-page__link:hover svg.sobre-page__link-icon {
   color: var(--color-primary);
 }
 

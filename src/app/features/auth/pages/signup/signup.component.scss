@@ -37,6 +37,12 @@
   height: 1.35rem;
 }
 
+.social-btn__icon {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
 .social-btn:hover {
   border-color: var(--color-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
