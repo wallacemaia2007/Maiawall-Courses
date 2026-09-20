@@ -9,6 +9,7 @@
     "dev": "nodemon server.js",
     "dev:prod": "nodemon --exec \"node --env-file=.env.production.local\" server.js",
     "seed:courses": "node src/scripts/seed-courses.js",
+    "seed:courses:prod": "node src/scripts/seed-courses-production.js",
     "test": "node --test"
   },
   "dependencies": {
