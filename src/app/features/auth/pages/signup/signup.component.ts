@@ -50,7 +50,7 @@ export class SignupComponent {
     const { name, email, password } = this.form.getRawValue();
 
     this.authService.signup({ name, email, password }).subscribe({
-      next: () => this.router.navigateByUrl('/app/dashboard'),
+      next: () => this.router.navigateByUrl('/'),
       error: (error: unknown) => {
         this.submitError.set(
           apiErrorMessage(error, 'Nao foi possivel criar a conta. Tente novamente.'),

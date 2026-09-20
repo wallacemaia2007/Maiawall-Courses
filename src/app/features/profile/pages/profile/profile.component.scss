@@ -5,6 +5,13 @@
   margin-inline: auto;
 }
 
+.learning-history { display: grid; gap: 18px; padding: 22px; border: 1px solid var(--color-border-light); border-radius: var(--radius-lg); background: var(--color-bg-primary); }
+.learning-history__head, .learning-history__item { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.learning-history__head h2, .learning-history__item h3 { margin: 0; font-family: var(--font-display); }
+.learning-history__item { padding: 16px 0; border-top: 1px solid var(--color-border-light); }
+.learning-history__item p { margin: 4px 0 0; color: var(--color-text-muted); }
+.learning-history__item a { color: var(--color-primary); font-weight: 700; text-decoration: none; }
+
 .profile-page__status {
   display: grid;
   padding: 48px 16px;

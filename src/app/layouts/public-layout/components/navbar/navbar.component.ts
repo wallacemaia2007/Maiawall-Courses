@@ -21,6 +21,8 @@ import {
   PublicNavLink,
 } from '../../../../core/constants/navigation.constants';
 import { HeaderHeroService } from '../../../../core/services/header-hero.service';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthStateService } from '../../../../core/auth/auth-state.service';
 
 /* Sensibilidade de direção do scroll (px). */
 const DIRECTION_THRESHOLD = 10;
@@ -45,12 +47,16 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly heroService = inject(HeaderHeroService);
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly authService = inject(AuthService);
+  private readonly authState = inject(AuthStateService);
 
   readonly links = input<PublicNavLink[]>(PUBLIC_NAV_LINKS);
 
   protected readonly menuOpen = signal(false);
   protected readonly overHero = signal(false);
   protected readonly headerState = signal<'visible' | 'hidden'>('visible');
+  protected readonly isAuthenticated = this.authState.isAuthenticated;
+  protected readonly user = this.authState.user;
 
   private readonly toggleButton =
     viewChild<ElementRef<HTMLButtonElement>>('toggleButton');
@@ -125,6 +131,11 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     } else {
       this.openMenu();
     }
+  }
+
+  protected logout(): void {
+    this.authService.logout().subscribe({ next: () => this.router.navigateByUrl('/') });
+    this.closeMenu();
   }
 
   protected openMenu(): void {

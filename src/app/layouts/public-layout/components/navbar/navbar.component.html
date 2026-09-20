@@ -28,8 +28,13 @@
     </nav>
 
     <div class="navbar__actions">
-      <a class="navbar__login" routerLink="/login">Entrar</a>
-      <a class="navbar__signup" routerLink="/signup">Criar conta</a>
+      @if (isAuthenticated()) {
+        <a class="navbar__login" routerLink="/perfil">Perfil{{ user()?.name ? ': ' + user()!.name.split(' ')[0] : '' }}</a>
+        <button class="navbar__signup" type="button" (click)="logout()">Sair</button>
+      } @else {
+        <a class="navbar__login" routerLink="/login">Entrar</a>
+        <a class="navbar__signup" routerLink="/signup">Criar conta</a>
+      }
     </div>
 
     <button
@@ -69,8 +74,13 @@
         }
       </nav>
       <div class="navbar__drawer-actions">
-        <a class="navbar__drawer-login" routerLink="/login" (click)="closeMenu()">Entrar</a>
-        <a class="navbar__drawer-signup" routerLink="/signup" (click)="closeMenu()">Criar conta</a>
+        @if (isAuthenticated()) {
+          <a class="navbar__drawer-login" routerLink="/perfil" (click)="closeMenu()">Meu perfil</a>
+          <button class="navbar__drawer-signup" type="button" (click)="logout()">Sair</button>
+        } @else {
+          <a class="navbar__drawer-login" routerLink="/login" (click)="closeMenu()">Entrar</a>
+          <a class="navbar__drawer-signup" routerLink="/signup" (click)="closeMenu()">Criar conta</a>
+        }
       </div>
     </div>
   }

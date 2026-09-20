@@ -26,9 +26,9 @@ export class ChapterService {
       .pipe(map(unwrapApiData));
   }
 
-  getBySlug(slug: string): Observable<ChapterDetail | null> {
+  getBySlug(courseSlug: string, slug: string): Observable<ChapterDetail | null> {
     return this.http
-      .get<ApiResponse<ChapterDetail>>(this.apiUrl(`${CHAPTER_ENDPOINTS.public}/${slug}`))
+      .get<ApiResponse<ChapterDetail>>(this.apiUrl(`/courses/${courseSlug}/capitulos/${slug}`))
       .pipe(map(unwrapApiData));
   }
 

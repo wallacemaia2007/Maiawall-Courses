@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -9,6 +9,8 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
 import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
 import { ChapterDetail, Lesson } from '../../models/course.model';
 import { ChapterService } from '../../services/chapter.service';
+import { AuthStateService } from '../../../../core/auth/auth-state.service';
+import { LearningService } from '../../../learning/services/learning.service';
 
 interface CourseChapterState {
   chapter: ChapterDetail | null;
@@ -28,6 +30,9 @@ interface CourseChapterState {
 export class CourseChapterComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly chapterService = inject(ChapterService);
+  private readonly authState = inject(AuthStateService);
+  private readonly learningService = inject(LearningService);
+  protected readonly completionStatus = signal<'idle' | 'saving' | 'completed'>('idle');
 
   protected readonly state = toSignal(
     this.route.paramMap.pipe(
@@ -35,7 +40,7 @@ export class CourseChapterComponent {
         const courseSlug = params.get('slug') ?? '';
         const chapterSlug = params.get('chapterSlug') ?? '';
 
-        return this.chapterService.getBySlug(chapterSlug).pipe(
+        return this.chapterService.getBySlug(courseSlug, chapterSlug).pipe(
           map((chapter) => ({
             chapter,
             courseSlug,
@@ -73,7 +78,7 @@ export class CourseChapterComponent {
     const chapter = this.state().chapter;
     const lessons = this.lessons();
 
-    if (!chapter?.requiresLogin || chapter.isPublic) {
+    if (this.authState.isAuthenticated() || !chapter?.requiresLogin || chapter.isPublic) {
       return lessons;
     }
 
@@ -84,6 +89,29 @@ export class CourseChapterComponent {
     const chapter = this.state().chapter;
     return Boolean(chapter?.requiresLogin && !chapter.isPublic && this.publicLessons().length === 0);
   });
+
+  protected readonly isAuthenticated = this.authState.isAuthenticated;
+
+  constructor() {
+    effect((onCleanup) => {
+      const chapter = this.chapter();
+      if (!chapter || !this.authState.isAuthenticated()) return;
+      const subscription = this.learningService.markRead(chapter.id).subscribe({
+        next: (progress) => this.completionStatus.set(progress.status === 'completed' ? 'completed' : 'idle'),
+      });
+      onCleanup(() => subscription.unsubscribe());
+    });
+  }
+
+  protected markComplete(): void {
+    const chapter = this.chapter();
+    if (!chapter || this.completionStatus() !== 'idle') return;
+    this.completionStatus.set('saving');
+    this.learningService.markComplete(chapter.id).subscribe({
+      next: () => this.completionStatus.set('completed'),
+      error: () => this.completionStatus.set('idle'),
+    });
+  }
 
   protected trackLesson(_index: number, lesson: Lesson): string {
     return lesson.id;

@@ -5,7 +5,6 @@ import { FeaturedCoursesComponent } from '../../components/featured-courses/feat
 import { HeroComponent } from '../../components/hero/hero.component';
 import { HomeCtaComponent } from '../../components/home-cta/home-cta.component';
 import { LearningMethodComponent } from '../../components/learning-method/learning-method.component';
-import { PlatformFeaturesComponent } from '../../components/platform-features/platform-features.component';
 
 const PAGE_TITLE = 'Maiawall Cursos — Aprenda tecnologia na prática';
 const PAGE_DESCRIPTION =
@@ -18,7 +17,6 @@ const PAGE_DESCRIPTION =
     HeroComponent,
     FeaturedCoursesComponent,
     LearningMethodComponent,
-    PlatformFeaturesComponent,
     HomeCtaComponent,
   ],
   templateUrl: './home.component.html',

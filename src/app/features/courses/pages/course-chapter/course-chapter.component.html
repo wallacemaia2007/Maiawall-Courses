@@ -40,6 +40,14 @@
           <a class="mw-btn mw-btn--primary" routerLink="/login">Entrar para continuar</a>
         </app-empty-state>
       } @else if (publicLessons().length > 0) {
+        @if (isAuthenticated()) {
+          <div class="course-chapter-page__completion">
+            <span>@if (completionStatus() === 'completed') { Capitulo concluido } @else { Terminou a leitura? }</span>
+            <button class="mw-btn mw-btn--primary" type="button" (click)="markComplete()" [disabled]="completionStatus() !== 'idle'">
+              @if (completionStatus() === 'saving') { Salvando... } @else if (completionStatus() === 'completed') { Concluido } @else { Marcar como concluido }
+            </button>
+          </div>
+        }
         <div class="lesson-list">
           @for (lesson of publicLessons(); track trackLesson($index, lesson)) {
             <article class="lesson-card">

@@ -35,4 +35,18 @@ async function requireAuth(request, _response, next) {
   }
 }
 
-module.exports = { requireAuth };
+async function optionalAuth(request, _response, next) {
+  const header = request.get('Authorization') || '';
+  const [scheme, token] = header.split(' ');
+  if (scheme !== 'Bearer' || !token) return next();
+  try {
+    const payload = verifyAccessToken(token);
+    const user = await UserRepository.findById(payload.sub);
+    if (user) request.auth = { token, user, userId: user._id.toString() };
+  } catch (_error) {
+    // A catalog visitor can still read public material with an expired local token.
+  }
+  return next();
+}
+
+module.exports = { requireAuth, optionalAuth };

@@ -41,6 +41,10 @@ export class CourseService {
       .pipe(map(unwrapApiData));
   }
 
+  getFeatured(limit = 3): Observable<CourseSummary[]> {
+    return this.list({ size: limit }).pipe(map((page) => page.content));
+  }
+
   getById(id: string): Observable<CourseDetail | null> {
     return this.http
       .get<ApiResponse<CourseDetail>>(this.apiUrl(`${COURSE_ENDPOINTS.detail}/${id}`))

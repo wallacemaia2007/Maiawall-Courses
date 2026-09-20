@@ -1,16 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { authChildGuard, authGuard } from './core/guards/auth.guard';
+import { authGuard } from './core/guards/auth.guard';
 import { guestChildGuard, guestGuard } from './core/guards/guest.guard';
-import { roleChildGuard, roleGuard } from './core/guards/role.guard';
 
 /*
  * Mapa de rotas da aplicação.
  *
- * Públicas  : /  /cursos  /cursos/:slug  /cursos/:slug/capitulo/:chapterSlug  /certificados/:code
+ * Públicas  : /  /cursos  /cursos/:slug  /cursos/:slug/capitulo/:chapterSlug
  * Auth      : /login  /signup  /forgot-password  /reset-password  /verify-email
- * Usuário   : /app/dashboard  /app/cursos  /app/capitulo/:id  /app/exercicios  /app/submissoes  /app/certificados  /app/perfil
- * Admin     : /admin/...
+ * Usuário   : /perfil
  */
 export const routes: Routes = [
   {
@@ -32,11 +30,10 @@ export const routes: Routes = [
           import('./features/courses/courses.routes').then((m) => m.COURSES_ROUTES),
       },
       {
-        path: 'certificados/:code',
+        path: 'perfil',
+        canActivate: [authGuard],
         loadComponent: () =>
-          import('./features/certificates/pages/certificate-public/certificate-public.component').then(
-            (m) => m.CertificatePublicComponent,
-          ),
+          import('./features/profile/pages/profile/profile.component').then((m) => m.ProfileComponent),
       },
     ],
   },
@@ -81,20 +78,6 @@ export const routes: Routes = [
           ),
       },
     ],
-  },
-  {
-    path: 'app',
-    canActivate: [authGuard],
-    canActivateChild: [authChildGuard],
-    loadChildren: () =>
-      import('./features/student/student.routes').then((m) => m.STUDENT_ROUTES),
-  },
-  {
-    path: 'admin',
-    canActivate: [authGuard, roleGuard(['ADMIN', 'INSTRUCTOR'])],
-    canActivateChild: [authChildGuard, roleChildGuard(['ADMIN', 'INSTRUCTOR'])],
-    loadChildren: () =>
-      import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
     path: 'not-found',

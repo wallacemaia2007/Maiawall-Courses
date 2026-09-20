@@ -14,53 +14,51 @@
     </div>
   } @else {
     @if (course(); as course) {
-      <header class="course-details-page__hero">
-      <div class="mw-container course-details-page__hero-inner">
-        <a class="course-details-page__back" routerLink="/cursos">Voltar ao catalogo</a>
+      <header class="course-details-page__hero" appHeroMarker>
+        <div class="mw-container course-details-page__hero-inner">
+          <a class="course-details-page__back" routerLink="/cursos">Voltar ao catálogo</a>
 
-        <div class="course-details-page__intro">
-          <div>
-            @if (categoryLabel()) {
-              <p class="course-details-page__eyebrow">{{ categoryLabel() }}</p>
-            }
-            <h1>{{ course.title }}</h1>
-            <p>{{ course.shortDescription || course.description }}</p>
+          <div class="course-details-page__intro">
+            <div>
+              @if (categoryLabel()) {
+                <p class="course-details-page__eyebrow">{{ categoryLabel() }}</p>
+              }
+              <h1>{{ course.title }}</h1>
+              <p>{{ course.shortDescription || course.description }}</p>
 
-            <ul class="course-details-page__meta">
-              @if (levelLabel()) {
-                <li>{{ levelLabel() }}</li>
-              }
-              @if (course.durationMinutes) {
-                <li>{{ course.durationMinutes | duration }}</li>
-              }
-              <li>{{ chapters().length }} capitulos</li>
-              <li>{{ lessonCount() }} aulas</li>
-              <li>{{ isFree() ? 'Gratis' : 'Pago' }}</li>
-            </ul>
+              <ul class="course-details-page__meta">
+                @if (levelLabel()) {
+                  <li>{{ levelLabel() }}</li>
+                }
+                @if (course.durationMinutes) {
+                  <li>{{ course.durationMinutes | duration }}</li>
+                }
+                <li>{{ chapters().length }} capítulos</li>
+                <li>{{ lessonCount() }} aulas</li>
+                <li>{{ isFree() ? 'Grátis' : 'Pago' }}</li>
+              </ul>
+            </div>
+
+            <aside class="course-details-page__cta" aria-label="Acesso ao curso">
+              <strong>{{ isAuthenticated() ? 'Sua leitura fica salva' : 'Leia no seu ritmo' }}</strong>
+              <p>
+                Abra os módulos abaixo. Entre para registrar os capítulos lidos e continuar
+                depois pelo seu perfil.
+              </p>
+              <a
+                class="mw-btn mw-btn--primary"
+                [routerLink]="isAuthenticated() ? '/perfil' : '/login'"
+                [queryParams]="isAuthenticated() ? {} : { redirect: '/cursos/' + course.slug }"
+              >
+                {{ isAuthenticated() ? 'Ver meu perfil' : 'Entrar para salvar progresso' }}
+              </a>
+            </aside>
           </div>
-
-          <aside class="course-details-page__cta" aria-label="Matricula">
-            <strong>{{ isFree() ? 'Comece sem custo' : 'Matricule-se para acessar' }}</strong>
-            <p>
-              Tenha acesso ao conteudo do curso, acompanhe seu progresso e emita certificado
-              quando concluir os requisitos.
-            </p>
-            @if (course.enrollmentUrl) {
-              <a class="mw-btn mw-btn--primary" [href]="course.enrollmentUrl">
-                Matricular agora
-              </a>
-            } @else {
-              <a class="mw-btn mw-btn--primary" routerLink="/signup">
-                Matricular agora
-              </a>
-            }
-          </aside>
         </div>
-      </div>
       </header>
 
       <div class="mw-container course-details-page__body">
-      <main class="course-details-page__main">
+        <main class="course-details-page__main">
         <section class="course-section">
           <h2>Ementa</h2>
           @if (course.syllabus?.length) {
@@ -81,32 +79,75 @@
         </section>
 
         <section class="course-section">
-          <h2>Capitulos</h2>
+          <div class="course-section__heading">
+            <div>
+              <p class="course-section__eyebrow">Conteúdo do curso</p>
+              <h2>Capítulos</h2>
+            </div>
+            <span>{{ chapters().length }} módulos</span>
+          </div>
           @if (chapters().length > 0) {
-            <ol class="chapter-list">
+            <ol class="chapter-list chapter-list--accordion">
               @for (chapter of chapters(); track trackChapter($index, chapter)) {
                 <li class="chapter-list__item">
-                  <div>
-                    <span>{{ chapter.order }}</span>
-                    <div>
-                      <h3>{{ chapter.title }}</h3>
+                  <details [attr.open]="$first ? true : null">
+                    <summary>
+                      <span class="chapter-list__number" aria-hidden="true">
+                        {{ chapter.order.toString().padStart(2, '0') }}
+                      </span>
+                      <span class="chapter-list__copy">
+                        <h3>{{ chapter.title }}</h3>
+                        <small>{{ chapter.lessons.length }} aulas</small>
+                      </span>
+                      @if (isCompleted(chapter)) {
+                        <span class="chapter-list__status chapter-list__status--completed">
+                          <span aria-hidden="true">✓</span> Concluído
+                        </span>
+                      } @else if (isPreview(chapter)) {
+                        <span class="chapter-list__status chapter-list__status--preview">
+                          Prévia grátis
+                        </span>
+                      } @else if (!canAccess(chapter)) {
+                        <span class="chapter-list__status chapter-list__status--locked">
+                          <span aria-hidden="true">●</span> Login necessário
+                        </span>
+                      } @else {
+                        <span class="chapter-list__status">Disponível</span>
+                      }
+                      <span class="chapter-list__chevron" aria-hidden="true"></span>
+                    </summary>
+                    <div class="chapter-list__panel">
                       @if (chapter.description) {
                         <p>{{ chapter.description }}</p>
                       }
-                      <small>{{ chapter.lessons.length }} aulas</small>
+                      @if (canAccess(chapter)) {
+                        <a
+                          class="chapter-list__link"
+                          [routerLink]="['/cursos', course.slug, 'capitulo', chapter.slug]"
+                        >
+                          {{ isCompleted(chapter) ? 'Rever capítulo' : isPreview(chapter) ? 'Começar prévia' : 'Abrir capítulo' }}
+                          <span aria-hidden="true">→</span>
+                        </a>
+                      } @else {
+                        <div class="chapter-list__login-prompt">
+                          <span>Entre para liberar este capítulo e salvar seu progresso.</span>
+                          <a
+                            class="chapter-list__locked"
+                            routerLink="/login"
+                            [queryParams]="{
+                              redirect:
+                                '/cursos/' +
+                                course.slug +
+                                '/capitulo/' +
+                                chapter.slug
+                            }"
+                          >
+                            Entrar e continuar
+                          </a>
+                        </div>
+                      }
                     </div>
-                  </div>
-
-                  @if (chapter.isPublic || !chapter.requiresLogin) {
-                    <a
-                      class="chapter-list__link"
-                      [routerLink]="['/cursos', course.slug, 'capitulo', chapter.slug]"
-                    >
-                      Abrir aula
-                    </a>
-                  } @else {
-                    <span class="chapter-list__locked">Login necessario</span>
-                  }
+                  </details>
                 </li>
               }
             </ol>
@@ -117,9 +158,9 @@
             />
           }
         </section>
-      </main>
+        </main>
 
-      <aside class="course-details-page__sidebar">
+        <aside class="course-details-page__sidebar">
         <section class="course-side-block">
           <h2>Instrutor</h2>
           <div class="instructor">
@@ -168,7 +209,7 @@
             <p>Os resultados do curso serao exibidos quando publicados.</p>
           }
         </section>
-      </aside>
+        </aside>
       </div>
     } @else {
       <div class="mw-container course-details-page__empty">

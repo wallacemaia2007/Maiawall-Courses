@@ -63,10 +63,10 @@ export class LoginComponent {
   private redirectUrl(): string {
     const redirect = this.route.snapshot.queryParamMap.get('redirect');
 
-    if (redirect?.startsWith('/app') || redirect?.startsWith('/admin')) {
+    if (redirect?.startsWith('/cursos') || redirect === '/perfil') {
       return redirect;
     }
 
-    return '/app/dashboard';
+    return '/';
   }
 }

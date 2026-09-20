@@ -1,8 +1,8 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { CourseSummary } from '../models/course.model';
-import { MockCourseService } from './mock-course.service';
+import { CourseService } from './course.service';
 
 /*
  * Contrato de acesso ao catálogo de cursos usado pela Home.
@@ -20,6 +20,6 @@ export const COURSE_CATALOG_SERVICE = new InjectionToken<CourseCatalogService>(
   'COURSE_CATALOG_SERVICE',
   {
     providedIn: 'root',
-    factory: () => new MockCourseService(),
+    factory: () => inject(CourseService),
   },
 );
