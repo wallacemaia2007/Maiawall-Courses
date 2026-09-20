@@ -125,6 +125,35 @@ Convenção de IDs: **catálogo público usa `slug`** (SEO/URLs amigáveis);
 > acesso). Como o backend ainda não está definido, decidir o fluxo de renovação
 > quando o contrato Spring/Security existir.
 
+### Login social (OAuth 2.0 — Authorization Code)
+
+O backend é o cliente OAuth confidencial (Express + `fetch` nativo + JWT manual, sem
+Passport). Fluxo:
+
+1. O front navega para `GET /api/auth/oauth/{provider}` (`github` | `google`).
+2. O backend grava um `state` em cookie httpOnly de 5 min (assinado com `JWT_SECRET`)
+   e redireciona para o provedor.
+3. O provedor volta para `GET /api/auth/oauth/{provider}/callback`.
+4. O backend valida `state`, troca o `code` pelo token do provedor, busca o perfil,
+   vincula ou cria o usuário (`githubId`/`googleId` + `email` verificado) e emite um
+   **ticket de troca** de uso único (60 s), redirecionando para
+   `FRONTEND_ORIGIN/auth/callback?ticket=...`. Nenhum token trafega pela URL.
+5. O front chama `POST /api/auth/oauth/exchange { ticket }` e recebe o mesmo shape de
+   `login`/`signup` (`{ user, tokens: { accessToken, refreshToken } }`). O ticket é
+   apagado do usuário assim que trocado.
+
+Configuração nos provedores (URLs montadas a partir de `OAUTH_CALLBACK_BASE_URL` no backend):
+
+| Provedor | O que cadastrar |
+| -------- | --------------- |
+| GitHub (OAuth App) | Authorization callback URL = `{OAUTH_CALLBACK_BASE_URL}/api/auth/oauth/github/callback` (scope `read:user user:email`) |
+| Google (Client OAuth tipo "Web application") | Authorized redirect URI = `{OAUTH_CALLBACK_BASE_URL}/api/auth/oauth/google/callback` (scope `openid email profile`) |
+
+Em dev: `OAUTH_CALLBACK_BASE_URL=http://localhost:3000` e `FRONTEND_ORIGIN=http://localhost:4200`
+(o `proxy.conf.json` do Angular encaminha `/api`, mas o redirect do navegador ao provedor
+aponta para o backend real). Deixar `GITHUB_CLIENT_ID`/`GOOGLE_CLIENT_ID` vazios desativa
+o provedor.
+
 ---
 
 ## HTTP e contratos com o backend

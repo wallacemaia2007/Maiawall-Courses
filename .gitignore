@@ -16,6 +16,9 @@ yarn-error.log*
 .env.local
 .env.*.local
 
+# Firebase service-account credentials
+backend/*firebase-adminsdk*.json
+
 # IDE
 .vscode/
 !.vscode/extensions.json

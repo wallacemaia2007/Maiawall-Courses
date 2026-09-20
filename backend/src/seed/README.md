@@ -7,7 +7,10 @@ curso, capítulos e aulas nesse arquivo e execute, a partir de `backend/`:
 npm.cmd run seed:courses
 ```
 
-O comando exige `APP_ENV=development` ou `test` e um `MONGODB_URI` apontando
-somente para `localhost`, `127.0.0.1`, `::1` ou `mongo` (Docker Compose).
-Ele limpa e recria integralmente as coleções `courses`, `chapters` e `lessons`;
-não altera `users` nem demais coleções de autenticação.
+O comando exige `APP_ENV=development` ou `test` e um Firestore acessível
+(credenciais da service account em `GOOGLE_APPLICATION_CREDENTIALS` ou
+`FIREBASE_SERVICE_ACCOUNT`, ou emulador em `FIRESTORE_EMULATOR_HOST`).
+Ele limpa e recria integralmente os documentos de `courses`, `chapters` e
+`lessons` (ids determinísticos: `{courseSlug}`,
+`{courseSlug}:{chapterSlug}` e `{chapterId}:{ordem}`); não altera `users`
+nem demais coleções de autenticação.
