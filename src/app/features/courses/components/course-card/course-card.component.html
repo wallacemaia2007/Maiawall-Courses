@@ -5,6 +5,11 @@
     [attr.aria-label]="'Ver curso: ' + course().title"
   >
     <div class="course-card__cover">
+      <img
+        class="course-card__sponsor-logo"
+        src="/assets/ufu.brand.png"
+        alt="Minicurso patrocinado pela Universidade Federal de Uberlândia"
+      />
       <span class="course-card__category">{{ categoryLabel() }}</span>
 
       <span class="course-card__index" aria-hidden="true">{{ coverIndex() }}</span>

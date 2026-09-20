@@ -62,6 +62,21 @@
   pointer-events: none;
 }
 
+.course-card__sponsor-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: min(72%, 210px);
+  height: auto;
+  max-height: 74%;
+  object-fit: contain;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .course-card__category {
   position: absolute;
   top: 1rem;
