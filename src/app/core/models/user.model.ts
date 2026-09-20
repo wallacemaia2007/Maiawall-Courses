@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: UserRole;
   avatarUrl?: string;
+  provider?: 'google' | 'github';
   active?: boolean;
   createdAt?: string;
   updatedAt?: string;

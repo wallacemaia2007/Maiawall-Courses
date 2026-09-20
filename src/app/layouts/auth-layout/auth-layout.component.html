@@ -1,3 +1,15 @@
 <main class="auth-layout">
+  <a class="auth-brand" routerLink="/" aria-label="Maiawall Cursos, página inicial">
+    <span class="auth-brand__mark" aria-hidden="true">MW</span>
+    <span class="auth-brand__name">Maiawall <b>Cursos</b></span>
+  </a>
+
   <router-outlet />
+
+  <a class="back-to-site" routerLink="/" aria-label="Voltar para o site">
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M11.75 4.25 6 10l5.75 5.75M6.5 10h7.75" />
+    </svg>
+    <span>Voltar ao site</span>
+  </a>
 </main>

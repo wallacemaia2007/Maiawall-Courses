@@ -12,5 +12,5 @@ export interface PublicNavLink {
 
 export const PUBLIC_NAV_LINKS: PublicNavLink[] = [
   { label: 'Cursos', route: '/cursos' },
-  { label: 'Sobre', route: '/', fragment: 'sobre' },
+  { label: 'Sobre', route: '/sobre' },
 ];

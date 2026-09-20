@@ -1,0 +1,212 @@
+:host {
+  display: block;
+}
+
+.sobre-page {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: calc(100dvh - var(--public-navbar-height));
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+  border-bottom: 1px solid var(--color-border);
+  background:
+    radial-gradient(48rem 24rem at 112% -10%, rgba(var(--color-primary-rgb), 0.09), transparent 62%),
+    linear-gradient(180deg, #fff 0%, var(--color-bg-secondary) 100%);
+}
+
+.sobre-page__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+  align-items: center;
+  gap: clamp(3rem, 6vw, 5rem);
+}
+
+/* ---------- Coluna de texto ---------- */
+
+.sobre-page__copy {
+  min-width: 0;
+}
+
+.sobre-page__eyebrow {
+  margin: 0 0 1.1rem;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sobre-page__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.5rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  vertical-align: middle;
+}
+
+.sobre-page__title {
+  max-width: 15ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 4.4vw, 3.8rem);
+  font-weight: 650;
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.sobre-page__text {
+  max-width: 58ch;
+  margin: 1.25rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.sobre-page__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sobre-page__highlights li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.sobre-page__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  margin-top: 2.2rem;
+}
+
+.sobre-page__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-primary);
+  font-size: 0.93rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.sobre-page__link-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-muted);
+  transition: color var(--motion-base) ease;
+}
+
+.sobre-page__link:hover {
+  color: var(--color-primary);
+}
+
+.sobre-page__link:hover .sobre-page__link-icon {
+  color: var(--color-primary);
+}
+
+/* ---------- Coluna de retrato ---------- */
+
+.sobre-page__portrait {
+  position: relative;
+  margin: 0;
+}
+
+/* Barra de destaque da marca no topo do cartão. */
+.sobre-page__portrait::before {
+  content: '';
+  position: absolute;
+  inset: -1px -1px auto;
+  z-index: 1;
+  height: 4px;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  background: linear-gradient(90deg, var(--color-primary) 0 38%, #d58a28 38% 64%, #287a66 64%);
+}
+
+.sobre-page__photo {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border: 1px solid #d7d5cf;
+  border-radius: var(--radius-2xl);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 700;
+  box-shadow: 0 24px 48px rgba(var(--color-shadow-rgb), 0.14);
+}
+
+img.sobre-page__photo {
+  display: block;
+  object-fit: cover;
+}
+
+.sobre-page__portrait figcaption {
+  margin-top: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 960px) {
+  .sobre-page {
+    min-height: auto;
+  }
+
+  .sobre-page__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .sobre-page__title {
+    max-width: none;
+  }
+
+  .sobre-page__portrait {
+    width: min(100%, 400px);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .sobre-page__title {
+    font-size: clamp(1.8rem, 8vw, 2.35rem);
+    line-height: 1.08;
+  }
+
+  .sobre-page__actions {
+    align-items: stretch;
+    gap: 0.9rem;
+    margin-top: 1.8rem;
+  }
+
+  .sobre-page__actions .mw-btn {
+    width: 100%;
+  }
+
+  .sobre-page__link {
+    justify-content: center;
+    min-height: 42px;
+  }
+}

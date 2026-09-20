@@ -24,6 +24,8 @@ function sanitizeUser(user) {
     name: user.name,
     email: user.email,
     role: user.role,
+    avatarUrl: user.avatarUrl,
+    provider: user.provider,
     emailVerified: Boolean(user.emailVerified),
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
@@ -103,8 +105,50 @@ const AuthService = {
 
     const user = await UserRepository.findByEmail(normalizeEmail(payload.email));
 
-    if (!user || !(await verifyPassword(payload.password, user.passwordHash))) {
+    if (!user || !user.passwordHash || !(await verifyPassword(payload.password, user.passwordHash))) {
       throw new AppError(401, 'INVALID_CREDENTIALS', 'E-mail ou senha invalidos');
+    }
+
+    return createSession(user);
+  },
+
+  async loginWithOAuth(profile) {
+    validateRequiredString(profile.provider, 'provider');
+    validateRequiredString(profile.providerId, 'providerId');
+    validateRequiredString(profile.email, 'email');
+
+    if (!profile.emailVerified) {
+      throw new AppError(401, 'OAUTH_EMAIL_UNVERIFIED', 'O e-mail do provedor nao foi verificado');
+    }
+
+    const email = normalizeEmail(profile.email);
+    const now = new Date();
+    let user = await UserRepository.findByProvider(profile.provider, profile.providerId);
+
+    if (!user) {
+      const existingByEmail = await UserRepository.findByEmail(email);
+
+      if (existingByEmail) {
+        user = await UserRepository.updateById(existingByEmail._id.toString(), {
+          provider: profile.provider,
+          providerId: profile.providerId,
+          avatarUrl: existingByEmail.avatarUrl || profile.avatarUrl,
+          emailVerified: true,
+          updatedAt: now,
+        });
+      } else {
+        user = await UserRepository.create({
+          name: profile.name,
+          email,
+          provider: profile.provider,
+          providerId: profile.providerId,
+          avatarUrl: profile.avatarUrl,
+          role: 'STUDENT',
+          emailVerified: true,
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
     }
 
     return createSession(user);

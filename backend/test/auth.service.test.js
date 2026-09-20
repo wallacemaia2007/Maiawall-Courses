@@ -21,6 +21,13 @@ require.cache[repositoryPath] = {
       async findByEmail(email) {
         return clone([...users.values()].find((user) => user.email === email) || null);
       },
+      async findByProvider(provider, providerId) {
+        return clone(
+          [...users.values()].find(
+            (user) => user.provider === provider && user.providerId === providerId,
+          ) || null,
+        );
+      },
       async findById(id) {
         return clone(users.get(id) || null);
       },
@@ -96,4 +103,21 @@ test('refresh rotates stored refresh token', async () => {
   assert.ok(secondSession.tokens.accessToken);
   assert.ok(secondSession.tokens.refreshToken);
   assert.notEqual(secondSession.tokens.refreshToken, firstSession.tokens.refreshToken);
+});
+
+test('OAuth creates a verified student account and reuses the provider identity', async () => {
+  const profile = {
+    provider: 'google',
+    providerId: 'google-user-1',
+    email: 'oauth@example.com',
+    name: 'OAuth User',
+    emailVerified: true,
+  };
+
+  const firstSession = await AuthService.loginWithOAuth(profile);
+  const secondSession = await AuthService.loginWithOAuth(profile);
+
+  assert.equal(firstSession.user.email, 'oauth@example.com');
+  assert.equal(firstSession.user.provider, 'google');
+  assert.equal(secondSession.user.id, firstSession.user.id);
 });

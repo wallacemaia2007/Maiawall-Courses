@@ -13,6 +13,35 @@
   min-height: 100dvh;
 }
 
+.social-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 auto;
+}
+
+.social-btn {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 50%;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+}
+
+.social-btn svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.social-btn:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
 .terms-option {
   position: relative;
   display: flex;

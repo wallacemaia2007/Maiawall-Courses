@@ -33,6 +33,19 @@ export interface CourseInstructor {
   name: string;
   bio?: string;
   avatarUrl?: string;
+  /* Campos da página Sobre (opcionais — mantém compatibilidade com quem já consome o objeto). */
+  tagline?: string;
+  bioParagraphs?: string[];
+  highlights?: string[];
+  socialLinks?: InstructorSocialLink[];
+}
+
+export type InstructorSocialIcon = 'site' | 'github' | 'linkedin' | (string & {});
+
+export interface InstructorSocialLink {
+  label: string;
+  url: string;
+  icon?: InstructorSocialIcon;
 }
 
 export interface Course {

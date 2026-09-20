@@ -24,6 +24,11 @@ const UserRepository = {
     return users(database).findOne({ email: email.toLowerCase() });
   },
 
+  async findByProvider(provider, providerId) {
+    const database = await getDatabase();
+    return users(database).findOne({ provider, providerId });
+  },
+
   async findById(id) {
     const _id = objectIdFrom(id);
 

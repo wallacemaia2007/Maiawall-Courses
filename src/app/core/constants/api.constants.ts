@@ -13,6 +13,8 @@ export const AUTH_ENDPOINTS = {
   forgotPassword: '/auth/forgot-password',
   resetPassword: '/auth/reset-password',
   verifyEmail: '/auth/verify-email',
+  oauthGoogle: '/auth/google',
+  oauthGithub: '/auth/github',
 } as const;
 
 export const USER_ENDPOINTS = {

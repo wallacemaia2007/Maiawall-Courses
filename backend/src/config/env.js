@@ -27,6 +27,18 @@ const env = {
   ),
   accessTokenTtl: process.env.ACCESS_TOKEN_TTL || '15m',
   refreshTokenTtl: process.env.REFRESH_TOKEN_TTL || '7d',
+  oauthRedirectUrl:
+    process.env.OAUTH_REDIRECT_URL || `${process.env.FRONTEND_ORIGIN || 'http://localhost:4200'}/auth/callback`,
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback',
+  },
+  github: {
+    clientId: process.env.GITHUB_CLIENT_ID || '',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+    callbackUrl: process.env.GITHUB_CALLBACK_URL || 'http://localhost:3000/api/auth/github/callback',
+  },
 };
 
 module.exports = { env };

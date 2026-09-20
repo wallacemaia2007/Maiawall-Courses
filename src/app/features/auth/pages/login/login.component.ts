@@ -52,6 +52,10 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
+  protected loginWithProvider(provider: 'google' | 'github'): void {
+    window.location.href = this.authService.socialLoginUrl(provider);
+  }
+
   protected get email() {
     return this.form.controls.email;
   }

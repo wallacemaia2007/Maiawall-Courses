@@ -67,6 +67,10 @@ export class SignupComponent {
     this.showPasswordConfirm = !this.showPasswordConfirm;
   }
 
+  protected loginWithProvider(provider: 'google' | 'github'): void {
+    window.location.href = this.authService.socialLoginUrl(provider);
+  }
+
   protected get name() {
     return this.form.controls.name;
   }

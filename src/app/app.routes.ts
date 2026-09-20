@@ -6,8 +6,8 @@ import { guestChildGuard, guestGuard } from './core/guards/guest.guard';
 /*
  * Mapa de rotas da aplicação.
  *
- * Públicas  : /  /cursos  /cursos/:slug  /cursos/:slug/capitulo/:chapterSlug
- * Auth      : /login  /signup  /forgot-password  /reset-password  /verify-email
+ * Públicas  : /  /sobre  /cursos  /cursos/:slug  /cursos/:slug/capitulo/:chapterSlug
+ * Auth      : /login  /signup  /forgot-password  /reset-password  /verify-email  /auth/callback
  * Usuário   : /perfil
  */
 export const routes: Routes = [
@@ -23,6 +23,11 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () =>
           import('./features/home/pages/home/home.component').then((m) => m.HomeComponent),
+      },
+      {
+        path: 'sobre',
+        loadComponent: () =>
+          import('./features/about/pages/sobre/sobre.component').then((m) => m.SobreComponent),
       },
       {
         path: 'cursos',
@@ -84,6 +89,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/not-found/pages/not-found/not-found.component').then(
         (m) => m.NotFoundComponent,
+      ),
+  },
+  {
+    path: 'auth/callback',
+    loadComponent: () =>
+      import('./features/auth/pages/oauth-callback/oauth-callback.component').then(
+        (m) => m.OauthCallbackComponent,
       ),
   },
   {

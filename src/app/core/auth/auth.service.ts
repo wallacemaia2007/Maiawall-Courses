@@ -95,6 +95,11 @@ export class AuthService {
       .pipe(map(() => void 0));
   }
 
+  socialLoginUrl(provider: 'google' | 'github'): string {
+    const endpoint = provider === 'google' ? AUTH_ENDPOINTS.oauthGoogle : AUTH_ENDPOINTS.oauthGithub;
+    return this.authUrl(endpoint);
+  }
+
   getSession(): Observable<AuthSession | null> {
     if (this.authState.isAuthenticated()) {
       return of({
