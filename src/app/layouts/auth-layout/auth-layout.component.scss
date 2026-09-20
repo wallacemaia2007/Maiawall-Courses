@@ -6,16 +6,15 @@
 
 .auth-layout {
   position: relative;
+  box-sizing: border-box;
   display: grid;
   align-content: start;
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 1.5rem 1.25rem 5rem;
+  padding: 1.5rem 1.25rem 0;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 82% 12%, rgba(var(--color-primary-rgb), 0.08), transparent 26rem),
-    var(--color-bg-secondary);
+  background: #ffffff;
 }
 
 .auth-layout::before {
