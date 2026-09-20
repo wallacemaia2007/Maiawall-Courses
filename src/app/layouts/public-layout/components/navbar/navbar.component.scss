@@ -141,17 +141,21 @@
 }
 
 .navbar__login {
-  padding: 0.55rem 1rem;
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 0 1.25rem;
   border-radius: var(--radius-sm);
-  color: var(--color-text-primary);
+  background: var(--color-primary);
+  color: #ffffff;
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
 }
 
 .navbar__login:hover {
-  color: var(--color-primary);
-  background: transparent;
+  color: #ffffff;
+  background: var(--color-primary-hover);
 }
 
 .navbar__signup {

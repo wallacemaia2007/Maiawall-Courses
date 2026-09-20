@@ -6,9 +6,9 @@
   >
     <div class="course-card__cover">
       <img
-        class="course-card__sponsor-logo"
-        src="/assets/ufu.brand.png"
-        alt="Minicurso patrocinado pela Universidade Federal de Uberlândia"
+        class="course-card__banner"
+        [src]="course().bannerUrl || '/assets/banners/ufu.brand.png'"
+        [alt]="'Banner do curso ' + course().title"
       />
     </div>
 

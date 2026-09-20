@@ -2,6 +2,7 @@
   "courses": [
     {
       "slug": "apis-metodos-http-e-json",
+      "bannerUrl": "/assets/banners/ufu.api.png",
       "title": "APIs, Métodos HTTP e JSON",
       "shortDescription": "Entenda como as APIs funcionam por dentro: métodos HTTP, status codes, JSON e boas práticas para consumir serviços.",
       "description": "Um minicurso prático para compreender a comunicação entre aplicações web. Você vai montar requisições, interpretar respostas e reconhecer os principais contratos de uma API HTTP.",
@@ -54,6 +55,7 @@
     },
     {
       "slug": "docker-compose-na-pratica",
+      "bannerUrl": "/assets/banners/ufu.docker.png",
       "title": "Docker Compose na Prática",
       "shortDescription": "Subir ambientes com múltiplos serviços nunca foi tão simples. Aprenda a definir e orquestrar containers com Docker Compose.",
       "description": "Crie um ambiente local reproduzível com serviços conectados, variáveis de ambiente, volumes e comandos de operação do Docker Compose.",
@@ -106,6 +108,7 @@
     },
     {
       "slug": "git-para-iniciantes",
+      "bannerUrl": "/assets/banners/ufu.git.png",
       "title": "Git para Iniciantes",
       "shortDescription": "Versionamento sem medo. Aprenda os comandos essenciais do Git e organize seu código com segurança.",
       "description": "Aprenda o fluxo essencial de versionamento para registrar mudanças, trabalhar com branches e sincronizar um projeto com um repositório remoto.",

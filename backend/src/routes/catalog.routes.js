@@ -32,7 +32,8 @@ function serializeCourse(course, chapters = []) {
   return {
     id: toId(course._id), title: course.title, slug: course.slug,
     shortDescription: course.shortDescription, description: course.description,
-    thumbnailUrl: course.thumbnailUrl, category: course.category, level: course.level,
+    bannerUrl: course.bannerUrl, thumbnailUrl: course.thumbnailUrl,
+    category: course.category, level: course.level,
     durationMinutes: course.durationMinutes,
     objectives: course.objectives || [], requirements: course.requirements || [],
     syllabus: course.syllabus || [], outcomes: course.outcomes || [],
@@ -60,7 +61,8 @@ catalogRouter.get('/', async (request, response, next) => {
     const chapterCounts = new Map(counts.map((item) => [item._id.toString(), item.count]));
     const content = courses.map((course) => ({
       id: toId(course._id), title: course.title, slug: course.slug,
-      shortDescription: course.shortDescription, thumbnailUrl: course.thumbnailUrl,
+      shortDescription: course.shortDescription, bannerUrl: course.bannerUrl,
+      thumbnailUrl: course.thumbnailUrl,
       category: course.category, level: course.level, durationMinutes: course.durationMinutes,
       chapterCount: chapterCounts.get(toId(course._id)) || 0,
     }));

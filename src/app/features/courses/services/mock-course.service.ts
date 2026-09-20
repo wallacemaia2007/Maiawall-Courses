@@ -15,6 +15,7 @@ export class MockCourseService implements CourseCatalogService {
       id: 'c1',
       title: 'Docker Compose na Prática',
       slug: 'docker-compose-na-pratica',
+      bannerUrl: '/assets/banners/ufu.docker.png',
       shortDescription:
         'Subir ambientes com múltiplos serviços nunca foi tão simples. Aprenda a definir e orquestrar containers com Docker Compose.',
       category: 'devops',
@@ -26,6 +27,7 @@ export class MockCourseService implements CourseCatalogService {
       id: 'c2',
       title: 'APIs, Métodos HTTP e JSON',
       slug: 'apis-metodos-http-e-json',
+      bannerUrl: '/assets/banners/ufu.api.png',
       shortDescription:
         'Entenda como as APIs funcionam por dentro: métodos HTTP, status codes, JSON e boas práticas para consumir serviços.',
       category: 'backend',
@@ -37,6 +39,7 @@ export class MockCourseService implements CourseCatalogService {
       id: 'c3',
       title: 'Git para Iniciantes',
       slug: 'git-para-iniciantes',
+      bannerUrl: '/assets/banners/ufu.git.png',
       shortDescription:
         'Versionamento sem medo. Aprenda os comandos essenciais do Git e organize seu código com segurança.',
       category: 'desenvolvimento',

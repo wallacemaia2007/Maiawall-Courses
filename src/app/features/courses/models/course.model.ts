@@ -53,6 +53,7 @@ export interface Course {
   title: string;
   slug: string;
   shortDescription?: string;
+  bannerUrl?: string;
   description: string;
   thumbnailUrl?: string;
   category?: CourseCategory;
@@ -77,6 +78,7 @@ export interface CourseSummary {
   title: string;
   slug: string;
   shortDescription?: string;
+  bannerUrl?: string;
   thumbnailUrl?: string;
   category?: CourseCategory;
   level: CourseLevel;
@@ -134,6 +136,7 @@ export interface CourseCreatePayload {
   title: string;
   slug: string;
   shortDescription?: string;
+  bannerUrl?: string;
   description: string;
   thumbnailUrl?: string;
   level: CourseLevel;
