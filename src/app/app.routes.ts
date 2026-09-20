@@ -82,6 +82,13 @@ export const routes: Routes = [
             (m) => m.VerifyEmailComponent,
           ),
       },
+      {
+        path: 'auth/callback',
+        loadComponent: () =>
+          import('./features/auth/pages/oauth-callback/oauth-callback.component').then(
+            (m) => m.OauthCallbackComponent,
+          ),
+      },
     ],
   },
   {
@@ -89,6 +96,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/not-found/pages/not-found/not-found.component').then(
         (m) => m.NotFoundComponent,
+      ),
+  },
+  {
+    path: 'auth/callback',
+    loadComponent: () =>
+      import('./features/auth/pages/oauth-callback/oauth-callback.component').then(
+        (m) => m.OauthCallbackComponent,
       ),
   },
   {

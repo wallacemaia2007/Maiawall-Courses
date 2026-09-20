@@ -13,13 +13,23 @@ function required(name, fallback) {
   return value;
 }
 
+const firestoreEmulatorHost = process.env.FIRESTORE_EMULATOR_HOST || '';
+const isFirestoreEmulator = Boolean(firestoreEmulatorHost);
+
 const env = {
   appEnv,
   isProduction,
   port: Number(process.env.PORT || 3000),
   frontendOrigin: process.env.FRONTEND_ORIGIN || 'http://localhost:4200',
-  mongodbUri: required('MONGODB_URI', 'mongodb://127.0.0.1:27017'),
-  mongodbDbName: required('MONGODB_DB_NAME', 'maiawall_courses'),
+  firebaseProjectId: required(
+    'FIREBASE_PROJECT_ID',
+    isFirestoreEmulator ? 'demo-maiawall' : 'maiawall-courses',
+  ),
+  firebaseDatabaseId: process.env.FIREBASE_DATABASE_ID || '(default)',
+  firebaseServiceAccountPath: process.env.GOOGLE_APPLICATION_CREDENTIALS || '',
+  firebaseServiceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT || '',
+  firestoreEmulatorHost,
+  isFirestoreEmulator,
   jwtSecret: required('JWT_SECRET', isProduction ? undefined : 'dev-access-secret-change-me'),
   jwtRefreshSecret: required(
     'JWT_REFRESH_SECRET',
@@ -27,18 +37,11 @@ const env = {
   ),
   accessTokenTtl: process.env.ACCESS_TOKEN_TTL || '15m',
   refreshTokenTtl: process.env.REFRESH_TOKEN_TTL || '7d',
-  oauthRedirectUrl:
-    process.env.OAUTH_REDIRECT_URL || `${process.env.FRONTEND_ORIGIN || 'http://localhost:4200'}/auth/callback`,
-  google: {
-    clientId: process.env.GOOGLE_CLIENT_ID || '',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback',
-  },
-  github: {
-    clientId: process.env.GITHUB_CLIENT_ID || '',
-    clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-    callbackUrl: process.env.GITHUB_CALLBACK_URL || 'http://localhost:3000/api/auth/github/callback',
-  },
+  oauthCallbackBaseUrl: process.env.OAUTH_CALLBACK_BASE_URL || 'http://localhost:3000',
+  githubClientId: process.env.GITHUB_CLIENT_ID || '',
+  githubClientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+  googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
 };
 
 module.exports = { env };

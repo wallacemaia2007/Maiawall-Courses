@@ -13,6 +13,7 @@ const { env } = require('../config/env');
 
 const ROLES = new Set(['STUDENT', 'INSTRUCTOR', 'ADMIN']);
 const PASSWORD_RESET_TTL_MS = 1000 * 60 * 30;
+const OAUTH_TICKET_TTL_MS = 1000 * 60;
 
 function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
@@ -112,44 +113,82 @@ const AuthService = {
     return createSession(user);
   },
 
-  async loginWithOAuth(profile) {
-    validateRequiredString(profile.provider, 'provider');
+  async loginWithOAuthProfile(provider, profile) {
+    validateRequiredString(provider, 'provider');
     validateRequiredString(profile.providerId, 'providerId');
     validateRequiredString(profile.email, 'email');
 
-    if (!profile.emailVerified) {
-      throw new AppError(401, 'OAUTH_EMAIL_UNVERIFIED', 'O e-mail do provedor nao foi verificado');
-    }
-
+    const isGithub = provider === 'github';
     const email = normalizeEmail(profile.email);
     const now = new Date();
-    let user = await UserRepository.findByProvider(profile.provider, profile.providerId);
+    let user = isGithub
+      ? await UserRepository.findByGithubId(profile.providerId)
+      : await UserRepository.findByGoogleId(profile.providerId);
+
+    if (user) {
+      return user;
+    }
+
+    const existingByEmail = await UserRepository.findByEmail(email);
+
+    if (!existingByEmail) {
+      return UserRepository.create({
+        name: profile.name,
+        email,
+        [isGithub ? 'githubId' : 'googleId']: profile.providerId,
+        provider,
+        avatarUrl: profile.avatarUrl,
+        role: 'STUDENT',
+        emailVerified: Boolean(profile.emailVerified),
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    // E-mail ja cadastrado (senha): so vincula se o provedor comprovar que e o
+    // dono do e-mail (verificado). Sem verificacao, nao vinculamos para evitar
+    // takeover de conta por e-mail nao confirmado.
+    if (!profile.emailVerified) {
+      throw new AppError(
+        401,
+        'OAUTH_EMAIL_UNVERIFIED',
+        'O e-mail do provedor nao foi verificado. Entre com seu e-mail e senha',
+      );
+    }
+
+    return UserRepository.updateById(existingByEmail._id.toString(), {
+      [isGithub ? 'githubId' : 'googleId']: profile.providerId,
+      provider,
+      avatarUrl: existingByEmail.avatarUrl || profile.avatarUrl,
+      emailVerified: true,
+      updatedAt: now,
+    });
+  },
+
+  async createOAuthTicket(user) {
+    const ticket = crypto.randomBytes(32).toString('hex');
+    await UserRepository.updateById(user._id.toString(), {
+      oauthTicketHash: hashToken(ticket),
+      oauthTicketExpiresAt: new Date(Date.now() + OAUTH_TICKET_TTL_MS),
+      updatedAt: new Date(),
+    });
+    return ticket;
+  },
+
+  async exchangeOAuthTicket(ticket) {
+    validateRequiredString(ticket, 'ticket');
+
+    const user = await UserRepository.findByOAuthTicketHash(hashToken(ticket));
 
     if (!user) {
-      const existingByEmail = await UserRepository.findByEmail(email);
-
-      if (existingByEmail) {
-        user = await UserRepository.updateById(existingByEmail._id.toString(), {
-          provider: profile.provider,
-          providerId: profile.providerId,
-          avatarUrl: existingByEmail.avatarUrl || profile.avatarUrl,
-          emailVerified: true,
-          updatedAt: now,
-        });
-      } else {
-        user = await UserRepository.create({
-          name: profile.name,
-          email,
-          provider: profile.provider,
-          providerId: profile.providerId,
-          avatarUrl: profile.avatarUrl,
-          role: 'STUDENT',
-          emailVerified: true,
-          createdAt: now,
-          updatedAt: now,
-        });
-      }
+      throw new AppError(401, 'OAUTH_INVALID_TICKET', 'Tempo de login expirado. Tente novamente');
     }
+
+    await UserRepository.updateById(user._id.toString(), {
+      oauthTicketHash: null,
+      oauthTicketExpiresAt: null,
+      updatedAt: new Date(),
+    });
 
     return createSession(user);
   },

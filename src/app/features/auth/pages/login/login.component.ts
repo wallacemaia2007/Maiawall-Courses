@@ -1,9 +1,22 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
 import { apiErrorMessage } from '../../../../core/models/api-error.model';
+import { OAuthProvider } from '../../../../core/models/auth.model';
+
+const OAUTH_ERROR_MESSAGES: Record<string, string> = {
+  OAUTH_CANCELLED: 'O login social foi cancelado.',
+  OAUTH_STATE_MISMATCH: 'A sessao de login expirou. Tente novamente.',
+  OAUTH_EMAIL_MISSING: 'Sua conta nao possui um e-mail verificado.',
+  OAUTH_EMAIL_UNVERIFIED: 'Nao foi possivel vincular sua conta. Entre com e-mail e senha.',
+  OAUTH_NOT_CONFIGURED: 'Esse login social nao esta disponivel no momento.',
+  OAUTH_EXCHANGE_FAILED: 'Nao foi possivel confirmar o login. Tente novamente.',
+  OAUTH_PROFILE_FAILED: 'Nao foi possivel obter seus dados. Tente novamente.',
+  OAUTH_INVALID_PROVIDER: 'Login social indisponivel.',
+  missing_ticket: 'A sessao de login expirou. Tente novamente.',
+};
 
 @Component({
   selector: 'app-login',
@@ -13,7 +26,7 @@ import { apiErrorMessage } from '../../../../core/models/api-error.model';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
@@ -27,6 +40,16 @@ export class LoginComponent {
 
   protected showPassword = false;
   protected readonly submitError = signal<string | null>(null);
+
+  ngOnInit(): void {
+    const errorCode = this.route.snapshot.queryParamMap.get('oauthError');
+
+    if (errorCode) {
+      this.submitError.set(
+        OAUTH_ERROR_MESSAGES[errorCode] ?? 'Nao foi possivel entrar. Tente novamente.',
+      );
+    }
+  }
 
   protected onSubmit(): void {
     this.submitError.set(null);
@@ -52,8 +75,8 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  protected loginWithProvider(provider: 'google' | 'github'): void {
-    window.location.href = this.authService.socialLoginUrl(provider);
+  protected loginWithProvider(provider: OAuthProvider): void {
+    this.authService.startOAuthLogin(provider);
   }
 
   protected get email() {

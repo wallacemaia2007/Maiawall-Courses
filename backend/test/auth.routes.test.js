@@ -44,9 +44,9 @@ test('POST /api/auth/logout is idempotent without refresh token', async () => {
   assert.equal(body.code, 'SUCCESS');
 });
 
-test('GET /api/auth/google reports when OAuth is not configured', async () => {
-  const response = await fetch(`${baseUrl}/api/auth/google`, { redirect: 'manual' });
+test('GET /api/auth/oauth/google redirects to the configured provider', async () => {
+  const response = await fetch(`${baseUrl}/api/auth/oauth/google`, { redirect: 'manual' });
 
   assert.equal(response.status, 302);
-  assert.match(response.headers.get('location'), /error=OAUTH_NOT_CONFIGURED/);
+  assert.match(response.headers.get('location'), /^https:\/\/accounts\.google\.com\/o\/oauth2\/v2\/auth\?/);
 });

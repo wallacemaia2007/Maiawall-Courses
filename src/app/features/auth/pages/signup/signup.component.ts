@@ -10,6 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
 import { apiErrorMessage } from '../../../../core/models/api-error.model';
+import { OAuthProvider } from '../../../../core/models/auth.model';
 
 @Component({
   selector: 'app-signup',
@@ -67,8 +68,8 @@ export class SignupComponent {
     this.showPasswordConfirm = !this.showPasswordConfirm;
   }
 
-  protected loginWithProvider(provider: 'google' | 'github'): void {
-    window.location.href = this.authService.socialLoginUrl(provider);
+  protected loginWithProvider(provider: OAuthProvider): void {
+    this.authService.startOAuthLogin(provider);
   }
 
   protected get name() {

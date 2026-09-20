@@ -24,9 +24,22 @@ const UserRepository = {
     return users(database).findOne({ email: email.toLowerCase() });
   },
 
-  async findByProvider(provider, providerId) {
+  async findByGithubId(githubId) {
     const database = await getDatabase();
-    return users(database).findOne({ provider, providerId });
+    return users(database).findOne({ githubId });
+  },
+
+  async findByGoogleId(googleId) {
+    const database = await getDatabase();
+    return users(database).findOne({ googleId });
+  },
+
+  async findByOAuthTicketHash(tokenHash, now = new Date()) {
+    const database = await getDatabase();
+    return users(database).findOne({
+      oauthTicketHash: tokenHash,
+      oauthTicketExpiresAt: { $gt: now },
+    });
   },
 
   async findById(id) {

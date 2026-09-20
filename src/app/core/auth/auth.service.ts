@@ -8,6 +8,8 @@ import { ApiResponse, unwrapApiData } from '../models/api-response.model';
 import {
   AuthSession,
   LoginCredentials,
+  OAuthProvider,
+  OAuthTicketExchange,
   PasswordRecoveryRequest,
   ResetPasswordPayload,
   SignupCredentials,
@@ -95,9 +97,21 @@ export class AuthService {
       .pipe(map(() => void 0));
   }
 
-  socialLoginUrl(provider: 'google' | 'github'): string {
-    const endpoint = provider === 'google' ? AUTH_ENDPOINTS.oauthGoogle : AUTH_ENDPOINTS.oauthGithub;
-    return this.authUrl(endpoint);
+  startOAuthLogin(provider: OAuthProvider): void {
+    const endpoint =
+      provider === 'google' ? AUTH_ENDPOINTS.oauthGoogle : AUTH_ENDPOINTS.oauthGithub;
+    window.location.href = this.authUrl(endpoint);
+  }
+
+  exchangeOAuthTicket(ticket: string): Observable<AuthSession> {
+    const payload: OAuthTicketExchange = { ticket };
+
+    return this.http
+      .post<ApiResponse<AuthSession>>(this.authUrl(AUTH_ENDPOINTS.oauthExchange), payload)
+      .pipe(
+        map(unwrapApiData),
+        tap((session) => this.authState.setSession(session)),
+      );
   }
 
   getSession(): Observable<AuthSession | null> {

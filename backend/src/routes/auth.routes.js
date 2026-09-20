@@ -1,71 +1,76 @@
 const express = require('express');
+const crypto = require('crypto');
 
 const { requireAuth } = require('../middleware/auth');
 const { AuthService } = require('../services/auth.service');
 const { OAuthService } = require('../services/oauth.service');
-const { successResponse } = require('../utils/api-response');
 const { env } = require('../config/env');
+const { successResponse } = require('../utils/api-response');
 
 const authRouter = express.Router();
 const OAUTH_STATE_COOKIE = 'mw_oauth_state';
 const OAUTH_STATE_TTL_MS = 5 * 60 * 1000;
 
-function redirectWithError(response, error) {
-  const message = error.code || 'OAUTH_ERROR';
-  response.redirect(`${env.oauthRedirectUrl}?error=${encodeURIComponent(message)}`);
+function frontendRedirect(path, params = {}) {
+  const url = new URL(path, env.frontendOrigin);
+
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
+  }
+
+  return url.toString();
 }
 
-function startOAuthFlow(provider) {
+function oauthErrorRedirect(response, code) {
+  response.redirect(frontendRedirect('/login', { oauthError: code }));
+}
+
+function startOAuth(provider) {
   return (request, response) => {
     try {
-      const state = OAuthService.createState();
+      const state = crypto.randomBytes(24).toString('hex');
       response.cookie(OAUTH_STATE_COOKIE, state, {
         httpOnly: true,
         sameSite: 'lax',
         secure: env.isProduction,
         maxAge: OAUTH_STATE_TTL_MS,
       });
-      response.redirect(OAuthService[provider].buildAuthUrl(state));
+      response.redirect(OAuthService.buildAuthorizationUrl(provider, state));
     } catch (error) {
-      redirectWithError(response, error);
+      oauthErrorRedirect(response, error.code || 'OAUTH_ERROR');
     }
   };
 }
 
-function completeOAuthFlow(provider) {
+function completeOAuth(provider) {
   return async (request, response) => {
     const { code, state, error } = request.query;
-    const cookieState = request.cookies?.[OAUTH_STATE_COOKIE];
+    const savedState = request.cookies?.[OAUTH_STATE_COOKIE];
     response.clearCookie(OAUTH_STATE_COOKIE);
 
     if (error) {
-      return redirectWithError(response, { code: 'OAUTH_CANCELLED' });
+      return oauthErrorRedirect(response, 'OAUTH_CANCELLED');
     }
 
-    if (!code || !state || !cookieState || state !== cookieState) {
-      return redirectWithError(response, { code: 'OAUTH_STATE_MISMATCH' });
+    if (!code || !state || !savedState || state !== savedState) {
+      return oauthErrorRedirect(response, 'OAUTH_STATE_MISMATCH');
     }
 
     try {
-      const profile = await OAuthService[provider].fetchProfile(code);
-      const session = await AuthService.loginWithOAuth(profile);
-      const params = new URLSearchParams({ accessToken: session.tokens.accessToken });
-
-      if (session.tokens.refreshToken) {
-        params.set('refreshToken', session.tokens.refreshToken);
-      }
-
-      response.redirect(`${env.oauthRedirectUrl}?${params.toString()}`);
+      const profile = await OAuthService.exchangeCodeForProfile(provider, code);
+      const user = await AuthService.loginWithOAuthProfile(provider, profile);
+      const ticket = await AuthService.createOAuthTicket(user);
+      response.redirect(frontendRedirect('/auth/callback', { ticket }));
     } catch (caughtError) {
-      redirectWithError(response, caughtError);
+      oauthErrorRedirect(response, caughtError.code || 'OAUTH_ERROR');
     }
   };
 }
 
-authRouter.get('/google', startOAuthFlow('google'));
-authRouter.get('/google/callback', completeOAuthFlow('google'));
-authRouter.get('/github', startOAuthFlow('github'));
-authRouter.get('/github/callback', completeOAuthFlow('github'));
+authRouter.get('/oauth/google', startOAuth('google'));
+authRouter.get('/oauth/github', startOAuth('github'));
+authRouter.get('/oauth/google/callback', completeOAuth('google'));
+authRouter.get('/oauth/github/callback', completeOAuth('github'));
 
 authRouter.post('/signup', async (request, response, next) => {
   try {

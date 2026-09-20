@@ -2,17 +2,6 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
-import { AuthStateService } from '../../../../core/auth/auth-state.service';
-
-const OAUTH_ERROR_MESSAGES: Record<string, string> = {
-  OAUTH_CANCELLED: 'O login social foi cancelado.',
-  OAUTH_STATE_MISMATCH: 'A sessao de login expirou. Tente novamente.',
-  OAUTH_EMAIL_MISSING: 'Sua conta nao possui um e-mail verificado.',
-  OAUTH_EMAIL_UNVERIFIED: 'O e-mail do provedor nao foi verificado.',
-  OAUTH_NOT_CONFIGURED: 'Esse login social nao esta disponivel no momento.',
-  OAUTH_EXCHANGE_FAILED: 'Nao foi possivel confirmar o login. Tente novamente.',
-  OAUTH_PROFILE_FAILED: 'Nao foi possivel obter seus dados. Tente novamente.',
-};
 
 @Component({
   selector: 'app-oauth-callback',
@@ -20,11 +9,11 @@ const OAUTH_ERROR_MESSAGES: Record<string, string> = {
   imports: [RouterLink],
   template: `
     <main class="oauth-callback">
-      @if (errorMessage()) {
+      @if (loading()) {
+        <p>Confirmando seu login...</p>
+      } @else {
         <p role="alert">{{ errorMessage() }}</p>
         <a routerLink="/login">Voltar para o login</a>
-      } @else {
-        <p>Confirmando seu login...</p>
       }
     </main>
   `,
@@ -41,33 +30,23 @@ export class OauthCallbackComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
-  private readonly authState = inject(AuthStateService);
 
+  protected readonly loading = signal(true);
   protected readonly errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParamMap;
-    const errorCode = params.get('error');
+    const ticket = this.route.snapshot.queryParamMap.get('ticket');
 
-    if (errorCode) {
-      this.errorMessage.set(OAUTH_ERROR_MESSAGES[errorCode] ?? 'Nao foi possivel entrar. Tente novamente.');
+    if (!ticket) {
+      void this.router.navigate(['/login'], { queryParams: { oauthError: 'missing_ticket' } });
       return;
     }
 
-    const accessToken = params.get('accessToken');
-    const refreshToken = params.get('refreshToken');
-
-    if (!accessToken) {
-      this.errorMessage.set('Nao foi possivel entrar. Tente novamente.');
-      return;
-    }
-
-    this.authState.setTokens({ accessToken, refreshToken: refreshToken ?? undefined });
-    this.authService.getSession().subscribe({
-      next: () => this.router.navigateByUrl('/'),
+    this.authService.exchangeOAuthTicket(ticket).subscribe({
+      next: () => void this.router.navigateByUrl('/perfil'),
       error: () => {
-        this.authState.clearSession();
-        this.errorMessage.set('Nao foi possivel confirmar sua sessao. Tente novamente.');
+        this.loading.set(false);
+        this.errorMessage.set('Nao foi possivel confirmar seu login. Tente novamente.');
       },
     });
   }

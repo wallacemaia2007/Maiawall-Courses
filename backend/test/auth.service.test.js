@@ -21,10 +21,19 @@ require.cache[repositoryPath] = {
       async findByEmail(email) {
         return clone([...users.values()].find((user) => user.email === email) || null);
       },
-      async findByProvider(provider, providerId) {
+      async findByGithubId(githubId) {
+        return clone([...users.values()].find((user) => user.githubId === githubId) || null);
+      },
+      async findByGoogleId(googleId) {
+        return clone([...users.values()].find((user) => user.googleId === googleId) || null);
+      },
+      async findByOAuthTicketHash(tokenHash) {
         return clone(
           [...users.values()].find(
-            (user) => user.provider === provider && user.providerId === providerId,
+            (user) =>
+              user.oauthTicketHash === tokenHash &&
+              user.oauthTicketExpiresAt &&
+              user.oauthTicketExpiresAt > new Date(),
           ) || null,
         );
       },
@@ -107,17 +116,75 @@ test('refresh rotates stored refresh token', async () => {
 
 test('OAuth creates a verified student account and reuses the provider identity', async () => {
   const profile = {
-    provider: 'google',
-    providerId: 'google-user-1',
+    providerId: 'github-user-1',
     email: 'oauth@example.com',
     name: 'OAuth User',
     emailVerified: true,
   };
 
-  const firstSession = await AuthService.loginWithOAuth(profile);
-  const secondSession = await AuthService.loginWithOAuth(profile);
+  const firstUser = await AuthService.loginWithOAuthProfile('github', profile);
+  const secondUser = await AuthService.loginWithOAuthProfile('github', profile);
 
-  assert.equal(firstSession.user.email, 'oauth@example.com');
-  assert.equal(firstSession.user.provider, 'google');
-  assert.equal(secondSession.user.id, firstSession.user.id);
+  assert.equal(firstUser.email, 'oauth@example.com');
+  assert.equal(firstUser.githubId, 'github-user-1');
+  assert.equal(secondUser._id.toString(), firstUser._id.toString());
+});
+
+test('OAuth links a verified provider email to an existing password account', async () => {
+  const signupSession = await AuthService.signup({
+    name: 'Wallace',
+    email: 'wallace@example.com',
+    password: 'StrongPass123',
+  });
+
+  const linkedUser = await AuthService.loginWithOAuthProfile('google', {
+    providerId: 'google-user-2',
+    email: 'wallace@example.com',
+    name: 'Wallace',
+    emailVerified: true,
+  });
+
+  assert.equal(linkedUser.googleId, 'google-user-2');
+  assert.equal(linkedUser.emailVerified, true);
+  assert.equal(linkedUser._id.toString(), signupSession.user.id);
+});
+
+test('OAuth rejects linking when the provider email is unverified', async () => {
+  await AuthService.signup({
+    name: 'Wallace',
+    email: 'wallace@example.com',
+    password: 'StrongPass123',
+  });
+
+  await assert.rejects(
+    () =>
+      AuthService.loginWithOAuthProfile('google', {
+        providerId: 'google-user-3',
+        email: 'wallace@example.com',
+        name: 'Wallace',
+        emailVerified: false,
+      }),
+    /nao foi verificado/,
+  );
+});
+
+test('OAuth ticket is single-use and exchanges into a session', async () => {
+  const user = await AuthService.loginWithOAuthProfile('github', {
+    providerId: 'github-user-4',
+    email: 'ticket@example.com',
+    name: 'Ticket User',
+    emailVerified: true,
+  });
+
+  const ticket = await AuthService.createOAuthTicket(user);
+  const session = await AuthService.exchangeOAuthTicket(ticket);
+  const stored = require.cache[repositoryPath].exports.UserRepository;
+  const storedUser = await stored.findById(user._id.toString());
+
+  assert.equal(session.user.email, 'ticket@example.com');
+  assert.ok(session.tokens.accessToken);
+  assert.ok(session.tokens.refreshToken);
+  assert.equal(storedUser.oauthTicketHash, null);
+
+  await assert.rejects(() => AuthService.exchangeOAuthTicket(ticket), /expirado/);
 });

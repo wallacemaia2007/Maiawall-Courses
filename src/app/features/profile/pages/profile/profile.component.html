@@ -1,5 +1,5 @@
 <section class="profile-page mw-container">
-  <header class="profile-hero"><div class="profile-hero__avatar" aria-hidden="true">{{ (user()?.name ?? '?').charAt(0).toUpperCase() }}</div><div><p class="profile-hero__eyebrow">Seu perfil</p><h1>{{ user()?.name }}</h1><p class="profile-hero__meta">Aqui ficam apenas as leituras que voce iniciou.</p></div></header>
+  <header class="profile-hero"><div class="profile-hero__avatar" aria-hidden="true">{{ (user()?.name ?? '?').charAt(0).toUpperCase() }}</div><div><p class="profile-hero__eyebrow">Seu perfil</p><h1>{{ user()?.name }}</h1><p class="profile-hero__meta">Aqui ficam apenas as leituras que voce iniciou.</p></div><button class="mw-btn mw-btn--outline profile-hero__logout" type="button" (click)="logout()">Sair</button></header>
   <section class="learning-history">
     <div class="learning-history__head"><div><p class="profile-hero__eyebrow">Continuar estudando</p><h2>Seus cursos</h2></div><a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver catalogo</a></div>
     @if (overview().loading) { <div class="profile-page__status"><app-loading-spinner label="Carregando seu historico" size="lg" /></div> }

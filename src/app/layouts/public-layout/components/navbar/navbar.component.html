@@ -29,8 +29,15 @@
 
     <div class="navbar__actions">
       @if (isAuthenticated()) {
-        <a class="navbar__login" routerLink="/perfil">Perfil{{ user()?.name ? ': ' + user()!.name.split(' ')[0] : '' }}</a>
-        <button class="navbar__signup" type="button" (click)="logout()">Sair</button>
+        <a class="navbar__profile" routerLink="/perfil" [attr.aria-label]="'Abrir perfil de ' + user()?.name">
+          <span class="navbar__profile-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="3.25" />
+              <path d="M5.5 20c.7-3.2 2.9-5 6.5-5s5.8 1.8 6.5 5" />
+            </svg>
+          </span>
+          <span>{{ firstName() }}</span>
+        </a>
       } @else {
         <a class="navbar__login" routerLink="/login">Entrar</a>
       }
@@ -74,8 +81,15 @@
       </nav>
       <div class="navbar__drawer-actions">
         @if (isAuthenticated()) {
-          <a class="navbar__drawer-login" routerLink="/perfil" (click)="closeMenu()">Meu perfil</a>
-          <button class="navbar__drawer-signup" type="button" (click)="logout()">Sair</button>
+          <a class="navbar__drawer-login navbar__drawer-profile" routerLink="/perfil" (click)="closeMenu()">
+            <span class="navbar__profile-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="3.25" />
+                <path d="M5.5 20c.7-3.2 2.9-5 6.5-5s5.8 1.8 6.5 5" />
+              </svg>
+            </span>
+            <span>{{ firstName() }}</span>
+          </a>
         } @else {
           <a class="navbar__drawer-login" routerLink="/login" (click)="closeMenu()">Entrar</a>
         }

@@ -24,6 +24,12 @@ export interface VerifyEmailPayload {
   token: string;
 }
 
+export type OAuthProvider = 'github' | 'google';
+
+export interface OAuthTicketExchange {
+  ticket: string;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken?: string;

@@ -13,8 +13,9 @@ export const AUTH_ENDPOINTS = {
   forgotPassword: '/auth/forgot-password',
   resetPassword: '/auth/reset-password',
   verifyEmail: '/auth/verify-email',
-  oauthGoogle: '/auth/google',
-  oauthGithub: '/auth/github',
+  oauthGoogle: '/auth/oauth/google',
+  oauthGithub: '/auth/oauth/github',
+  oauthExchange: '/auth/oauth/exchange',
 } as const;
 
 export const USER_ENDPOINTS = {

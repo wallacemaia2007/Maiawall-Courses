@@ -31,6 +31,11 @@
   box-shadow: var(--shadow-sm);
 }
 
+.profile-hero__logout {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .profile-hero__avatar {
   display: grid;
   flex: 0 0 auto;
@@ -72,6 +77,18 @@
   margin: 0;
   color: var(--color-text-secondary);
   font-size: 0.86rem;
+}
+
+@media (max-width: 560px) {
+  .profile-hero {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .profile-hero__logout {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 /* ---------- Layout ---------- */
