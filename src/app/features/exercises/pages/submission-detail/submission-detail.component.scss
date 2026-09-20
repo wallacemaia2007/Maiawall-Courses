@@ -1,4 +1,244 @@
 .submission-detail-page {
   display: grid;
-  gap: 24px;
+  gap: 20px;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.submission-detail-page__status {
+  display: grid;
+  padding: 48px 16px;
+  place-items: center;
+}
+
+.submission-detail-page__back {
+  color: var(--color-text-secondary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.submission-detail-page__back:hover {
+  color: var(--color-primary);
+}
+
+/* ---------- Hero ---------- */
+
+.submission-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 28px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.submission-hero__eyebrow {
+  margin: 0 0 4px;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.submission-hero h1 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+}
+
+.submission-hero__meta {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.86rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-pill--graded {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.status-pill--review {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.status-pill--draft {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+/* ---------- Layout ---------- */
+
+.submission-detail-page__layout {
+  display: grid;
+  gap: 20px;
+}
+
+.detail-panel {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.detail-panel__head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.detail-panel__head span {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.detail-panel__empty {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+/* ---------- Resposta ---------- */
+
+.answer-view-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answer-view {
+  display: grid;
+  gap: 8px;
+}
+
+.answer-view__label {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.answer-view pre {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.answer-view.is-code pre {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+}
+
+/* ---------- Anexos ---------- */
+
+.attachment-block h3 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+
+.attachment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attachment-list a {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.attachment-list span {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* ---------- Feedback ---------- */
+
+.feedback-panel {
+  border-color: color-mix(in srgb, var(--color-success) 25%, var(--color-border-light));
+}
+
+.feedback-panel--pending {
+  border-color: var(--color-border-light);
+}
+
+.feedback-panel__score {
+  color: var(--color-success) !important;
+  font-weight: 700;
+}
+
+.feedback-panel__content {
+  margin: 0;
+  color: var(--color-text-primary);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.feedback-panel__date {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.detail-panel .mw-btn {
+  justify-self: start;
+  min-height: 42px;
+  padding: 0 1.2rem;
+}
+
+@media (max-width: 640px) {
+  .submission-hero {
+    flex-direction: column;
+  }
+
+  .detail-panel {
+    padding: 18px;
+  }
 }

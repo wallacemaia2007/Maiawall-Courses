@@ -1,3 +1,70 @@
 <section class="submission-list-page">
-  Histórico das submissões do aluno com status (rascunho/enviada/corrigida).
+  @if (state().loading) {
+    <div class="submission-list-page__status">
+      <app-loading-spinner label="Carregando respostas" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="submission-list-page__status">
+      <app-empty-state
+        title="Não foi possível carregar as respostas"
+        [message]="state().errorMessage"
+      >
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    </div>
+  } @else {
+    <header class="submissions-hero">
+      <h1>Minhas respostas</h1>
+      <p>Acompanhe tudo que você enviou e as correções recebidas.</p>
+    </header>
+
+    @if (items().length === 0) {
+      <div class="submission-list-page__status">
+        <app-empty-state
+          title="Nenhuma resposta enviada"
+          message="Quando você responder um exercício, ele aparecerá aqui."
+        >
+          <a class="mw-btn mw-btn--primary" routerLink="/app/exercicios">
+            Ir para os exercícios
+          </a>
+        </app-empty-state>
+      </div>
+    } @else {
+      <ul class="submission-list">
+        @for (item of items(); track trackItem($index, item)) {
+          <li>
+            <a [routerLink]="['/app/submissoes', item.submission.id]">
+              <div class="submission-row">
+                <div class="submission-row__main">
+                  <strong>{{ item.exercise?.title ?? 'Exercício' }}</strong>
+                  @if (item.exercise) {
+                    <small>{{ getTypeLabel(item.exercise.type) }}</small>
+                  }
+                  <p class="submission-row__summary">{{ answerSummary(item.submission) }}</p>
+                </div>
+
+                <div class="submission-row__meta">
+                  <span
+                    class="status-pill"
+                    [class.status-pill--graded]="item.submission.status === 'graded'"
+                    [class.status-pill--review]="item.submission.status === 'submitted'"
+                    [class.status-pill--draft]="item.submission.status === 'draft'"
+                  >
+                    @if (item.submission.status === 'graded') {
+                      Nota {{ item.submission.score ?? '—' }}
+                    } @else {
+                      {{ getStatusLabel(item.submission.status) }}
+                    }
+                  </span>
+                  <span class="row-link">Ver →</span>
+                </div>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  }
 </section>

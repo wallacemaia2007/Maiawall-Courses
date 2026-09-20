@@ -1,3 +1,214 @@
 <section class="student-course-detail-page">
-  Estrutura do curso matriculado: capítulos, aulas, exercícios e progresso.
+  @if (state().loading) {
+    <div class="student-course-detail-page__status">
+      <app-loading-spinner label="Carregando curso" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="student-course-detail-page__status">
+      <app-empty-state
+        title="Curso indisponível"
+        [message]="state().errorMessage"
+      >
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+        <a class="mw-btn mw-btn--primary" routerLink="/app/cursos">Meus cursos</a>
+      </app-empty-state>
+    </div>
+  } @else {
+    @if (course(); as course) {
+      <header class="course-detail-hero">
+        <a class="course-detail-hero__back" routerLink="/app/cursos">← Voltar aos meus cursos</a>
+
+        <div class="course-detail-hero__intro">
+          <div>
+            <p class="course-detail-hero__eyebrow">
+              {{ levelLabel() || 'Curso' }}
+              @if (course.chapters.length) {
+                · {{ course.chapters.length }} capítulos
+              }
+              · {{ totalLessons() }} aulas
+            </p>
+            <h1>{{ course.title }}</h1>
+            @if (course.shortDescription) {
+              <p>{{ course.shortDescription }}</p>
+            } @else if (course.description) {
+              <p>{{ course.description }}</p>
+            }
+          </div>
+
+          <div class="course-detail-hero__progress">
+            <app-progress-bar [percent]="percent()" [label]="'Progresso do curso'" />
+            <span>{{ completedChapters() }} de {{ course.chapters.length }} capítulos concluídos</span>
+          </div>
+        </div>
+      </header>
+
+      @if (isCompleted()) {
+        <div class="course-concluded-banner">
+          <div>
+            <strong>Curso concluído 🎉</strong>
+            <p>Parabéns! Você terminou todos os capítulos deste curso.</p>
+          </div>
+          <a class="mw-btn mw-btn--primary" routerLink="/app/certificados">Ver meus certificados</a>
+        </div>
+      } @else {
+        @if (nextStep(); as next) {
+          <div class="next-step-banner">
+            <div>
+              <span>Próximo passo</span>
+              <strong>{{ next.chapter.title }}</strong>
+              @if (next.chapter.requiresLogin && !next.chapter.isPublic) {
+                <p>Complete os capítulos anteriores para liberar as aulas seguintes.</p>
+              }
+            </div>
+            <a
+              class="mw-btn mw-btn--primary"
+              [routerLink]="['/app/capitulo', next.chapter.id]"
+            >
+              Continuar
+            </a>
+          </div>
+        }
+      }
+
+      <div class="course-detail-body">
+        <main class="course-detail-body__main">
+          <section class="detail-panel">
+            <div class="detail-panel__head">
+              <h2>Estrutura do curso</h2>
+              <span>Conteúdo organizado em capítulos e aulas</span>
+            </div>
+
+            @if (chapterItems().length > 0) {
+              <ol class="chapter-list">
+                @for (item of chapterItems(); track trackChapter($index, item)) {
+                  <li class="chapter-list__item" [attr.data-status]="item.status">
+                    <div class="chapter-list__index">
+                      @switch (item.status) {
+                        @case ('completed') {
+                          <span aria-label="Concluído">✓</span>
+                        }
+                        @case ('locked') {
+                          <span aria-label="Bloqueado">🔒</span>
+                        }
+                        @default {
+                          <span>{{ item.chapter.order }}</span>
+                        }
+                      }
+                    </div>
+
+                    <div class="chapter-list__content">
+                      <div class="chapter-list__title">
+                        <span>Capítulo {{ item.chapter.order }}</span>
+                        <h3>{{ item.chapter.title }}</h3>
+                        @if (item.chapter.description) {
+                          <p>{{ item.chapter.description }}</p>
+                        }
+                      </div>
+
+                      <div class="chapter-list__meta">
+                        @if (item.lessonCount > 0) {
+                          <span>{{ item.lessonCount }} aulas</span>
+                        } @else {
+                          <span>Sem aulas publicadas</span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="chapter-list__action">
+                      @switch (item.status) {
+                        @case ('completed') {
+                          <span class="status-chip status-chip--success">Concluído</span>
+                          <a
+                            class="mw-btn mw-btn--outline"
+                            [routerLink]="['/app/capitulo', item.chapter.id]"
+                          >
+                            Revisar
+                          </a>
+                        }
+                        @case ('current') {
+                          <span class="status-chip status-chip--primary">Próximo passo</span>
+                          <a
+                            class="mw-btn mw-btn--primary"
+                            [routerLink]="['/app/capitulo', item.chapter.id]"
+                          >
+                            Continuar
+                          </a>
+                        }
+                        @case ('available') {
+                          <span class="status-chip status-chip--info">Aula aberta</span>
+                          <a
+                            class="mw-btn mw-btn--outline"
+                            [routerLink]="['/app/capitulo', item.chapter.id]"
+                          >
+                            Abrir
+                          </a>
+                        }
+                        @default {
+                          <span class="locked-hint">
+                            Complete os capítulos anteriores para liberar este conteúdo.
+                          </span>
+                        }
+                      }
+                    </div>
+                  </li>
+                }
+              </ol>
+            } @else {
+              <app-empty-state
+                title="Capítulos em preparação"
+                message="O conteúdo deste curso ainda não foi publicado. Volte em breve."
+              />
+            }
+          </section>
+        </main>
+
+        <aside class="course-detail-body__side">
+          <section class="detail-panel">
+            <h2>Seu progresso</h2>
+            <dl class="progress-summary">
+              <div>
+                <dt>Capítulos concluídos</dt>
+                <dd>{{ completedChapters() }} / {{ course.chapters.length }}</dd>
+              </div>
+              <div>
+                <dt>Aulas no curso</dt>
+                <dd>{{ totalLessons() }}</dd>
+              </div>
+            </dl>
+            <app-progress-bar [percent]="percent()" [label]="'Progresso total'" />
+          </section>
+
+          <section class="detail-panel">
+            <h2>Instrutor</h2>
+            <div class="instructor-card">
+              <div class="instructor-card__avatar">
+                @if (course.instructor.avatarUrl) {
+                  <img [src]="course.instructor.avatarUrl" [alt]="course.instructor.name" />
+                } @else {
+                  <span aria-hidden="true">{{ course.instructor.name.slice(0, 1) }}</span>
+                }
+              </div>
+              <div>
+                <strong>{{ course.instructor.name }}</strong>
+                @if (course.instructor.bio) {
+                  <p>{{ course.instructor.bio }}</p>
+                }
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    } @else {
+      <div class="student-course-detail-page__status">
+        <app-empty-state
+          title="Curso não encontrado"
+          message="Verifique se o curso existe e se você está matriculado nele."
+        >
+          <a class="mw-btn mw-btn--primary" routerLink="/app/cursos">Voltar aos meus cursos</a>
+        </app-empty-state>
+      </div>
+    }
+  }
 </section>

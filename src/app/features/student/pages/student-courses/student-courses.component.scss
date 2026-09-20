@@ -1,4 +1,212 @@
 .student-courses-page {
   display: grid;
+  gap: 24px;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.student-courses-page__status {
+  display: grid;
+  padding: 48px 16px;
+  place-items: center;
+}
+
+.courses-hero h1 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.courses-hero p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.courses-panel {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.courses-panel__head h2 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.courses-panel__head p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+/* ---------- Matriculados ---------- */
+
+.enrolled-list {
+  display: grid;
+  gap: 14px;
+}
+
+.enrolled-card {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+.enrolled-card__cover {
+  position: relative;
+  display: grid;
+  min-height: 88px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.enrolled-card__cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.enrolled-card__cover span {
+  z-index: 1;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.enrolled-card__body {
+  display: grid;
+  gap: 8px;
+}
+
+.enrolled-card__body h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.enrolled-card__meta {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: capitalize;
+}
+
+.enrolled-card__actions {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.enrolled-card__actions .mw-btn {
+  min-height: 40px;
+  padding: 0 1.2rem;
+  font-size: 0.84rem;
+}
+
+/* ---------- Disponíveis ---------- */
+
+.available-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
+}
+
+.available-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+.available-card__cover {
+  position: relative;
+  display: grid;
+  min-height: 96px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+}
+
+.available-card__cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.available-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+}
+
+.available-card__body h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.available-card__body p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.available-card__meta {
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+}
+
+.available-card .mw-btn {
+  min-height: 40px;
+  padding: 0 1.1rem;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 860px) {
+  .enrolled-card {
+    grid-template-columns: 1fr;
+  }
+
+  .enrolled-card__cover {
+    min-height: 72px;
+  }
+
+  .enrolled-card__actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .enrolled-card__actions {
+    grid-template-columns: 1fr;
+  }
 }

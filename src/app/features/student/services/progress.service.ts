@@ -39,16 +39,16 @@ export class ProgressService {
       .pipe(map(unwrapApiData));
   }
 
-  markLessonComplete(
-    chapterId: string,
-    lessonId: string,
-  ): Observable<ChapterProgress | null> {
+  markChapterComplete(chapterId: string): Observable<ChapterProgress | null> {
     return this.http
-      .post<ApiResponse<ChapterProgress>>(
-        this.apiUrl(`${PROGRESS_ENDPOINTS.chapter}/${chapterId}/lessons/${lessonId}/complete`),
-        {},
-      )
+      .patch<ApiResponse<ChapterProgress>>(this.apiUrl(`${PROGRESS_ENDPOINTS.chapter}/${chapterId}`), {
+        status: 'completed',
+      })
       .pipe(map(unwrapApiData));
+  }
+
+  markLessonComplete(chapterId: string): Observable<ChapterProgress | null> {
+    return this.markChapterComplete(chapterId);
   }
 
   listExerciseProgress(): Observable<ExerciseProgress[]> {

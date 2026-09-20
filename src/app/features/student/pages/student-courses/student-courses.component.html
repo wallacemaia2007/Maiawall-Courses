@@ -1,3 +1,131 @@
 <section class="student-courses-page">
-  Lista dos cursos matriculados com barra de progresso.
+  @if (state().loading) {
+    <div class="student-courses-page__status">
+      <app-loading-spinner label="Carregando seus cursos" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="student-courses-page__status">
+      <app-empty-state
+        title="Não foi possível carregar os cursos"
+        [message]="state().errorMessage"
+      >
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    </div>
+  } @else {
+    <header class="courses-hero">
+      <h1>Meus cursos</h1>
+      <p>Acompanhe o progresso das suas matrículas e descubra novos cursos.</p>
+    </header>
+
+    <section class="courses-panel">
+      <div class="courses-panel__head">
+        <div>
+          <h2>Em andamento</h2>
+          <p>{{ state().enrolled.length }} curso(s) matriculado(s)</p>
+        </div>
+      </div>
+
+      @if (state().enrolled.length > 0) {
+        <div class="enrolled-list">
+          @for (item of state().enrolled; track trackCourse($index, item)) {
+            <article class="enrolled-card">
+              <div class="enrolled-card__cover" [attr.data-tone]="'primary'">
+                @if (item.course.thumbnailUrl) {
+                  <img [src]="item.course.thumbnailUrl" [alt]="item.course.title" />
+                }
+                <span>{{ item.progress.percent }}%</span>
+              </div>
+
+              <div class="enrolled-card__body">
+                <h3>{{ item.course.title }}</h3>
+                <app-progress-bar [percent]="item.progress.percent" />
+                <p class="enrolled-card__meta">
+                  {{ item.progress.completedChapters }} de {{ item.progress.totalChapters }}
+                  capítulos concluídos
+                  · {{ item.progress.status }}
+                </p>
+              </div>
+
+              <div class="enrolled-card__actions">
+                <a
+                  class="mw-btn mw-btn--primary"
+                  [routerLink]="['/app/cursos', item.course.id]"
+                >
+                  Acessar curso
+                </a>
+                <button
+                  type="button"
+                  class="mw-btn mw-btn--outline"
+                  (click)="drop(item.course.id)"
+                  [disabled]="isDropping(item.course.id)"
+                  [attr.aria-busy]="isDropping(item.course.id)"
+                >
+                  {{ isDropping(item.course.id) ? 'Cancelando…' : 'Cancelar matrícula' }}
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <app-empty-state
+          title="Você ainda não está matriculado"
+          message="Escolha um curso abaixo para começar a estudar hoje."
+        >
+          <a class="mw-btn mw-btn--primary" href="#disponiveis">Ver cursos disponíveis</a>
+        </app-empty-state>
+      }
+    </section>
+
+    <section class="courses-panel" id="disponiveis" aria-label="Cursos disponíveis">
+      <div class="courses-panel__head">
+        <div>
+          <h2>Disponíveis para matrícula</h2>
+          <p>{{ state().available.length }} curso(s) no catálogo</p>
+        </div>
+      </div>
+
+      @if (state().available.length > 0) {
+        <div class="available-grid">
+          @for (course of state().available; track trackAvailable($index, course)) {
+            <article class="available-card">
+              <div class="available-card__cover" [attr.data-tone]="'primary'">
+                @if (course.thumbnailUrl) {
+                  <img [src]="course.thumbnailUrl" [alt]="course.title" />
+                }
+              </div>
+              <div class="available-card__body">
+                <h3>{{ course.title }}</h3>
+                @if (course.shortDescription) {
+                  <p>{{ course.shortDescription }}</p>
+                }
+                <span class="available-card__meta">
+                  {{ course.chapterCount }} capítulos
+                  @if (course.durationMinutes) {
+                    · {{ course.durationMinutes }}min
+                  }
+                </span>
+              </div>
+              <button
+                type="button"
+                class="mw-btn mw-btn--primary"
+                (click)="enroll(course.id)"
+                [disabled]="isEnrolling(course.id)"
+                [attr.aria-busy]="isEnrolling(course.id)"
+              >
+                {{ isEnrolling(course.id) ? 'Matriculando…' : 'Matricular-se' }}
+              </button>
+            </article>
+          }
+        </div>
+      } @else {
+        <app-empty-state
+          title="Nenhum curso disponível agora"
+          message="Você já está matriculado em todos os cursos do catálogo. Novidades chegam em breve."
+        />
+      }
+    </section>
+  }
 </section>

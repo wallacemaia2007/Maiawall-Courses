@@ -1,4 +1,375 @@
 .student-chapter-page {
   display: grid;
   gap: 24px;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.student-chapter-page__status {
+  display: grid;
+  padding: 48px 16px;
+  place-items: center;
+}
+
+/* ---------- Hero ---------- */
+
+.chapter-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 30px;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.07), transparent 55%),
+    var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.chapter-hero__back {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--color-text-secondary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.chapter-hero__back:hover {
+  color: var(--color-primary);
+}
+
+.chapter-hero__eyebrow {
+  margin: 0 0 4px;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.chapter-hero h1 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  letter-spacing: -0.02em;
+}
+
+.chapter-hero > div > p:last-child {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+.chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.chapter-badge--success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.chapter-badge--primary {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+/* ---------- Banner de sucesso ---------- */
+
+.chapter-success-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 22px;
+  border: 1px solid color-mix(in srgb, var(--color-success) 25%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--color-success-bg);
+}
+
+.chapter-success-banner strong {
+  display: block;
+  font-size: 1.02rem;
+}
+
+.chapter-success-banner p {
+  margin: 2px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+}
+
+.chapter-success-banner .mw-btn {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 1.3rem;
+  font-size: 0.86rem;
+}
+
+/* ---------- Corpo ---------- */
+
+.chapter-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.chapter-body__side {
+  display: grid;
+  gap: 24px;
+}
+
+.detail-panel {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-panel__head h2,
+.detail-panel > h2 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.detail-panel__head span {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+/* ---------- Aulas ---------- */
+
+.lesson-list,
+.exercise-list,
+.materials-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-card {
+  padding: 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease;
+}
+
+.lesson-card.is-marked {
+  border-color: color-mix(in srgb, var(--color-success) 30%, transparent);
+  background: color-mix(in srgb, var(--color-success-bg) 40%, var(--color-bg-primary));
+}
+
+.lesson-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.lesson-card__check {
+  display: grid;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg-primary);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lesson-card.is-marked .lesson-card__check {
+  border-color: var(--color-success);
+  background: var(--color-success);
+}
+
+.lesson-card__head h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.lesson-card__head p {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: capitalize;
+}
+
+.lesson-card__content {
+  margin-top: 12px;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.lesson-card__empty {
+  margin: 12px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.lesson-card__attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-card__attachments a,
+.materials-list a {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lesson-card__attachments a:hover,
+.materials-list a:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.4);
+}
+
+/* ---------- Exercícios ---------- */
+
+.exercise-list li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease;
+}
+
+.exercise-list li a:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.35);
+  background: var(--color-bg-secondary);
+}
+
+.exercise-list small {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ---------- Conclusão ---------- */
+
+.chapter-complete-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 22px;
+  border: 1px solid rgba(var(--color-primary-rgb), 0.22);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+}
+
+.chapter-complete-panel strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.chapter-complete-panel p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.chapter-complete-panel .mw-btn {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 1.3rem;
+  font-size: 0.86rem;
+}
+
+/* ---------- Navegação ---------- */
+
+.chapter-nav {
+  display: grid;
+  gap: 10px;
+}
+
+.chapter-nav .mw-btn,
+.chapter-nav__disabled {
+  min-height: 42px;
+  padding: 0 1.1rem;
+  font-size: 0.86rem;
+}
+
+.chapter-nav__disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-weight: 700;
+}
+
+.chapter-nav__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.course-link {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.course-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .chapter-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .chapter-hero {
+    flex-direction: column;
+    padding: 22px;
+  }
+
+  .chapter-success-banner,
+  .chapter-complete-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chapter-success-banner .mw-btn,
+  .chapter-complete-panel .mw-btn {
+    width: 100%;
+  }
 }

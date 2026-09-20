@@ -1,4 +1,126 @@
 .exercise-list-page {
   display: grid;
+  gap: 24px;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.exercise-list-page__status {
+  display: grid;
+  padding: 48px 16px;
+  place-items: center;
+}
+
+.exercises-hero h1 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.exercises-hero p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.exercise-panel {
+  display: grid;
   gap: 16px;
+  padding: 22px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.exercise-panel__head h2 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.exercise-panel__head p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.exercise-group {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exercise-group li > a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition:
+    border-color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease;
+}
+
+.exercise-group li > a:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.35);
+  background: var(--color-bg-secondary);
+}
+
+.exercise-group strong {
+  display: block;
+  font-size: 0.96rem;
+}
+
+.exercise-group small {
+  display: block;
+  margin-top: 2px;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.status-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-pill--pending {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.status-pill--review {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.status-pill--graded {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.row-link {
+  color: var(--color-primary);
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .exercise-group li > a {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .status-pill {
+    justify-self: start;
+  }
 }

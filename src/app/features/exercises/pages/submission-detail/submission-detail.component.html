@@ -1,3 +1,128 @@
 <section class="submission-detail-page">
-  Detalhe da submissão: resposta, anexos, nota e feedback.
+  @if (state().loading) {
+    <div class="submission-detail-page__status">
+      <app-loading-spinner label="Carregando resposta" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="submission-detail-page__status">
+      <app-empty-state
+        title="Não foi possível carregar a resposta"
+        [message]="state().errorMessage"
+      >
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    </div>
+  } @else if (submission()) {
+    <a class="submission-detail-page__back" routerLink="/app/submissoes">← Minhas respostas</a>
+
+    <header class="submission-hero">
+      <div>
+        <p class="submission-hero__eyebrow">Resposta enviada</p>
+        <h1>{{ exercise()?.title ?? 'Exercício' }}</h1>
+        @if (exercise()) {
+          <p class="submission-hero__meta">
+            {{ getTypeLabel(exercise()!.type) }}
+            @if (submission()!.score !== undefined && submission()!.score !== null) {
+              · nota {{ submission()!.score }}
+            }
+            @if (formatSubmittedAt()) {
+              · enviada em {{ formatSubmittedAt() }}
+            }
+          </p>
+        }
+      </div>
+
+      <span
+        class="status-pill"
+        [class.status-pill--graded]="submission()!.status === 'graded'"
+        [class.status-pill--review]="submission()!.status === 'submitted'"
+        [class.status-pill--draft]="submission()!.status === 'draft'"
+      >
+        @if (submission()!.status === 'graded' && submission()!.score !== undefined) {
+          Corrigida · nota {{ submission()!.score }}
+        } @else {
+          {{ getStatusLabel(submission()!.status) }}
+        }
+      </span>
+    </header>
+
+    <div class="submission-detail-page__layout">
+      <section class="detail-panel">
+        <div class="detail-panel__head">
+          <h2>Sua resposta</h2>
+          <span>{{ answers().length }} item(ns)</span>
+        </div>
+
+        @if (answers().length === 0) {
+          <p class="detail-panel__empty">Esta resposta não possui conteúdo.</p>
+        } @else {
+          <ul class="answer-view-list">
+            @for (answer of answers(); track trackAnswer($index, answer)) {
+              <li class="answer-view" [class.is-code]="answer.kind === 'code'">
+                <span class="answer-view__label">{{ answer.label }}</span>
+                <pre>
+                  <code>{{ answer.value }}</code>
+                </pre>
+              </li>
+            }
+          </ul>
+        }
+
+        @if (attachments().length > 0) {
+          <div class="attachment-block">
+            <h3>Anexos</h3>
+            <ul class="attachment-list">
+              @for (attachment of attachments(); track trackAttachment($index, attachment)) {
+                <li>
+                  <a [href]="attachment.url" target="_blank" rel="noopener">
+                    {{ attachment.name }}
+                    @if (attachment.sizeBytes) {
+                      <span>({{ attachment.sizeBytes }} bytes)</span>
+                    }
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </section>
+
+      @if (state().feedback) {
+        <section class="detail-panel feedback-panel">
+          <div class="detail-panel__head">
+            <h2>Feedback do professor</h2>
+            @if (submission()!.score !== undefined && submission()!.score !== null) {
+              <span class="feedback-panel__score">Nota: {{ submission()!.score }}</span>
+            }
+          </div>
+          <p class="feedback-panel__content">{{ state().feedback!.content }}</p>
+          @if (formatGradedAt()) {
+            <p class="feedback-panel__date">Corrigido em {{ formatGradedAt() }}</p>
+          }
+        </section>
+      } @else if (submission()!.status === 'submitted') {
+        <section class="detail-panel feedback-panel feedback-panel--pending">
+          <div class="detail-panel__head">
+            <h2>Feedback</h2>
+          </div>
+          <p class="feedback-panel__content">
+            Sua resposta aguarda correção. Quando o professor avaliar, o feedback aparecerá aqui.
+          </p>
+        </section>
+      }
+
+      @if (exercise()) {
+        <div class="detail-panel">
+          <div class="detail-panel__head">
+            <h2>Ações</h2>
+          </div>
+          <a class="mw-btn mw-btn--outline" [routerLink]="['/app/exercicios', exercise()!.id]">
+            Ver exercício
+          </a>
+        </div>
+      }
+    </div>
+  }
 </section>

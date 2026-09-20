@@ -163,7 +163,7 @@ export class CourseListComponent {
       .replace(/[\u0300-\u036f]/g, '');
   }
 
-  private uniqueValues(values: Array<string | undefined>): string[] {
+  private uniqueValues(values: (string | undefined)[]): string[] {
     return [...new Set(values.filter((value): value is string => Boolean(value)))].sort();
   }
 }

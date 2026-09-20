@@ -1,8 +1,104 @@
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 0 24px;
   border-bottom: 1px solid var(--color-border);
   background: var(--color-bg-primary);
+}
+
+.topbar__menu {
+  display: none;
+}
+
+.topbar__title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.topbar__user {
+  overflow: hidden;
+  max-width: 180px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar__logout {
+  min-height: 34px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.topbar__logout:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.4);
+  color: var(--color-primary);
+}
+
+@media (max-width: 860px) {
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .topbar__menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-primary);
+    cursor: pointer;
+  }
+
+  .topbar__menu span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-text-primary);
+  }
+
+  .topbar__menu.is-open span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .topbar__menu.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .topbar__menu.is-open span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .topbar__user {
+    display: none;
+  }
 }

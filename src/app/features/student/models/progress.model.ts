@@ -1,5 +1,7 @@
 export type ProgressStatus = 'not-started' | 'in-progress' | 'completed';
 
+export type ExerciseProgressStatus = 'not-answered' | 'submitted' | 'graded';
+
 export interface CourseProgress {
   courseId: string;
   userId: string;
@@ -22,7 +24,7 @@ export interface ChapterProgress {
 
 export interface ExerciseProgress {
   exerciseId: string;
-  status: 'not-answered' | 'submitted' | 'graded';
+  status: ExerciseProgressStatus;
   score?: number;
 }
 

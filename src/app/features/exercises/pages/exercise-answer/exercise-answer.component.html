@@ -1,3 +1,306 @@
 <section class="exercise-answer-page">
-  Resposta do exercício: enunciado, tipo de resposta (texto/código/alternativas) e anexos.
+  @if (state().loading) {
+    <div class="exercise-answer-page__status">
+      <app-loading-spinner label="Carregando exercício" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="exercise-answer-page__status">
+      <app-empty-state
+        title="Não foi possível carregar o exercício"
+        [message]="state().errorMessage"
+      >
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    </div>
+  } @else if (exercise()) {
+    <header class="exercise-hero">
+      <a class="exercise-hero__back" routerLink="/app/exercicios">← Todos os exercícios</a>
+
+      <div class="exercise-hero__head">
+        <div>
+          <p class="exercise-hero__eyebrow">Exercício</p>
+          <h1>{{ exercise()!.title }}</h1>
+          <p class="exercise-hero__meta">
+            {{ getTypeLabel(exercise()!.type) }}
+            @if (exercise()!.points) {
+              · {{ exercise()!.points }} pts
+            }
+          </p>
+        </div>
+
+        @if (isAnswered()) {
+          @if (latestSubmission()?.status === 'graded') {
+            <span class="exercise-badge exercise-badge--graded">
+              Nota {{ latestSubmission()!.score ?? '—' }}
+            </span>
+          } @else if (latestSubmission()?.status === 'submitted') {
+            <span class="exercise-badge exercise-badge--review">Aguardando correção</span>
+          } @else {
+            <span class="exercise-badge exercise-badge--pending">Submetido</span>
+          }
+        }
+      </div>
+
+      @if (exercise()!.description) {
+        <p class="exercise-hero__description">{{ exercise()!.description }}</p>
+      }
+    </header>
+
+    <div class="exercise-answer-page__layout">
+      @if (latestSubmission()) {
+        <app-alert-banner
+          [tone]="latestSubmission()!.status === 'graded' ? 'success' : 'info'"
+          [title]="
+            latestSubmission()!.status === 'graded'
+              ? 'Exercício corrigido'
+              : 'Aguardando correção'
+          "
+          [message]="
+            latestSubmission()!.status === 'graded'
+              ? 'Sua nota obtida foi ' + (latestSubmission()!.score ?? '—') + '.'
+              : 'Sua resposta foi recebida e será corrigida em breve.'
+          "
+        />
+        <p class="submission-link-row">
+          <a class="submission-link" [routerLink]="['/app/submissoes', latestSubmission()!.id]">
+            Ver resposta enviada →
+          </a>
+        </p>
+      }
+
+      @switch (exercise()!.type) {
+        @case ('multiple-choice') {
+          @if (questions().length === 0) {
+            <div class="exercise-answer-page__status">
+              <app-empty-state
+                title="Questões indisponíveis"
+                message="Este exercício ainda não possui questões publicadas."
+              />
+            </div>
+          } @else {
+            <form class="answer-form" (submit)="onSubmit($event)">
+              @for (question of questions(); track trackQuestion($index, question)) {
+                <fieldset class="answer-form__fieldset">
+                  <legend>
+                    <span>{{ $index + 1 }}.</span>
+                    {{ question.statement }}
+                  </legend>
+
+                  <div class="option-list">
+                    @for (option of question.options; track option.id) {
+                      <button
+                        type="button"
+                        class="option-row"
+                        [class.is-selected]="selectedChoices()[question.id] === option.id"
+                        (click)="selectChoice(question.id, option.id)"
+                      >
+                        <span class="option-row__radio" aria-hidden="true"></span>
+                        <span>{{ option.label }}</span>
+                      </button>
+                    }
+                  </div>
+                </fieldset>
+              }
+
+              <div class="answer-form__actions">
+                @if (isAnswered()) {
+                  <p class="answer-form__hint">
+                    Você já respondeu este exercício. Envie novamente para atualizar sua resposta.
+                  </p>
+                }
+                <button
+                  type="submit"
+                  class="mw-btn mw-btn--primary"
+                  [disabled]="!canSubmit()"
+                >
+                  @if (submitting()) {
+                    Enviando…
+                  } @else {
+                    Enviar resposta
+                  }
+                </button>
+              </div>
+            </form>
+          }
+        }
+
+        @case ('true-false') {
+          @if (questions().length > 0) {
+            <form class="answer-form" (submit)="onSubmit($event)">
+              @for (question of questions(); track trackQuestion($index, question)) {
+                <fieldset class="answer-form__fieldset">
+                  <legend>
+                    <span>{{ $index + 1 }}.</span>
+                    {{ question.statement }}
+                  </legend>
+
+                  <div class="option-list option-list--inline">
+                    @for (option of question.options; track option.id) {
+                      <button
+                        type="button"
+                        class="option-row"
+                        [class.is-selected]="selectedChoices()[question.id] === option.id"
+                        (click)="selectChoice(question.id, option.id)"
+                      >
+                        <span class="option-row__radio" aria-hidden="true"></span>
+                        <span>{{ option.label }}</span>
+                      </button>
+                    }
+                  </div>
+                </fieldset>
+              }
+
+              <div class="answer-form__actions">
+                @if (isAnswered()) {
+                  <p class="answer-form__hint">
+                    Você já respondeu este exercício. Envie novamente para atualizar sua resposta.
+                  </p>
+                }
+                <button
+                  type="submit"
+                  class="mw-btn mw-btn--primary"
+                  [disabled]="!canSubmit()"
+                >
+                  @if (submitting()) {
+                    Enviando…
+                  } @else {
+                    Enviar resposta
+                  }
+                </button>
+              </div>
+            </form>
+          } @else {
+            <form class="answer-form" (submit)="onSubmit($event)">
+              <fieldset class="answer-form__fieldset">
+                <legend>Verdadeiro ou falso?</legend>
+
+                <div class="option-list option-list--inline">
+                  <button
+                    type="button"
+                    class="option-row"
+                    [class.is-selected]="selectedRate() === 'true'"
+                    (click)="setRate('true')"
+                  >
+                    <span class="option-row__radio" aria-hidden="true"></span>
+                    <span>Verdadeiro</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="option-row"
+                    [class.is-selected]="selectedRate() === 'false'"
+                    (click)="setRate('false')"
+                  >
+                    <span class="option-row__radio" aria-hidden="true"></span>
+                    <span>Falso</span>
+                  </button>
+                </div>
+              </fieldset>
+
+              <div class="answer-form__actions">
+                @if (isAnswered()) {
+                  <p class="answer-form__hint">
+                    Você já respondeu este exercício. Envie novamente para atualizar sua resposta.
+                  </p>
+                }
+                <button
+                  type="submit"
+                  class="mw-btn mw-btn--primary"
+                  [disabled]="!canSubmit()"
+                >
+                  @if (submitting()) {
+                    Enviando…
+                  } @else {
+                    Enviar resposta
+                  }
+                </button>
+              </div>
+            </form>
+          }
+        }
+
+        @case ('code') {
+          <form class="answer-form" (submit)="onSubmit($event)">
+            <div class="answer-form__code-head">
+              <label for="language-select">Linguagem</label>
+              <select
+                id="language-select"
+                [value]="codeLanguage()"
+                (change)="codeLanguage.set($any($event.target).value)"
+              >
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+              </select>
+            </div>
+
+            <textarea
+              class="code-textarea"
+              rows="12"
+              [value]="answerText()"
+              (input)="answerText.set($any($event.target).value)"
+              placeholder="Escreva seu código aqui…"
+            ></textarea>
+
+            <div class="answer-form__actions">
+              @if (isAnswered()) {
+                <p class="answer-form__hint">
+                  Você já respondeu este exercício. Envie novamente para atualizar sua resposta.
+                </p>
+              }
+              <button
+                type="submit"
+                class="mw-btn mw-btn--primary"
+                [disabled]="!canSubmit()"
+              >
+                @if (submitting()) {
+                  Enviando…
+                } @else {
+                  Enviar resposta
+                }
+              </button>
+            </div>
+          </form>
+        }
+
+        @default {
+          <form class="answer-form" (submit)="onSubmit($event)">
+            <label class="answer-form__label" for="answer-textarea">
+              Sua resposta
+            </label>
+            <textarea
+              id="answer-textarea"
+              class="text-textarea"
+              rows="8"
+              [value]="answerText()"
+              (input)="answerText.set($any($event.target).value)"
+              placeholder="Escreva sua resposta…"
+            ></textarea>
+
+            <div class="answer-form__actions">
+              @if (isAnswered()) {
+                <p class="answer-form__hint">
+                  Você já respondeu este exercício. Envie novamente para atualizar sua resposta.
+                </p>
+              }
+              <button
+                type="submit"
+                class="mw-btn mw-btn--primary"
+                [disabled]="!canSubmit()"
+              >
+                @if (submitting()) {
+                  Enviando…
+                } @else {
+                  Enviar resposta
+                }
+              </button>
+            </div>
+          </form>
+        }
+      }
+    </div>
+  }
 </section>

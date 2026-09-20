@@ -38,7 +38,7 @@ export class UserService {
 
   changePassword(currentPassword: string, newPassword: string): Observable<void> {
     return this.http
-      .post<ApiResponse<void>>(this.apiUrl(USER_ENDPOINTS.changePassword), {
+      .patch<ApiResponse<void>>(this.apiUrl(USER_ENDPOINTS.changePassword), {
         currentPassword,
         newPassword,
       })

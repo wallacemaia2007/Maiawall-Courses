@@ -37,7 +37,7 @@ export class ExerciseService {
 
   listMine(): Observable<Exercise[]> {
     return this.http
-      .get<ApiResponse<Exercise[]>>(this.apiUrl(`${EXERCISE_ENDPOINTS.list}/mine`))
+      .get<ApiResponse<Exercise[]>>(this.apiUrl(EXERCISE_ENDPOINTS.list))
       .pipe(map(unwrapApiData));
   }
 

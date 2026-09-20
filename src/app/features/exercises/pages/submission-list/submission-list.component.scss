@@ -1,4 +1,129 @@
 .submission-list-page {
   display: grid;
-  gap: 16px;
+  gap: 24px;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.submission-list-page__status {
+  display: grid;
+  padding: 48px 16px;
+  place-items: center;
+}
+
+.submissions-hero h1 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.submissions-hero p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.submission-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.submission-list li > a {
+  display: block;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease;
+}
+
+.submission-list li > a:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.35);
+  background: var(--color-bg-secondary);
+}
+
+.submission-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 16px;
+}
+
+.submission-row__main strong {
+  display: block;
+  font-size: 0.96rem;
+}
+
+.submission-row__main small {
+  display: block;
+  margin-top: 2px;
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  text-transform: capitalize;
+}
+
+.submission-row__summary {
+  margin: 6px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 560px;
+}
+
+.submission-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 0 0 auto;
+}
+
+.status-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-pill--graded {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.status-pill--review {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.status-pill--draft {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.row-link {
+  color: var(--color-primary);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .submission-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .submission-row__summary {
+    white-space: normal;
+  }
+
+  .submission-row__meta {
+    justify-content: space-between;
+  }
 }

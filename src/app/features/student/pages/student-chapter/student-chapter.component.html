@@ -1,3 +1,269 @@
 <section class="student-chapter-page">
-  Player do capítulo: aulas, anexos, exercícios e navegação entre capítulos.
+  @if (state().loading) {
+    <div class="student-chapter-page__status">
+      <app-loading-spinner label="Carregando capítulo" size="lg" />
+    </div>
+  } @else if (state().errorMessage) {
+    <div class="student-chapter-page__status">
+      <app-empty-state
+        title="Não foi possível abrir o capítulo"
+        [message]="state().errorMessage"
+      >
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    </div>
+  } @else {
+    @if (chapter(); as chapter) {
+      @if (isLocked()) {
+        <div class="student-chapter-page__status">
+          <app-empty-state
+            title="Conteúdo bloqueado"
+            message="Complete os capítulos anteriores deste curso para liberar as aulas e exercícios deste capítulo."
+          >
+            @if (state().course; as course) {
+              <a
+                class="mw-btn mw-btn--primary"
+                [routerLink]="['/app/cursos', course.id]"
+              >
+                Ver progresso do curso
+              </a>
+            }
+          </app-empty-state>
+        </div>
+      } @else {
+        <header class="chapter-hero">
+          <div>
+            <a
+              class="chapter-hero__back"
+              [routerLink]="['/app/cursos', chapter.courseId]"
+            >
+              ← Voltar ao curso
+            </a>
+            <p class="chapter-hero__eyebrow">
+              {{ state().course?.title ?? 'Curso' }} · Capítulo {{ chapter.order }}
+            </p>
+            <h1>{{ chapter.title }}</h1>
+            @if (chapter.description) {
+              <p>{{ chapter.description }}</p>
+            }
+          </div>
+
+          <div class="chapter-hero__badge">
+            @if (isCompleted()) {
+              <span class="chapter-badge chapter-badge--success">✓ Capítulo concluído</span>
+            } @else {
+              <span class="chapter-badge chapter-badge--primary">Em andamento</span>
+            }
+          </div>
+        </header>
+
+        @if (isCompleted()) {
+          <div class="chapter-success-banner">
+            <div>
+              <strong>Capítulo concluído 🎉</strong>
+              <p>Você já finalizou este capítulo. Revisite o conteúdo ou avance.</p>
+            </div>
+            @if (nextChapter(); as next) {
+              <a class="mw-btn mw-btn--primary" [routerLink]="['/app/capitulo', next.id]">
+                Próximo capítulo
+              </a>
+            } @else {
+              <a class="mw-btn mw-btn--primary" [routerLink]="['/app/cursos', chapter.courseId]">
+                Concluir curso
+              </a>
+            }
+          </div>
+        }
+
+        <div class="chapter-body">
+          <main class="chapter-body__main">
+            <section class="detail-panel">
+              <div class="detail-panel__head">
+                <div>
+                  <h2>Aulas</h2>
+                  <span>Marque as aulas conforme você estuda o conteúdo.</span>
+                </div>
+              </div>
+
+              @if (lessons().length > 0) {
+                <ol class="lesson-list">
+                  @for (lesson of lessons(); track trackLesson($index, lesson)) {
+                    <li
+                      class="lesson-card"
+                      [class.is-marked]="markedLessonIds().has(lesson.id)"
+                    >
+                      <div class="lesson-card__head">
+                        <button
+                          type="button"
+                          class="lesson-card__check"
+                          [attr.aria-pressed]="markedLessonIds().has(lesson.id)"
+                          [attr.aria-label]="
+                            (markedLessonIds().has(lesson.id) ? 'Desmarcar' : 'Marcar') +
+                            ' aula como concluída'
+                          "
+                          (click)="toggleLesson(lesson)"
+                        >
+                          <span>{{ markedLessonIds().has(lesson.id) ? '✓' : '' }}</span>
+                        </button>
+                        <div>
+                          <h3>Aula {{ lesson.order }} · {{ lesson.title }}</h3>
+                          <p>{{ lesson.type }} {{ lesson.durationMinutes ? '· ' + lesson.durationMinutes + ' min' : '' }}</p>
+                        </div>
+                      </div>
+
+                      @if (lesson.content) {
+                        <div class="lesson-card__content" [innerHTML]="lesson.content"></div>
+                      } @else {
+                        <p class="lesson-card__empty">
+                          Esta aula ainda não possui conteúdo publicado.
+                        </p>
+                      }
+
+                      @if (lesson.attachments?.length) {
+                        <ul class="lesson-card__attachments">
+                          @for (attachment of lesson.attachments; track attachment.id) {
+                            <li>
+                              <a [href]="attachment.url" target="_blank" rel="noopener">
+                                {{ attachment.name }}
+                              </a>
+                            </li>
+                          }
+                        </ul>
+                      }
+                    </li>
+                  }
+                </ol>
+              } @else {
+                <app-empty-state
+                  title="Sem aulas neste capítulo"
+                  message="O capítulo pode conter apenas exercícios. Continue abaixo."
+                />
+              }
+            </section>
+
+            @if (exercises().length > 0) {
+              <section class="detail-panel">
+                <div class="detail-panel__head">
+                  <div>
+                    <h2>Exercícios</h2>
+                    <span>Responda e envie para receber a correção do instrutor.</span>
+                  </div>
+                </div>
+
+                <ol class="exercise-list">
+                  @for (exercise of exercises(); track exercise.id) {
+                    <li>
+                      <a [routerLink]="['/app/exercicios', exercise.id]">
+                        <span>{{ exercise.title }}</span>
+                        <small>Resolver exercício →</small>
+                      </a>
+                    </li>
+                  }
+                </ol>
+              </section>
+            }
+
+            @if (materials().length > 0) {
+              <section class="detail-panel">
+                <div class="detail-panel__head">
+                  <div>
+                    <h2>Materiais de apoio</h2>
+                    <span>Arquivos complementares deste capítulo.</span>
+                  </div>
+                </div>
+
+                <ul class="materials-list">
+                  @for (material of materials(); track material.id) {
+                    <li>
+                      <a [href]="material.url" target="_blank" rel="noopener">
+                        {{ material.name }}
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </section>
+            }
+
+            <section class="chapter-complete-panel">
+              <div>
+                <strong>
+                  {{ isCompleted() ? 'Progresso registrado' : 'Finalizou o capítulo?' }}
+                </strong>
+                <p>
+                  @if (isCompleted()) {
+                    Você pode revisar as aulas ou seguir para o próximo passo.
+                  } @else if (allLessonsMarked()) {
+                    Marque todas as aulas como concluídas e confirme para registrar seu progresso.
+                  } @else {
+                    Marque cada aula acima como concluída para liberar a confirmação do capítulo.
+                  }
+                </p>
+              </div>
+
+              @if (!isCompleted()) {
+                <button
+                  type="button"
+                  class="mw-btn mw-btn--primary"
+                  (click)="completeChapter()"
+                  [disabled]="!allLessonsMarked() || completing()"
+                  [attr.aria-busy]="completing()"
+                >
+                  {{ completing() ? 'Salvando…' : 'Concluir capítulo' }}
+                </button>
+              }
+            </section>
+          </main>
+
+          <aside class="chapter-body__side">
+            <section class="detail-panel">
+              <h2>Navegação</h2>
+              <div class="chapter-nav">
+                @if (prevChapter(); as prev) {
+                  <a class="mw-btn mw-btn--outline" [routerLink]="['/app/capitulo', prev.id]">
+                    ← Anterior
+                  </a>
+                } @else {
+                  <span class="chapter-nav__disabled">← Anterior</span>
+                }
+
+                @if (nextChapter(); as next) {
+                  <a class="mw-btn mw-btn--primary" [routerLink]="['/app/capitulo', next.id]">
+                    Próximo →
+                  </a>
+                } @else {
+                  <span class="chapter-nav__disabled">Próximo →</span>
+                }
+              </div>
+              <p class="chapter-nav__hint">
+                Navegue pelos capítulos do curso para manter o ritmo de estudos.
+              </p>
+            </section>
+
+            @if (state().course; as course) {
+              <section class="detail-panel">
+                <h2>Curso</h2>
+                <a class="course-link" [routerLink]="['/app/cursos', course.id]">
+                  {{ course.title }}
+                </a>
+                <a class="mw-btn mw-btn--outline" [routerLink]="['/app/cursos', course.id]">
+                  Ver estrutura completa
+                </a>
+              </section>
+            }
+          </aside>
+        </div>
+      }
+    } @else {
+      <div class="student-chapter-page__status">
+        <app-empty-state
+          title="Capítulo não encontrado"
+          message="Esse capítulo pode ter sido removido ou ainda não está publicado."
+        >
+          <a class="mw-btn mw-btn--primary" routerLink="/app/cursos">Voltar aos meus cursos</a>
+        </app-empty-state>
+      </div>
+    }
+  }
 </section>

@@ -20,7 +20,7 @@ export class SubmissionService {
 
   listMine(): Observable<Submission[]> {
     return this.http
-      .get<ApiResponse<Submission[]>>(this.apiUrl(`${SUBMISSION_ENDPOINTS.list}/mine`))
+      .get<ApiResponse<Submission[]>>(this.apiUrl(SUBMISSION_ENDPOINTS.list))
       .pipe(map(unwrapApiData));
   }
 

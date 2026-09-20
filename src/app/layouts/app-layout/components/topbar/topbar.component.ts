@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -17,6 +17,8 @@ export class TopbarComponent {
   private readonly router = inject(Router);
 
   readonly currentUser = this.authState.user;
+
+  readonly menuToggled = output<void>();
 
   logout(): void {
     this.authService.logout().subscribe({

@@ -1,9 +1,22 @@
 <header class="topbar">
+  <button
+    type="button"
+    class="topbar__menu"
+    (click)="menuToggled.emit()"
+    aria-label="Abrir menu de navegação"
+    aria-expanded="false"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
   <span class="topbar__title">Maiawall Cursos</span>
+
   <div class="topbar__actions">
     @if (currentUser(); as user) {
       <span class="topbar__user">{{ user.name }}</span>
     }
-    <button type="button" (click)="logout()">Sair</button>
+    <button type="button" class="topbar__logout" (click)="logout()">Sair</button>
   </div>
 </header>
