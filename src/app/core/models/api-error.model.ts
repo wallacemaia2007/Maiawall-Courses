@@ -29,3 +29,21 @@ export function toApiError(error: unknown): ApiError {
     raw: error,
   };
 }
+
+export function apiErrorMessage(
+  error: unknown,
+  fallback = 'Nao foi possivel concluir a acao. Tente novamente.',
+): string {
+  const apiError = isApiError(error) ? error : toApiError(error);
+
+  return apiError.message?.trim() || fallback;
+}
+
+function isApiError(error: unknown): error is ApiError {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'status' in error &&
+    'message' in error
+  );
+}

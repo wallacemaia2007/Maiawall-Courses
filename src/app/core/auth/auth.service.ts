@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, of, tap } from 'rxjs';
+import { Observable, finalize, map, of, shareReplay, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { AUTH_ENDPOINTS } from '../constants/api.constants';
@@ -19,6 +19,8 @@ import { AuthStateService } from './auth-state.service';
   providedIn: 'root',
 })
 export class AuthService {
+  private sessionRequest$: Observable<AuthSession | null> | null = null;
+
   constructor(
     private readonly http: HttpClient,
     private readonly authState: AuthStateService,
@@ -94,18 +96,36 @@ export class AuthService {
   }
 
   getSession(): Observable<AuthSession | null> {
+    if (this.authState.isAuthenticated()) {
+      return of({
+        user: this.authState.user()!,
+        tokens: {
+          accessToken: this.authState.accessToken()!,
+          refreshToken: this.authState.refreshToken() ?? undefined,
+        },
+      });
+    }
+
     const token = this.authState.accessToken();
 
     if (!token) {
       return of(null);
     }
 
-    return this.http
-      .get<ApiResponse<AuthSession>>(this.authUrl(AUTH_ENDPOINTS.me))
-      .pipe(
-        map(unwrapApiData),
-        tap((session) => this.authState.setSession(session)),
-      );
+    if (!this.sessionRequest$) {
+      this.sessionRequest$ = this.http
+        .get<ApiResponse<AuthSession>>(this.authUrl(AUTH_ENDPOINTS.me))
+        .pipe(
+          map(unwrapApiData),
+          tap((session) => this.authState.setSession(session)),
+          shareReplay({ bufferSize: 1, refCount: false }),
+          finalize(() => {
+            this.sessionRequest$ = null;
+          }),
+        );
+    }
+
+    return this.sessionRequest$;
   }
 
   private authUrl(endpoint: string): string {

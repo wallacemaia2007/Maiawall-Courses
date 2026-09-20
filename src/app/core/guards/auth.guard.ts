@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
 import { AuthStateService } from '../auth/auth-state.service';
@@ -11,10 +11,14 @@ import { AuthStateService } from '../auth/auth-state.service';
  * - Com token, valida a sessão contra o backend, cobrindo sessão expirada
  *   antes de renderizar o layout. Erros (ex.: 401) são tratados aqui.
  */
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (_route, state) => {
   const authState = inject(AuthStateService);
   const authService = inject(AuthService);
   const router = inject(Router);
+
+  if (authState.isAuthenticated()) {
+    return true;
+  }
 
   return (authState.accessToken() ? authService.getSession() : of(null)).pipe(
     catchError(() => of(null)),
@@ -27,11 +31,10 @@ export const authGuard: CanActivateFn = () => {
 
       return of(
         router.createUrlTree(['/login'], {
-          queryParams: { redirect: router.routerState.snapshot.url },
+          queryParams: { redirect: state.url },
         }),
       );
     }),
-    map((result) => result),
   );
 };
 

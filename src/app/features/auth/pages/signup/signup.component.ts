@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,6 +9,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
+import { apiErrorMessage } from '../../../../core/models/api-error.model';
 
 @Component({
   selector: 'app-signup',
@@ -36,8 +37,11 @@ export class SignupComponent {
 
   protected showPassword = false;
   protected showPasswordConfirm = false;
+  protected readonly submitError = signal<string | null>(null);
 
   protected onSubmit(): void {
+    this.submitError.set(null);
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -47,7 +51,11 @@ export class SignupComponent {
 
     this.authService.signup({ name, email, password }).subscribe({
       next: () => this.router.navigateByUrl('/app/dashboard'),
-      error: () => undefined,
+      error: (error: unknown) => {
+        this.submitError.set(
+          apiErrorMessage(error, 'Nao foi possivel criar a conta. Tente novamente.'),
+        );
+      },
     });
   }
 

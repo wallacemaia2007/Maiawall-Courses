@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
+import { apiErrorMessage } from '../../../../core/models/api-error.model';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,8 +22,11 @@ export class ForgotPasswordComponent {
   });
 
   protected emailSent = false;
+  protected readonly submitError = signal<string | null>(null);
 
   protected onSubmit(): void {
+    this.submitError.set(null);
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -31,6 +35,11 @@ export class ForgotPasswordComponent {
     this.authService.requestPasswordRecovery(this.form.getRawValue().email).subscribe({
       next: () => {
         this.emailSent = true;
+      },
+      error: (error: unknown) => {
+        this.submitError.set(
+          apiErrorMessage(error, 'Nao foi possivel solicitar a recuperacao.'),
+        );
       },
     });
   }

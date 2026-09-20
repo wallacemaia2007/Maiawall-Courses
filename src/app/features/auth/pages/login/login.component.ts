@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
+import { apiErrorMessage } from '../../../../core/models/api-error.model';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ import { AuthService } from '../../../../core/auth/auth.service';
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   protected readonly form = this.fb.nonNullable.group({
@@ -24,8 +26,11 @@ export class LoginComponent {
   });
 
   protected showPassword = false;
+  protected readonly submitError = signal<string | null>(null);
 
   protected onSubmit(): void {
+    this.submitError.set(null);
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -34,8 +39,12 @@ export class LoginComponent {
     const { email, password } = this.form.getRawValue();
 
     this.authService.login({ email, password }).subscribe({
-      next: () => this.router.navigateByUrl('/app/dashboard'),
-      error: () => undefined,
+      next: () => this.router.navigateByUrl(this.redirectUrl()),
+      error: (error: unknown) => {
+        this.submitError.set(
+          apiErrorMessage(error, 'Nao foi possivel entrar. Confira seus dados.'),
+        );
+      },
     });
   }
 
@@ -49,5 +58,15 @@ export class LoginComponent {
 
   protected get password() {
     return this.form.controls.password;
+  }
+
+  private redirectUrl(): string {
+    const redirect = this.route.snapshot.queryParamMap.get('redirect');
+
+    if (redirect?.startsWith('/app') || redirect?.startsWith('/admin')) {
+      return redirect;
+    }
+
+    return '/app/dashboard';
   }
 }
