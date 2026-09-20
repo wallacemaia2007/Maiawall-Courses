@@ -149,9 +149,9 @@ Configuração nos provedores (URLs montadas a partir de `OAUTH_CALLBACK_BASE_UR
 | GitHub (OAuth App) | Authorization callback URL = `{OAUTH_CALLBACK_BASE_URL}/api/auth/oauth/github/callback` (scope `read:user user:email`) |
 | Google (Client OAuth tipo "Web application") | Authorized redirect URI = `{OAUTH_CALLBACK_BASE_URL}/api/auth/oauth/google/callback` (scope `openid email profile`) |
 
-Em dev: `OAUTH_CALLBACK_BASE_URL=http://localhost:3000` e `FRONTEND_ORIGIN=http://localhost:4200`
-(o `proxy.conf.json` do Angular encaminha `/api`, mas o redirect do navegador ao provedor
-aponta para o backend real). Deixar `GITHUB_CLIENT_ID`/`GOOGLE_CLIENT_ID` vazios desativa
+Em producao: `OAUTH_CALLBACK_BASE_URL=https://api.courses.maiawall.com` e `FRONTEND_ORIGIN=https://courses.maiawall.com`
+(em producao, o rewrite da Vercel encaminha `/api` para o backend). Deixar
+`GITHUB_CLIENT_ID`/`GOOGLE_CLIENT_ID` vazios desativa
 o provedor.
 
 ---

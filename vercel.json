@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/maiawall-cursos/browser",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.courses.maiawall.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
