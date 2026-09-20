@@ -77,6 +77,31 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Esconde a scrollbar mantendo o scroll funcional */
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 /* Respiro para âncoras navegarem sem ficar escondidas atrás do header fixo. */
 [id] {
   scroll-margin-top: calc(var(--public-navbar-height) + 12px);
