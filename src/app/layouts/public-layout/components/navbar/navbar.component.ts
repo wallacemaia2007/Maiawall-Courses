@@ -55,6 +55,9 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
 
   protected readonly menuOpen = signal(false);
   protected readonly overHero = signal(false);
+  protected readonly lightText = computed(
+    () => this.overHero() && this.heroService.element()?.dataset['navbarTone'] === 'light',
+  );
   protected readonly headerState = signal<'visible' | 'hidden'>('visible');
   protected readonly isAuthenticated = this.authState.isAuthenticated;
   protected readonly user = this.authState.user;
