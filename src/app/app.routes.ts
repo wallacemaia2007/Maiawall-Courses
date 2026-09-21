@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
 import { guestChildGuard, guestGuard } from './core/guards/guest.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 /*
  * Mapa de rotas da aplicação.
@@ -39,6 +40,14 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () =>
           import('./features/profile/pages/profile/profile.component').then((m) => m.ProfileComponent),
+      },
+      {
+        path: 'admin/duvidas',
+        canActivate: [authGuard, roleGuard(['ADMIN'])],
+        loadComponent: () =>
+          import('./features/admin/pages/admin-question-list/admin-question-list.component').then(
+            (m) => m.AdminQuestionListComponent,
+          ),
       },
     ],
   },

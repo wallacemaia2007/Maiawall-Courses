@@ -864,7 +864,13 @@
   font-size: 0.72rem;
 }
 
-.instructor-card>p:last-child,
+.instructor-card>p:not(.sidebar-label) {
+  margin: 0.65rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
 .requirements-card>p:last-child {
   margin: 1rem 0 0;
   color: var(--color-text-secondary);

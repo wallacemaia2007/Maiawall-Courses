@@ -314,6 +314,13 @@
       }
     </div>
   </section>
+
+  <app-course-faq
+    id="duvidas"
+    [courseId]="course.id"
+    [courseSlug]="course.slug"
+    [items]="course.faq"
+  />
   } @else {
   <div class="mw-container course-details-page__empty">
     <app-empty-state title="Curso indisponível" message="Este curso não foi encontrado ou ainda não está publicado.">

@@ -19,6 +19,7 @@ import { CourseService } from '../../services/course.service';
 import { AuthStateService } from '../../../../core/auth/auth-state.service';
 import { LearningService } from '../../../learning/services/learning.service';
 import { COURSE_INSTRUCTOR } from '../../../../core/constants/instructor.data';
+import { CourseFaqComponent } from '../../components/course-faq/course-faq.component';
 
 interface CourseDetailsState {
   course: CourseDetail | null;
@@ -36,6 +37,7 @@ interface CourseDetailsState {
     LoadingSpinnerComponent,
     HeroMarkerDirective,
     RevealDirective,
+    CourseFaqComponent,
   ],
   templateUrl: './course-details.component.html',
   styleUrl: './course-details.component.scss',

@@ -28,6 +28,40 @@ function serializeChapter(chapter, lessons = []) {
   };
 }
 
+function buildCourseFaq(course, chapters = []) {
+  if (Array.isArray(course.faq) && course.faq.length >= 5) {
+    return course.faq.slice(0, 5);
+  }
+
+  const requirements = course.requirements?.length
+    ? course.requirements.join(', ')
+    : 'Nao ha conhecimento previo obrigatorio';
+  return [
+    {
+      question: `Para quem e o minicurso ${course.title}?`,
+      answer: `Ele foi preparado para quem esta no nivel ${course.level || 'iniciante'} e quer aprender o tema de forma objetiva e pratica.`,
+    },
+    {
+      question: 'Preciso ter algum conhecimento antes de comecar?',
+      answer: requirements,
+    },
+    {
+      question: 'Quanto tempo preciso reservar?',
+      answer: course.durationMinutes
+        ? `O conteudo foi planejado para aproximadamente ${course.durationMinutes} minutos, mas voce pode seguir no seu ritmo.`
+        : 'Voce pode estudar no seu ritmo e retomar quando quiser.',
+    },
+    {
+      question: 'Como o conteudo esta organizado?',
+      answer: `O minicurso possui ${chapters.length || course.chapterCount || 0} capitulos curtos, organizados em uma sequencia de leitura pratica.`,
+    },
+    {
+      question: 'Preciso fazer login para acessar?',
+      answer: 'A leitura e publica. O login e necessario para salvar progresso e enviar uma duvida ao instrutor.',
+    },
+  ];
+}
+
 function serializeCourse(course, chapters = []) {
   const sortedChapters = [...chapters].sort((a, b) => a.order - b.order);
   return {
@@ -40,6 +74,7 @@ function serializeCourse(course, chapters = []) {
     syllabus: course.syllabus || [], outcomes: course.outcomes || [],
     published: Boolean(course.published),
     chapters: sortedChapters,
+    faq: buildCourseFaq(course, sortedChapters),
   };
 }
 
@@ -234,4 +269,4 @@ catalogRouter.get('/:courseSlug/capitulos/:chapterSlug', async (request, respons
   } catch (error) { next(error); }
 });
 
-module.exports = { catalogRouter };
+module.exports = { buildCourseFaq, catalogRouter };

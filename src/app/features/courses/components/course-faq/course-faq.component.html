@@ -1,0 +1,67 @@
+<section class="course-faq" aria-labelledby="course-faq-title">
+  <div class="mw-container course-faq__inner">
+    <header class="course-faq__heading">
+      <p>FAQ do minicurso</p>
+      <h2 id="course-faq-title">Dúvidas frequentes</h2>
+      <span>Respostas rápidas antes de você continuar praticando.</span>
+    </header>
+
+    <div class="course-faq__list">
+      @for (item of items(); track item.question; let index = $index) {
+        <details [attr.open]="$first ? true : null">
+          <summary><span>{{ (index + 1).toString().padStart(2, '0') }}</span>{{ item.question }}</summary>
+          <p>{{ item.answer }}</p>
+        </details>
+      }
+
+      @for (item of publishedQuestions(); track item.id; let index = $index) {
+        <details class="course-faq__community">
+          <summary>
+            <span>{{ (items().length + index + 1).toString().padStart(2, '0') }}</span>
+            {{ item.question }}
+          </summary>
+          <div class="course-faq__answer">
+            <small>Pergunta de {{ item.authorName }}</small>
+            <p>{{ item.answer }}</p>
+          </div>
+        </details>
+      }
+    </div>
+
+    <div class="course-faq__ask">
+      <div>
+        <p class="course-faq__eyebrow">Não encontrou sua resposta?</p>
+        <h3>Deixe aqui sua dúvida</h3>
+        <p>Envie sua pergunta ao instrutor. Depois de respondida, ela poderá entrar neste FAQ.</p>
+      </div>
+
+      @if (isAuthenticated()) {
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <label for="faq-author">Seu nome</label>
+          <input id="faq-author" type="text" formControlName="authorName" autocomplete="name" maxlength="80" />
+          @if (form.controls.authorName.touched && form.controls.authorName.invalid) {
+            <small class="course-faq__error">Informe um nome com pelo menos 2 caracteres.</small>
+          }
+
+          <label for="faq-question">Sua dúvida</label>
+          <textarea id="faq-question" formControlName="question" rows="5" maxlength="1000"
+            placeholder="Escreva sua pergunta com o máximo de contexto possível."></textarea>
+          <div class="course-faq__form-footer">
+            <small>{{ form.controls.question.value.length }}/1000</small>
+            <button class="mw-btn mw-btn--primary" type="submit" [disabled]="submitting()">
+              {{ submitting() ? 'Enviando...' : 'Enviar dúvida' }}
+            </button>
+          </div>
+          @if (successMessage()) { <p class="course-faq__success" role="status">{{ successMessage() }}</p> }
+          @if (errorMessage()) { <p class="course-faq__error" role="alert">{{ errorMessage() }}</p> }
+        </form>
+      } @else {
+        <div class="course-faq__login">
+          <p>Para identificar sua pergunta e avisar quando houver resposta, primeiro entre na sua conta.</p>
+          <a class="mw-btn mw-btn--primary" routerLink="/login"
+            [queryParams]="{ redirect: '/cursos/' + courseSlug() + '#duvidas' }">Entrar para perguntar</a>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+<main class="question-admin">
+  <div class="mw-container">
+    <header class="question-admin__header">
+      <div>
+        <p>Área administrativa</p>
+        <h1>Dúvidas dos minicursos</h1>
+      </div>
+      <a routerLink="/cursos">Ver minicursos</a>
+    </header>
+
+    @if (errorMessage()) {
+      <p class="question-admin__error" role="alert">{{ errorMessage() }}</p>
+    }
+
+    @if (loading()) {
+      <p class="question-admin__status">Carregando dúvidas...</p>
+    } @else if (questions().length === 0) {
+      <section class="question-admin__empty">
+        <h2>Nenhuma dúvida enviada</h2>
+        <p>Quando alguém perguntar em um minicurso, a mensagem aparecerá aqui.</p>
+      </section>
+    } @else {
+      <div class="question-admin__list">
+        @for (item of questions(); track item.id) {
+          <article [class.is-published]="publication()[item.id]">
+            <header>
+              <div>
+                <small>{{ item.courseTitle }}</small>
+                <h2>{{ item.question }}</h2>
+              </div>
+              <span>{{ item.createdAt | date:'dd/MM/yyyy, HH:mm' }}</span>
+            </header>
+            <p class="question-admin__author">
+              Pergunta de <strong>{{ item.authorName }}</strong>
+              @if (item.authorEmail) { <span>· {{ item.authorEmail }}</span> }
+            </p>
+
+            <label [for]="'answer-' + item.id">Sua resposta</label>
+            <textarea [id]="'answer-' + item.id" rows="5" maxlength="2000"
+              [formControl]="answerControl(item)"
+              placeholder="Responda de forma clara e útil para outros alunos."></textarea>
+
+            <footer>
+              <label class="question-admin__publish">
+                <input type="checkbox" [checked]="publication()[item.id]"
+                  (change)="setPublished(item.id, $event)" />
+                <span>Adicionar esta pergunta ao FAQ público</span>
+              </label>
+              <button class="mw-btn mw-btn--primary" type="button" (click)="save(item)"
+                [disabled]="answerControl(item).invalid || savingId() !== null">
+                {{ savingId() === item.id ? 'Salvando...' : 'Salvar resposta' }}
+              </button>
+            </footer>
+            @if (savedId() === item.id) {
+              <p class="question-admin__saved" role="status">
+                Resposta salva{{ publication()[item.id] ? ' e publicada no FAQ.' : ' sem publicação.' }}
+              </p>
+            }
+          </article>
+        }
+      </div>
+    }
+  </div>
+</main>

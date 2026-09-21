@@ -66,7 +66,7 @@ require.cache[repositoryPath] = {
   },
 };
 
-const { AuthService } = require('../src/services/auth.service');
+const { AuthService, effectiveRole } = require('../src/services/auth.service');
 
 beforeEach(() => {
   users.clear();
@@ -83,6 +83,28 @@ test('signup creates a student session with access and refresh tokens', async ()
   assert.equal(session.user.role, 'STUDENT');
   assert.ok(session.tokens.accessToken);
   assert.ok(session.tokens.refreshToken);
+});
+
+test('signup ignores a client attempt to create an admin account', async () => {
+  const session = await AuthService.signup({
+    name: 'Student',
+    email: 'student@example.com',
+    password: 'StrongPass123',
+    role: 'ADMIN',
+  });
+
+  assert.equal(session.user.role, 'STUDENT');
+});
+
+test('only a verified Google identity from the allowlist receives the admin role', () => {
+  const baseUser = {
+    email: 'wallacemaia2007@gmail.com',
+    role: 'STUDENT',
+  };
+
+  assert.equal(effectiveRole(baseUser), 'STUDENT');
+  assert.equal(effectiveRole({ ...baseUser, provider: 'google', emailVerified: false }), 'STUDENT');
+  assert.equal(effectiveRole({ ...baseUser, provider: 'google', emailVerified: true }), 'ADMIN');
 });
 
 test('login rejects invalid credentials', async () => {

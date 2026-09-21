@@ -61,6 +61,7 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   protected readonly headerState = signal<'visible' | 'hidden'>('visible');
   protected readonly isAuthenticated = this.authState.isAuthenticated;
   protected readonly user = this.authState.user;
+  protected readonly isAdmin = computed(() => this.user()?.role === 'ADMIN');
   protected readonly firstName = computed(() => this.user()?.name?.split(' ')[0] ?? '');
 
   private readonly toggleButton =

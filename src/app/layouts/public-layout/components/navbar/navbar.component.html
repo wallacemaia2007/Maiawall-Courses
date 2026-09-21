@@ -37,6 +37,9 @@
 
     <div class="navbar__actions">
       @if (isAuthenticated()) {
+        @if (isAdmin()) {
+          <a class="navbar__admin" routerLink="/admin/duvidas">Dúvidas</a>
+        }
         <a class="navbar__profile" routerLink="/perfil" [attr.aria-label]="'Abrir perfil de ' + user()?.name">
           <span class="navbar__profile-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -89,6 +92,9 @@
       </nav>
       <div class="navbar__drawer-actions">
         @if (isAuthenticated()) {
+          @if (isAdmin()) {
+            <a class="navbar__drawer-login" routerLink="/admin/duvidas" (click)="closeMenu()">Dúvidas</a>
+          }
           <a class="navbar__drawer-login navbar__drawer-profile" routerLink="/perfil" (click)="closeMenu()">
             <span class="navbar__profile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24">

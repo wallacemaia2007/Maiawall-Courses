@@ -71,6 +71,12 @@ export interface Course {
 export interface CourseDetail extends Course {
   chapters: Chapter[];
   materials?: Attachment[];
+  faq: CourseFaqItem[];
+}
+
+export interface CourseFaqItem {
+  question: string;
+  answer: string;
 }
 
 export interface CourseSummary {

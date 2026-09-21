@@ -156,6 +156,18 @@
   gap: 0.5rem;
 }
 
+.navbar__admin {
+  padding: 0.45rem 0.65rem;
+  color: var(--color-primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.navbar__admin:hover {
+  color: var(--color-primary-hover);
+}
+
 .navbar__login {
   display: inline-flex;
   min-height: 40px;

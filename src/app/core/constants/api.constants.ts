@@ -78,3 +78,8 @@ export const ATTACHMENT_ENDPOINTS = {
   create: '/attachments',
   download: '/attachments',
 } as const;
+
+export const QUESTION_ENDPOINTS = {
+  byCourse: (courseId: string) => `/courses/${courseId}/questions`,
+  admin: '/admin/questions',
+} as const;

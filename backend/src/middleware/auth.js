@@ -1,6 +1,15 @@
 const { AppError } = require('./error-handler');
 const { UserRepository } = require('../repositories/user.repository');
 const { verifyAccessToken } = require('../utils/tokens');
+const { env } = require('../config/env');
+
+function isAdminUser(user) {
+  const email = String(user?.email || '').trim().toLowerCase();
+  const isVerifiedGoogleAdmin = user?.provider === 'google'
+    && user?.emailVerified === true
+    && env.adminEmails.includes(email);
+  return user?.role === 'ADMIN' || isVerifiedGoogleAdmin;
+}
 
 async function requireAuth(request, _response, next) {
   try {
@@ -35,6 +44,15 @@ async function requireAuth(request, _response, next) {
   }
 }
 
+function requireAdmin(request, _response, next) {
+  if (!request.auth?.user || !isAdminUser(request.auth.user)) {
+    next(new AppError(403, 'FORBIDDEN', 'Acesso restrito ao administrador'));
+    return;
+  }
+
+  next();
+}
+
 async function optionalAuth(request, _response, next) {
   const header = request.get('Authorization') || '';
   const [scheme, token] = header.split(' ');
@@ -49,4 +67,4 @@ async function optionalAuth(request, _response, next) {
   return next();
 }
 
-module.exports = { requireAuth, optionalAuth };
+module.exports = { isAdminUser, requireAdmin, requireAuth, optionalAuth };

@@ -11,7 +11,6 @@ const {
 } = require('../utils/tokens');
 const { env } = require('../config/env');
 
-const ROLES = new Set(['STUDENT', 'INSTRUCTOR', 'ADMIN']);
 const PASSWORD_RESET_TTL_MS = 1000 * 60 * 30;
 const OAUTH_TICKET_TTL_MS = 1000 * 60;
 
@@ -19,12 +18,21 @@ function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
 }
 
+function effectiveRole(user) {
+  const isVerifiedGoogleAdmin = user.provider === 'google'
+    && user.emailVerified === true
+    && env.adminEmails.includes(normalizeEmail(user.email));
+  return user.role === 'ADMIN' || isVerifiedGoogleAdmin
+    ? 'ADMIN'
+    : user.role;
+}
+
 function sanitizeUser(user) {
   return {
     id: user._id.toString(),
     name: user.name,
     email: user.email,
-    role: user.role,
+    role: effectiveRole(user),
     avatarUrl: user.avatarUrl,
     provider: user.provider,
     emailVerified: Boolean(user.emailVerified),
@@ -87,7 +95,7 @@ const AuthService = {
       name: payload.name.trim(),
       email,
       passwordHash: await hashPassword(payload.password),
-      role: ROLES.has(payload.role) ? payload.role : 'STUDENT',
+      role: 'STUDENT',
       emailVerified: false,
       emailVerificationTokenHash: hashToken(verificationToken),
       createdAt: now,
@@ -299,4 +307,5 @@ module.exports = {
   sanitizeUser,
   validatePassword,
   validateRequiredString,
+  effectiveRole,
 };

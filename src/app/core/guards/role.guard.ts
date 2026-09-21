@@ -20,7 +20,7 @@ export const roleGuard =
       return true;
     }
 
-    return router.createUrlTree(['/app/dashboard']);
+    return router.createUrlTree(['/perfil']);
   };
 
 export const roleChildGuard =
@@ -33,5 +33,5 @@ export const roleChildGuard =
       return true;
     }
 
-    return router.createUrlTree(['/app/dashboard']);
+    return router.createUrlTree(['/perfil']);
   };

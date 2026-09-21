@@ -16,6 +16,13 @@ function required(name, fallback) {
 const firestoreEmulatorHost = process.env.FIRESTORE_EMULATOR_HOST || '';
 const isFirestoreEmulator = Boolean(firestoreEmulatorHost);
 
+function commaSeparated(value) {
+  return String(value || '')
+    .split(',')
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean);
+}
+
 const env = {
   appEnv,
   isProduction,
@@ -42,6 +49,9 @@ const env = {
   githubClientSecret: process.env.GITHUB_CLIENT_SECRET || '',
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+  adminEmails: commaSeparated(
+    process.env.ADMIN_EMAILS || 'wallacemaia2007@gmail.com',
+  ),
 };
 
 module.exports = { env };
