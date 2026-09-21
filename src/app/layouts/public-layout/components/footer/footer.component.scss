@@ -54,6 +54,7 @@
 
 .footer__heading {
   margin: 0 0 1rem;
+  padding-left: calc(18px + 0.55rem);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -63,10 +64,16 @@
 
 .footer__list {
   display: grid;
+  grid-template-columns: 1fr;
   gap: 0.7rem;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.footer__list li {
+  display: flex;
+  align-items: center;
 }
 
 .footer__list a {
@@ -74,6 +81,10 @@
   font-size: 0.94rem;
   text-decoration: none;
   transition: color var(--motion-fast) ease;
+}
+
+.footer__list a:not(.footer__link) {
+  padding-left: calc(18px + 0.55rem);
 }
 
 .footer__list a:hover {
@@ -84,6 +95,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
+  line-height: 1.2;
 }
 
 .footer__link-icon {
