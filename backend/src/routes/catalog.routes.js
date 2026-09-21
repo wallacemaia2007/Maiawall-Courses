@@ -79,6 +79,76 @@ function groupLessonsByChapter(lessons) {
   return lessonsByChapter;
 }
 
+async function getChaptersForCourses(database, courseIds) {
+  if (courseIds.length === 0) return [];
+  const snapshots = await Promise.all(
+    courseIds.map((courseId) =>
+      database.collection('chapters').where('courseId', '==', courseId).get()),
+  );
+  return snapshots.flatMap((snapshot) => snapshot.docs.map(fromFirestoreDoc));
+}
+
+async function getLessonsForChapters(database, chapterIds) {
+  if (chapterIds.length === 0) return [];
+  const snapshots = await Promise.all(
+    chapterIds.map((chapterId) =>
+      database.collection('lessons').where('chapterId', '==', chapterId).get()),
+  );
+  return snapshots.flatMap((snapshot) => snapshot.docs.map(fromFirestoreDoc));
+}
+
+/* Limits a trecho de código enviado na listagem a poucas linhas (o payload do
+ * catálogo continua leve mesmo com preview). */
+const MAX_SNIPPET_LINES = 8;
+
+/* Listagens pequenas (ex.: getFeatured do hero da Home manda size=3) ganham um
+ * preview rico: títulos dos 3 primeiros capítulos e, quando houver, um trecho da
+ * primeira lesson de código do capítulo 1. A página de catálogo completa (size
+ * maior) não carrega isso para não estourar o payload. */
+async function enrichWithPreview(database, content) {
+  const ids = content.map((course) => course.id);
+  const chapters = await getChaptersForCourses(database, ids);
+  const chaptersByCourse = new Map();
+
+  for (const chapter of chapters) {
+    const entries = chaptersByCourse.get(chapter.courseId) || [];
+    entries.push(chapter);
+    chaptersByCourse.set(chapter.courseId, entries);
+  }
+
+  for (const entries of chaptersByCourse.values()) {
+    entries.sort((a, b) => a.order - b.order);
+  }
+
+  const firstChapters = [...chaptersByCourse.values()].map((list) => list[0]).filter(Boolean);
+  const lessons = await getLessonsForChapters(
+    database,
+    firstChapters.map((chapter) => chapter._id),
+  );
+  const lessonsByChapter = groupLessonsByChapter(lessons);
+
+  for (const course of content) {
+    const courseChapters = chaptersByCourse.get(course.id) || [];
+    course.previewChapters = courseChapters.slice(0, 3).map((chapter) => ({ title: chapter.title }));
+
+    const firstChapter = courseChapters[0];
+    const codeLesson = (firstChapter ? lessonsByChapter.get(firstChapter._id) || [] : [])
+      .find((lesson) => lesson.type === 'code'
+        && typeof lesson.content === 'string'
+        && lesson.content.trim().length > 0);
+
+    if (codeLesson) {
+      course.previewSnippet = {
+        code: codeLesson.content
+          .split('\n')
+          .slice(0, MAX_SNIPPET_LINES)
+          .map((line) => line.trimEnd())
+          .join('\n'),
+      };
+    }
+  }
+}
+
 catalogRouter.get('/', async (request, response, next) => {
   try {
     const database = await getDatabase();
@@ -99,6 +169,10 @@ catalogRouter.get('/', async (request, response, next) => {
       chapterCount: Number(course.chapterCount) || 0,
     }));
 
+    if (size <= 6) {
+      await enrichWithPreview(database, content);
+    }
+
     response.json(successResponse(
       { content, page, size, totalElements, totalPages: Math.ceil(totalElements / size) },
       'OK',
@@ -110,6 +184,27 @@ catalogRouter.get('/slug/:slug', async (request, response, next) => {
   try {
     const database = await getDatabase();
     const course = await getPublishedCourse(database, request.params.slug);
+    const chapters = await getChaptersByCourse(database, course._id);
+    const lessons = await getLessonsByCourse(database, course._id);
+    const lessonsByChapter = groupLessonsByChapter(lessons);
+
+    response.json(successResponse(serializeCourse(
+      course,
+      chapters.map((chapter) => serializeChapter(chapter, lessonsByChapter.get(chapter._id) || [])),
+    ), 'OK'));
+  } catch (error) { next(error); }
+});
+
+catalogRouter.get('/:id', async (request, response, next) => {
+  try {
+    const database = await getDatabase();
+    const doc = await database.collection('courses').doc(request.params.id).get();
+    const course = fromFirestoreDoc(doc);
+
+    if (!course || !course.published) {
+      throw new AppError(404, 'COURSE_NOT_FOUND', 'Curso nao encontrado');
+    }
+
     const chapters = await getChaptersByCourse(database, course._id);
     const lessons = await getLessonsByCourse(database, course._id);
     const lessonsByChapter = groupLessonsByChapter(lessons);

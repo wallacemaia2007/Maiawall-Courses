@@ -84,6 +84,20 @@ export interface CourseSummary {
   level: CourseLevel;
   durationMinutes?: number;
   chapterCount: number;
+  /* Preview rico enviado só na listagem do hero (getFeatured): títulos dos 3
+   * primeiros capítulos e, quando houver, um trecho da primeira lesson de
+   * código do capítulo 1. Ambos opcionais — nem todo curso tem snippet. */
+  previewChapters?: PreviewChapter[];
+  previewSnippet?: PreviewSnippet;
+}
+
+export interface PreviewChapter {
+  title: string;
+}
+
+export interface PreviewSnippet {
+  language?: string;
+  code: string;
 }
 
 export interface Chapter {

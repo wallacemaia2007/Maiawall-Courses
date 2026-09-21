@@ -1,0 +1,118 @@
+<article class="lesson-card" [class.lesson-card--resume]="isResume()">
+  <header class="lesson-card__header">
+    <div>
+      <span class="lesson-card__kicker">{{ course().title }}</span>
+      <strong>
+        @if (isResume()) {
+          @if (current(); as currentChapter) {
+            Capítulo {{ chapterNumber(currentChapter.order - 1) }} · {{ currentChapter.title }}
+          } @else {
+            Curso iniciado
+          }
+        } @else {
+          Primeiro capítulo
+        }
+      </strong>
+    </div>
+    @if (formatDuration(course().durationMinutes); as duration) {
+      <span class="lesson-card__duration">{{ duration }}</span>
+    }
+  </header>
+
+  <div class="lesson-card__banner">
+    <img
+      [src]="bannerUrl()"
+      [alt]="'Banner do minicurso ' + course().title"
+      loading="eager"
+      decoding="async"
+      (error)="useFallbackBanner($event)"
+    />
+  </div>
+
+  <div class="lesson-card__workspace">
+    <aside class="lesson-card__outline">
+      <span class="lesson-card__label">Neste curso</span>
+      <ol>
+        @if (isResume()) {
+          @for (chapter of chapters(); track chapter.id; let index = $index) {
+            <li
+              [class.is-complete]="status()(chapter.id) === 'completed'"
+              [class.is-current]="chapter.id === current()?.id"
+            >
+              <span>{{ status()(chapter.id) === 'completed' ? '✓' : chapterNumber(index) }}</span>
+              {{ chapter.title }}
+            </li>
+          }
+        } @else {
+          @for (chapter of previewChapters(); track $index; let index = $index) {
+            <li><span>{{ chapterNumber(index) }}</span>{{ chapter.title }}</li>
+          } @empty {
+            <li class="lesson-card__outline-empty">Capítulos na página do curso</li>
+          }
+        }
+      </ol>
+    </aside>
+
+    <div class="lesson-card__content">
+      <span class="lesson-card__label">{{ isResume() ? 'Onde você está' : 'Trecho do conteúdo' }}</span>
+      @if (isResume()) {
+        @if (current(); as currentChapter) {
+          <strong class="lesson-card__current-title">{{ currentChapter.title }}</strong>
+          @if (currentChapter.description; as description) {
+            <p class="lesson-card__note">{{ description }}</p>
+          }
+        } @else {
+          <p class="lesson-card__note">Continue de onde parou — seu progresso já está salvo na sua conta.</p>
+        }
+        <div class="lesson-card__checklist">
+          <span>{{ completedCount() }} de {{ chapters().length }} capítulos</span>
+          @if (course().level) {
+            <span>{{ levelLabel(course().level) }}</span>
+          }
+        </div>
+      } @else {
+        @if (previewCode(); as code) {
+          <pre><code>@for (line of codeLines(code); track $index) {<span class="code-line">{{ line.indent }}@if (line.key) {<span class="code-key">{{ line.key }}</span>}<span class="code-value">{{ line.rest }}</span></span>}</code></pre>
+        } @else {
+          @if (course().shortDescription; as description) {
+            <p class="lesson-card__note">{{ description }}</p>
+          } @else {
+            <p class="lesson-card__note">Conteúdo completo disponível na página do curso.</p>
+          }
+        }
+        <div class="lesson-card__checklist">
+          @if (course().level) {
+            <span>{{ levelLabel(course().level) }}</span>
+          }
+          @if (course().category) {
+            <span>{{ categoryLabel(course().category) }}</span>
+          }
+          @if (isSummary()) {
+            <span>{{ chapterCount() }} capítulos</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (isResume()) {
+    <footer class="lesson-card__progress">
+      <div>
+        <span>Progresso do curso</span>
+        <strong>{{ progressPercentage() }}%</strong>
+      </div>
+      <span class="lesson-card__track"><i [style.width.%]="progressPercentage()"></i></span>
+      <a class="mw-btn mw-btn--primary lesson-card__continue" [routerLink]="resumeLink()">Continuar assistindo</a>
+    </footer>
+  } @else {
+    <footer class="lesson-card__footer">
+      <div class="lesson-card__meta">
+        <span>{{ chapterCount() }} capítulos</span>
+        @if (course().level) {
+          <span class="lesson-card__level-badge">{{ levelLabel(course().level) }}</span>
+        }
+      </div>
+      <a class="lesson-card__cta" [routerLink]="'/cursos/' + course().slug">Ver mais <span>→</span></a>
+    </footer>
+  }
+</article>

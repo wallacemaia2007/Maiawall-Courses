@@ -1,3 +1,196 @@
-<section class="hero" appHeroMarker><div class="hero__container mw-container"><div class="hero__copy"><p class="hero__eyebrow">Acervo de cursos da Maiawall</p><h1 class="hero__title">Os cursos que ministrei, <span class="hero__highlight">organizados capitulo por <span class="hero__highlight-break">capitulo.</span></span></h1><p class="hero__subtitle">Este espaço reúne o conteúdo dos cursos que já ministrei. Você pode consultar todos os módulos sem conta; o login serve somente para identificar sua visita e salvar onde parou.</p><div class="hero__actions"><a class="mw-btn mw-btn--primary" routerLink="/cursos">Ver cursos ministrados</a></div></div><div class="hero__lesson" aria-label="Exemplo de conteúdo de um curso"><header class="lesson__header"><div><span class="lesson__kicker">Docker Compose na Pratica</span><strong>Modulo 02 · Ambiente local</strong></div><span class="lesson__duration">12 min</span></header><div class="lesson__workspace"><aside class="lesson__outline"><span class="lesson__outline-title">Neste modulo</span><ol><li class="is-complete"><span>✓</span> Estrutura do arquivo</li><li class="is-current"><span>02</span> Subindo os servicos</li><li><span>03</span> Variaveis de ambiente</li></ol></aside><div class="lesson__content"><span class="lesson__label">Trecho do conteúdo</span><pre><code><span class="code-key">services:</span>
-  api:
-    <span class="code-key">build:</span> ./api</code></pre><p>Agora a API pode subir junto com todo o ambiente.</p><div class="lesson__checklist"><span>Texto da aula</span><span>Links de apoio</span><span>Progresso salvo</span></div></div></div><footer class="lesson__progress"><div><span>Progresso do curso</span><strong>42%</strong></div><span class="lesson__track"><i></i></span></footer></div></div></section>
+<section class="hero" appHeroMarker>
+  <div class="hero__bg" aria-hidden="true" data-hero-bg>
+    <div class="hero__blob hero__blob--amber" data-hero-blob></div>
+    <div class="hero__blob hero__blob--teal" data-hero-blob></div>
+  </div>
+
+  <div class="hero__container mw-container">
+    <div class="hero__copy">
+      @if (isAuthenticated()) {
+      <p class="hero__eyebrow">Sua conta está pronta</p>
+      <h1 class="hero__title hero__title--greeting">
+        <span class="hero__highlight">Bem-vindo de volta,</span> {{ userName() }}.
+      </h1>
+      <p class="hero__subtitle">
+        @switch (state()) {
+        @case ('resume') {
+        @if (resumeData(); as resume) {
+        Você está em <strong>{{ resume.progressPercentage }}%</strong> de
+        <strong>{{ resume.course.title }}</strong>. Continue de onde parou — seu progresso
+        já está salvo.
+        } @else {
+        Um instante, buscando seu progresso…
+        }
+        }
+        @default {
+        Sua conta está pronta e o catálogo inteiro está liberado. Comece por um curso — seu
+        progresso fica salvo no seu ritmo.
+        }
+        }
+      </p>
+      <div class="hero__actions">
+        @switch (state()) {
+        @case ('resume') {
+        <a class="mw-btn mw-btn--primary" [routerLink]="resumeLink()">Continuar assistindo</a>
+        <a class="hero__secondary-link" routerLink="/cursos">Ver todos os cursos <span>→</span></a>
+        }
+        @default {
+        <a class="mw-btn mw-btn--primary" routerLink="/cursos">Ver cursos</a>
+        @if (!isAuthenticated()) {
+        <a class="hero__secondary-link" routerLink="/signup">Criar conta pra salvar progresso <span>→</span></a>
+        <a class="hero__login-link" routerLink="/login">Entrar</a>
+        }
+        }
+        }
+      </div>
+      <dl class="hero__facts">
+        @switch (state()) {
+        @case ('resume') {
+        @if (resumeData(); as resume) {
+        <div>
+          <dt>Progresso</dt>
+          <dd>{{ resume.progressPercentage }}% em {{ resume.course.title }}</dd>
+        </div>
+        <div>
+          <dt>Sincronizado</dt>
+          <dd>Seu progresso fica salvo na sua conta</dd>
+        </div>
+        <div>
+          <dt>Retomada</dt>
+          <dd>Volte de onde parou quando quiser</dd>
+        </div>
+        } @else {
+        <div>
+          <dt>Buscando</dt>
+          <dd>Localizando seu progresso…</dd>
+        </div>
+        <div>
+          <dt>Conta</dt>
+          <dd>Seu progresso fica salvo na sua conta</dd>
+        </div>
+        <div>
+          <dt>Retomada</dt>
+          <dd>Continue de onde parou</dd>
+        </div>
+        }
+        }
+        @case ('start') {
+        <div>
+          <dt>Conectado</dt>
+          <dd>Como {{ userName() }}, seu progresso fica por conta</dd>
+        </div>
+        <div>
+          <dt>Catálogo livre</dt>
+          <dd>Todos os módulos disponíveis pra consulta</dd>
+        </div>
+        <div>
+          <dt>Seu ritmo</dt>
+          <dd>Sem prazos — volte quando quiser</dd>
+        </div>
+        }
+        }
+      </dl>
+      } @else {
+      <p class="hero__eyebrow">Acervo de cursos da Maiawall</p>
+      <h1 class="hero__title">
+        Cursos
+        <span class="hero__highlight">organizados <span class="hero__highlight-break">capítulo por
+            capítulo.</span></span>
+      </h1>
+      <p class="hero__subtitle">
+        Todo o conteúdo dos cursos que já ministrei está aberto pra consulta: navegue pelos
+        módulos, capítulos e materiais sem criar conta. Criar uma conta grátis serve só pra
+        salvar onde você parou.
+      </p>
+      <div class="hero__actions">
+        <a class="mw-btn mw-btn--primary" routerLink="/cursos">Ver cursos</a>
+      </div>
+      }
+    </div>
+
+    <div class="hero__lesson" aria-label="Destaque de conteúdo">
+      @switch (state()) {
+      @case ('loading') {
+      <div class="lesson-skeleton" aria-hidden="true">
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--kicker"></span>
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--title"></span>
+        <div class="lesson-skeleton__body">
+          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
+          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
+        </div>
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--footer"></span>
+      </div>
+      }
+      @case ('resume') {
+      @if (resumeData(); as resume) {
+      <app-lesson-card
+        [course]="resume.course"
+        [chapters]="resume.chapters"
+        [current]="resume.current"
+        [completedCount]="resume.completedCount"
+        [progressPercentage]="resume.progressPercentage"
+        [resumeLink]="resumeLink()"
+        [status]="resume.status"
+      />
+      } @else {
+      <div class="lesson-skeleton" aria-hidden="true">
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--kicker"></span>
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--title"></span>
+        <div class="lesson-skeleton__body">
+          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
+          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
+        </div>
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--footer"></span>
+      </div>
+      }
+      }
+      @default {
+      @if (featured(); as courses) {
+      @if (courses.length === 0) {
+      <div class="lesson__empty">
+        <p>Nenhum curso em destaque no momento — mas o catálogo completo continua disponível logo ali.</p>
+        <a class="lesson__empty-link" routerLink="/cursos">Ver todos os cursos <span>→</span></a>
+      </div>
+      } @else {
+      <div class="hero-carousel" #carousel (mouseenter)="setPaused(true)" (mouseleave)="setPaused(false)"
+        (focusin)="setPaused(true)" (focusout)="onFocusOut($event, carousel)">
+        <div class="hero-carousel__viewport">
+          @for (course of courses; track course.id; let index = $index) {
+          <article class="hero-carousel__slide" [class.is-active]="index === activeIndex()"
+            [attr.aria-hidden]="index === activeIndex() ? 'false' : 'true'">
+            <app-lesson-card [course]="course" />
+          </article>
+          }
+        </div>
+
+        @if (courses.length > 1) {
+        <div class="hero-carousel__nav">
+          <button class="hero-carousel__arrow" type="button" (click)="prev()" aria-label="Slide anterior">‹</button>
+          <div class="hero-carousel__dots" role="tablist" aria-label="Cursos em destaque">
+            @for (course of courses; track $index; let index = $index) {
+            <button class="hero-carousel__dot" type="button" role="tab" [class.is-active]="index === activeIndex()"
+              [attr.aria-selected]="index === activeIndex()" [attr.aria-label]="'Ver curso ' + (index + 1)"
+              (click)="goTo(index)"></button>
+            }
+          </div>
+          <button class="hero-carousel__arrow" type="button" (click)="next()" aria-label="Próximo slide">›</button>
+        </div>
+        }
+      </div>
+      }
+      } @else {
+      <div class="lesson-skeleton" aria-hidden="true">
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--kicker"></span>
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--title"></span>
+        <div class="lesson-skeleton__body">
+          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
+          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
+        </div>
+        <span class="lesson-skeleton__bar lesson-skeleton__bar--footer"></span>
+      </div>
+      }
+      }
+      }
+    </div>
+  </div>
+</section>

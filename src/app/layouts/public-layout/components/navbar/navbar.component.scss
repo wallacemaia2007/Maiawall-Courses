@@ -30,6 +30,27 @@
   -webkit-backdrop-filter: none;
 }
 
+.navbar[data-over-hero='true'] .navbar__wordmark,
+.navbar[data-over-hero='true'] .navbar__link,
+.navbar[data-over-hero='true'] .navbar__profile {
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.28);
+}
+
+.navbar[data-over-hero='true'] .navbar__cursos,
+.navbar[data-over-hero='true'] .navbar__link:not(.is-active) {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.navbar[data-over-hero='true'] .navbar__profile:hover {
+  color: #ffffff;
+}
+
+.navbar[data-over-hero='true'] .navbar__link:hover,
+.navbar[data-over-hero='true'] .navbar__link.is-active {
+  color: #ffffff;
+}
+
 .navbar[data-state='visible'] {
   animation: navbar-slide-in 520ms var(--ease-soft) both;
   pointer-events: auto;
