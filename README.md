@@ -1,214 +1,226 @@
-# Maiawall Cursos — Frontend (Arquitetura)
+# Maiawall Cursos
 
-Plataforma de cursos online — **`cursos.maiawall.com`** (em construção).
+Plataforma de cursos online da Maiawall, criada para reunir cursos, aulas,
+exercicios e acompanhamento da jornada de aprendizagem em um unico lugar.
 
-Este repositório contém **somente a fundação arquitetural** do frontend em Angular.
-As páginas são stubs estruturais (sem layout final, sem funcionalidade), prontos para
-evoluírem para as telas reais seguindo as convenções descritas abaixo.
+O projeto esta em desenvolvimento e combina uma experiencia publica para
+descoberta dos cursos com uma area autenticada para alunos e uma area
+administrativa para gerenciamento do conteudo.
 
-> Referência de arquitetura: **Maiawall-Homolog** (Angular 19, standalone, signals,
-> guards/interceptors funcionais, lazy loading por feature).
+## Sobre o projeto
 
----
+O Maiawall Cursos foi pensado para funcionar como um acervo de conhecimento e,
+ao mesmo tempo, como uma plataforma completa de aprendizagem. A aplicacao
+organiza o conteudo por cursos, capitulos e aulas, permitindo que o aluno avance
+de forma estruturada e acompanhe seu progresso.
+
+### O que existe no projeto
+
+- Pagina inicial publica com apresentacao da plataforma e seus cursos.
+- Catalogo publico de cursos com URLs amigaveis baseadas em `slug`.
+- Paginas de detalhes, capitulos e aulas publicas.
+- Cadastro, login, recuperacao de senha e verificacao de email.
+- Login social opcional com GitHub e Google.
+- Area do aluno com dashboard, cursos, progresso, exercicios e submissoes.
+- Perfil do aluno e troca de senha.
+- Emissao e validacao publica de certificados.
+- Painel administrativo para cursos, capitulos, exercicios, alunos, submissoes
+  e certificados.
+- API propria para autenticacao, catalogo, aprendizagem e usuarios.
+- Persistencia dos dados no Firebase Firestore.
+- Seeds para carregar o catalogo local de cursos.
+
+## Preview
+
+Adicione aqui uma captura de tela atualizada do hero da pagina inicial:
+
+```md
+![Hero da pagina inicial](docs/images/hero-home.png)
+```
+
+Enquanto a captura oficial nao e adicionada, este banner existente pode ser
+usado como referencia visual:
+
+![Banner de referencia](public/assets/banners/ufu.api.png)
+
+> Para incluir uma nova imagem no README, salve o arquivo em `docs/images/` e
+> atualize o caminho acima. Uma captura do hero em desktop e outra em mobile
+> ajudam a documentar melhor a experiencia da plataforma.
+
+## Experiencia da aplicacao
+
+### Area publica
+
+Visitantes podem conhecer a plataforma, navegar pelo catalogo, abrir um curso,
+consultar capitulos e validar certificados sem precisar entrar na conta.
+
+### Area do aluno
+
+Alunos autenticados acessam seus cursos, aulas, exercicios, respostas,
+submissoes, progresso e certificados. O acesso e protegido por autenticacao e
+guards de rota.
+
+### Area administrativa
+
+Usuarios com perfil administrativo ou de instrutor possuem uma area dedicada
+para manter o catalogo e acompanhar a operacao da plataforma, incluindo cursos,
+conteudo, exercicios, alunos, correcoes e certificados.
 
 ## Stack
 
-| Camada     | Escolha                                            |
-| ---------- | -------------------------------------------------- |
-| Framework  | Angular **19** (standalone components)             |
-| Linguagem  | TypeScript (strict)                                |
-| Estilo     | Tailwind CSS + SCSS (design tokens em `styles.scss`) |
-| State      | Signals (`signal` + `computed`) em serviços de estado |
-| HTTP       | `HttpClient` + interceptors funcionais             |
-| Formulários | Reactive Forms                                     |
-| Infra      | Angular CLI 19, ESLint flat config, Prettier       |
+### Frontend
 
----
+- Angular 19 com standalone components e TypeScript strict.
+- Angular Router com carregamento por feature.
+- RxJS para fluxos de dados e signals para estado reativo de sessao.
+- Reactive Forms para formularios de autenticacao e gerenciamento.
+- SCSS, Tailwind CSS e design tokens em `src/styles.scss`.
+- GSAP para animacoes da interface.
 
-## Estrutura de pastas
+### Backend
 
-```
-src/app/
-├── app.config.ts            # Providers globais (router, http, interceptors)
-├── app.routes.ts            # Mapa de rotas raiz (lazy loading por área)
-├── core/                    # INFRAESTRUTURA: nada de UI aqui
-│   ├── auth/                # TokenStorage, AuthState (signals), AuthService
-│   ├── guards/              # authGuard, guestGuard, roleGuard (+ child variants)
-│   ├── interceptors/        # auth (Bearer + timeout), error (normalização + 401)
-│   ├── models/              # ApiResponse, ApiError, User/Role, Page, Attachment
-│   ├── services/            # user, attachment (upload/progress), notification
-│   └── constants/           # Central de endpoints da API
-├── layouts/                 # Layouts raiz (≠ feature layouts)
-│   ├── public-layout/       # Navbar + Footer (visão pública)
-│   ├── auth-layout/         # Páginas de autenticação
-│   └── app-layout/          # Sidebar + Topbar (área do aluno)
-├── shared/                 # REUSO: componentes/diretivas/pipes/presentação
-│   ├── ui/                  # alert-banner, progress-bar, file-upload, rich-text-editor
-│   ├── components/          # modal, confirm-delete-modal, loading-spinner, empty-state
-│   ├── directives/          # integer-input
-│   ├── pipes/               # duration, file-size
-│   └── utils/               # date.utils
-└── features/                # FEATURES: uma pasta por domínio, isolada
-    ├── home/                # Landing pública
-    ├── auth/                # login, signup, forgot/reset-password, verify-email
-    ├── courses/             # Catálogo (slug-based, público)
-    ├── student/             # Área do aluno /app (id-based, autenticado)
-    ├── exercises/           # Exercícios e submissões
-    ├── certificates/        # Certificados (emissão + validação pública)
-    ├── profile/             # Perfil e troca de senha
-    ├── admin/               # Painel administrativo (ADMIN/INSTRUCTOR)
-    └── not-found/
-```
+- Node.js com Express.
+- JWT para access tokens e refresh tokens.
+- bcryptjs para hash de senhas.
+- Firebase Admin para acesso ao Firestore.
+- Helmet, CORS e middleware de tratamento de erros.
+- OAuth 2.0 com GitHub e Google, quando configurado.
 
-### Regras de camada
+### Ferramentas
 
-- `core` e `shared` **não dependem de `features`**.
-- `features` podem usar `core` e `shared`, e layouts raiz.
-- Features **não importam entre si** de forma direta (ex.: `student` não importa
-  `courses/course-card`; compartilhamento futuro vai para `shared`).
-- Toda feature isolada tem seu próprio `routes.ts`, `pages/`, `components/`,
-  `services/` e `models/` — carregada com `loadChildren`/`loadComponent`.
+- Angular CLI 19.
+- ESLint com flat config.
+- Prettier.
+- Jasmine/Karma para testes do frontend.
+- `node:test` para testes do backend.
 
----
+## Arquitetura
 
-## Rotas
+O repositorio e dividido em duas aplicacoes relacionadas:
 
-```
-/                         public-layout ─ home
-/cursos                   public-layout ─ listagem (slug)
-/cursos/:slug             public-layout ─ detalhe do curso (slug)
-/cursos/:slug/capitulo/:chapterSlug   public-layout ─ aula pública (slug)
-/certificados/:code       public-layout ─ validação de certificado
-
-/login /signup /forgot-password /reset-password /verify-email
-                          auth-layout (guestGuard)
-
-/app/dashboard            app-layout (authGuard)
-/app/cursos /app/cursos/:id
-/app/capitulo/:id
-/app/exercicios /app/exercicios/:id/resposta
-/app/submissoes /app/submissoes/:id
-/app/certificados
-/app/perfil
-
-/admin/...                admin-layout (authGuard + roleChildGuard ['ADMIN','INSTRUCTOR'])
-                          dashboard, cursos, cursos/:id, capitulos, exercicios,
-                          alunos, submissoes, certificados
-
-/not-found                404
-**                        redirect → /not-found
+```text
+src/                    # Frontend Angular
+  app/
+    core/               # Auth, guards, interceptors, modelos e servicos globais
+    features/           # Home, auth, cursos, aluno, exercicios, certificados etc.
+    layouts/            # Layout publico, autenticacao e area logada
+    shared/             # Componentes, diretivas, pipes e utilitarios reutilizaveis
+backend/                # API Node.js/Express
+  src/
+    config/             # Ambiente e conexao com Firebase
+    middleware/         # Autenticacao e tratamento de erros
+    repositories/       # Acesso aos dados
+    routes/              # Rotas HTTP
+    services/            # Autenticacao e OAuth
+    scripts/             # Seeds do catalogo
+    seed/                # Dados e instrucoes do seed
+public/assets/          # Logos, icones e banners da aplicacao
+docs/                   # Documentacao funcional e tecnica
 ```
 
-Convenção de IDs: **catálogo público usa `slug`** (SEO/URLs amigáveis);
-**áreas autenticadas usam `id`** (integridade referencial).
+### Principios principais
 
----
+- `core` concentra infraestrutura compartilhada e nao depende de `features`.
+- `shared` concentra componentes e utilitarios de apresentacao reutilizaveis.
+- Features sao organizadas por dominio e podem usar `core` e `shared`.
+- A autenticacao usa servicos, guards e interceptors funcionais.
+- O estado da sessao usa signals; servicos de dominio trabalham com Observables.
+- O frontend consome a API por `/api`; em desenvolvimento, o proxy aponta para
+  `http://localhost:3000`.
+- Respostas da API seguem o envelope `ApiResponse<T>`.
 
-## Autenticação (JWT — Spring Boot / Spring Security)
+## Rotas principais
 
-- `TokenStorageService` → armazena `access_token` e `refresh_token` no `localStorage`
-  (chaves em `core/models/auth.model.ts`, `AUTH_STORAGE_KEYS`).
-- `AuthStateService` → expõe `accessToken()` e `user()` como **signals**, além de
-  `isAuthenticated()` computado. Mantém o estado da sessão reativo sem recarregar a página.
-- `AuthService` → `login`, `signup`, `logout`, `getSession` (`/auth/me`),
-  `refreshSession`, `requestPasswordRecovery`, `resetPassword`, `verifyEmail`.
-- Fluxo do `authGuard` (funcional):
-  1. Sem token local → redireciona para `/login?redirect=<url>`.
-  2. Com token → valida a sessão via `GET /auth/me` (erros tratados no guard).
-- `authInterceptor` → injeta `Authorization: Bearer <token>` em toda requisição e
-  impõe timeout de 15s.
-- `errorInterceptor` → normaliza falhas no padrão `ApiError`; em **401** limpa a
-  sessão e redireciona para `/login` (sessão expirada).
-- Páginas de auth são protegidas com `guestGuard` (autenticado é jogado para `/app/dashboard`).
+```text
+/                         Inicio publico
+/cursos                   Catalogo de cursos
+/cursos/:slug             Detalhe do curso
+/cursos/:slug/capitulo/... Aula publica
+/certificados/:code       Validacao publica de certificado
+/login                    Login
+/signup                   Cadastro
+/app/...                  Area autenticada do aluno
+/admin/...                Area administrativa
+```
 
-> **Refresh token**: `refreshSession()` ainda é conceitual (aponta para o token de
-> acesso). Como o backend ainda não está definido, decidir o fluxo de renovação
-> quando o contrato Spring/Security existir.
+O catalogo publico usa `slug` nas URLs. As areas autenticadas usam `id` para
+identificar os recursos.
 
-### Login social (OAuth 2.0 — Authorization Code)
+## Como executar
 
-O backend é o cliente OAuth confidencial (Express + `fetch` nativo + JWT manual, sem
-Passport). Fluxo:
+### Pre-requisitos
 
-1. O front navega para `GET /api/auth/oauth/{provider}` (`github` | `google`).
-2. O backend grava um `state` em cookie httpOnly de 5 min (assinado com `JWT_SECRET`)
-   e redireciona para o provedor.
-3. O provedor volta para `GET /api/auth/oauth/{provider}/callback`.
-4. O backend valida `state`, troca o `code` pelo token do provedor, busca o perfil,
-   vincula ou cria o usuário (`githubId`/`googleId` + `email` verificado) e emite um
-   **ticket de troca** de uso único (60 s), redirecionando para
-   `FRONTEND_ORIGIN/auth/callback?ticket=...`. Nenhum token trafega pela URL.
-5. O front chama `POST /api/auth/oauth/exchange { ticket }` e recebe o mesmo shape de
-   `login`/`signup` (`{ user, tokens: { accessToken, refreshToken } }`). O ticket é
-   apagado do usuário assim que trocado.
+- Node.js LTS e npm.
+- Um projeto Firebase com Firestore ou um emulador local.
+- Credenciais do Firebase Admin para executar a API.
 
-Configuração nos provedores (URLs montadas a partir de `OAUTH_CALLBACK_BASE_URL` no backend):
+### Instalar dependencias
 
-| Provedor | O que cadastrar |
-| -------- | --------------- |
-| GitHub (OAuth App) | Authorization callback URL = `{OAUTH_CALLBACK_BASE_URL}/api/auth/oauth/github/callback` (scope `read:user user:email`) |
-| Google (Client OAuth tipo "Web application") | Authorized redirect URI = `{OAUTH_CALLBACK_BASE_URL}/api/auth/oauth/google/callback` (scope `openid email profile`) |
+Na raiz do projeto:
 
-Em producao: `OAUTH_CALLBACK_BASE_URL=https://api.courses.maiawall.com` e `FRONTEND_ORIGIN=https://courses.maiawall.com`
-(em producao, o rewrite da Vercel encaminha `/api` para o backend). Deixar
-`GITHUB_CLIENT_ID`/`GOOGLE_CLIENT_ID` vazios desativa
-o provedor.
+```powershell
+npm install
+npm --prefix backend install
+```
 
----
+### Configurar o backend
 
-## HTTP e contratos com o backend
+Crie `backend/.env` para desenvolvimento:
 
-- Resposta padrão do backend segue o envelope `ApiResponse<T>`:
-  `{ code, data, message, timestamp }`. `unwrapApiData()` extrai `data` (e
-  resolve `null` para o caso de "não encontrado").
-- Erros normalizados em `ApiError` via `toApiError()`.
-- Segurança: o projeto **não inventa backend**. Todos os caminhos em
-  `src/app/core/constants/api.constants.ts` são **PLACEHOLDER** de organização
-  (agrupados por domínio) e devem ser alinhados ao contrato real da API.
+```env
+APP_ENV=development
+PORT=3000
+FRONTEND_ORIGIN=http://localhost:4200
+FIREBASE_PROJECT_ID=seu-projeto
+GOOGLE_APPLICATION_CREDENTIALS=C:\caminho\para\service-account.json
+JWT_SECRET=troque-este-segredo
+JWT_REFRESH_SECRET=troque-este-outro-segredo
+```
 
-| Endpoint (placeholder)            | Uso                         |
-| --------------------------------- | --------------------------- |
-| `/auth/**`                         | login, cadastro, sessão…    |
-| `/users/me`                        | perfil                      |
-| `/courses/**` `/chapters/**` ...   | catálogo e conteúdo         |
-| `/progress/**` `/enrollments/**`   | matrícula/progresso         |
-| `/exercises/**` `/submissions/**`  | exercícios/correção         |
-| `/certificates/**` `/attachments/**` | certificados, uploads     |
+O arquivo de credenciais tambem pode ser substituido por
+`FIREBASE_SERVICE_ACCOUNT`. Para usar o emulador, defina
+`FIRESTORE_EMULATOR_HOST=127.0.0.1:8080`.
 
-- Dev: `proxy.conf.json` roteia `/api` → `http://localhost:8080`.
-- Prod: `environment.production.ts` usa `/api` (reverse proxy/CDN). Se a API
-  ganhar domínio próprio, trocar esse valor (ex.: `https://api.cursos.maiawall.com/api`).
+### Iniciar o ambiente
 
----
+Para iniciar frontend e backend juntos:
 
-## Serviços
+```powershell
+npm run dev
+```
 
-- Serviços de domínio (`providedIn: 'root'`) expõem `Observable`s prontos para o
-  template via pipe `async` (padrão de containers de dados).
-- Serviços de **estado** (ex.: `AuthStateService`) usam signals.
-- Convenções de nomenclatura: `list`, `listMine`, `listAll`, `getById`, `getBySlug`,
-  `create`, `update`, `delete` (+ variantes por domínio).
+O frontend fica em `http://localhost:4200`, a API em `http://localhost:3000` e
+`GET /api/health` verifica a saude da API.
 
----
+Para executar separadamente:
 
-## Decisões reaproveitadas do Maiawall-Homolog
+```powershell
+npm start
+npm --prefix backend run dev
+```
 
-- Standalone components + `ChangeDetectionStrategy.OnPush` + `inject()` (sem
-  construtor para DI).
-- Lazy loading total por feature (`loadChildren`/`loadComponent`).
-- Layouts raiz em `src/app/layouts/` com N rotas `path: ''` por grupo visual
-  (público / auth / logado); guarda por área.
-- Guards e interceptors **funcionais** (`CanActivateFn`, `HttpInterceptorFn`).
-- Endpoints centralizados e tipados em `**/constants/api.constants.ts`.
-- Envelopes `ApiResponse<T>` + helpers `unwrapApiData` / `emptyPage`.
-- SCSS escopado (`styleUrl` + prefixo de classe por componente) + design tokens.
+## Comandos uteis
 
----
+| Comando | Descricao |
+| --- | --- |
+| `npm run dev` | Inicia frontend e backend juntos |
+| `npm run build` | Gera o build de producao do frontend |
+| `npm test` | Executa os testes Angular |
+| `npm run lint` | Executa o ESLint |
+| `npm run format` | Formata os arquivos com Prettier |
+| `npm --prefix backend test` | Executa os testes da API |
+| `npm --prefix backend run seed:courses` | Recria o catalogo local no Firestore |
+| `npm run kill:ports` | Libera as portas locais no Windows |
 
-## Próximos passos (fora do escopo desta fundação)
+O seed usa `backend/src/seed/courses.json` como fonte do catalogo e recria as
+colecoes de cursos, capitulos e aulas sem alterar os usuarios.
 
-1. Definir o contrato da API Spring e alinhar `api.constants.ts`.
-2. Implementar as telas reais a partir dos stubs de cada feature.
-3. Navegação e estado de aluno: consumir `ProgressService`/`EnrollmentService`.
-4. Fluxo de correção no admin (`submissoes`).
-5. Emissão/validação de certificados.
+## Documentacao
+
+O diretorio [`docs/`](docs/) contem o planejamento funcional e tecnico do
+produto, incluindo autenticacao, area do aluno, administracao de cursos,
+exercicios, certificados e deploy.
+
+## Licenca
+
+Projeto privado da Maiawall.
