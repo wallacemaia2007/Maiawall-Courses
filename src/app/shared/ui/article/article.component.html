@@ -1,3 +1,19 @@
+<ng-template #body let-stack="stack">
+  @if (blocks().length) {
+    <div class="article__content" [class.article__content--stack]="stack">
+      @for (block of blocks(); track $index) {
+        @if (block.kind === 'code') {
+          <app-terminal [code]="block.code" [language]="block.language" [title]="block.title" />
+        } @else {
+          <div class="article__text capitalize" [innerHTML]="block.html"></div>
+        }
+      }
+    </div>
+  } @else {
+    <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
+  }
+</ng-template>
+
 <article class="article" [class.is-marked]="marked()">
   <header class="article__head">
     @if (order(); as order) {
@@ -24,11 +40,7 @@
     @if (image.position !== 'center') {
       <div class="article__side" [class.article__side--{{ image.position }}]="true">
         <div class="article__copy">
-          @if (content()) {
-            <div class="article__content" [innerHTML]="content()"></div>
-          } @else {
-            <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
-          }
+          <ng-container [ngTemplateOutlet]="body" />
         </div>
         <figure class="article__figure">
           <button
@@ -60,18 +72,10 @@
           <figcaption>{{ image.caption }}</figcaption>
         }
       </figure>
-      @if (content()) {
-        <div class="article__content article__content--stack" [innerHTML]="content()"></div>
-      } @else {
-        <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
-      }
+      <ng-container [ngTemplateOutlet]="body" [ngTemplateOutletContext]="{ stack: true }" />
     }
   } @else {
-    @if (content()) {
-      <div class="article__content" [innerHTML]="content()"></div>
-    } @else {
-      <p class="article__empty">Esta aula ainda não possui conteúdo publicado.</p>
-    }
+    <ng-container [ngTemplateOutlet]="body" />
   }
 
   @if (attachments()?.length) {

@@ -136,6 +136,29 @@ async function getLessonsForChapters(database, chapterIds) {
  * catálogo continua leve mesmo com preview). */
 const MAX_SNIPPET_LINES = 8;
 
+// Conteúdo de aula pode trazer trechos entre ``` (renderizados como terminal no
+// frontend). A prévia da home mostra só o código, sem as cercas.
+const CODE_FENCE = /^[ \t]*```[^\n`]*\n([\s\S]*?)\n[ \t]*```[ \t]*(?=\n|$)/m;
+
+function extractFirstCode(content) {
+  const codeTag = /<pre>\s*<code(?:\s+class="language-[^"]+")?>([\s\S]*?)<\/code>\s*<\/pre>/i.exec(content);
+  if (codeTag) {
+    return decodeHtmlEntities(codeTag[1].trim());
+  }
+
+  const match = CODE_FENCE.exec(content.replace(/\r\n/g, '\n'));
+  return match ? match[1] : content;
+}
+
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&');
+}
+
 /* Listagens pequenas (ex.: getFeatured do hero da Home manda size=3) ganham um
  * preview rico: títulos dos 3 primeiros capítulos e, quando houver, um trecho da
  * primeira lesson de código do capítulo 1. A página de catálogo completa (size
@@ -174,7 +197,7 @@ async function enrichWithPreview(database, content) {
 
     if (codeLesson) {
       course.previewSnippet = {
-        code: codeLesson.content
+        code: extractFirstCode(codeLesson.content)
           .split('\n')
           .slice(0, MAX_SNIPPET_LINES)
           .map((line) => line.trimEnd())

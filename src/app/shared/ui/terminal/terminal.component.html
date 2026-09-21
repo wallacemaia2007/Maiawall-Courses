@@ -1,0 +1,25 @@
+<figure class="terminal">
+  <figcaption class="terminal__bar">
+    <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="terminal__title">{{ heading() }}</span>
+    <button
+      type="button"
+      class="terminal__copy"
+      [class.is-copied]="copied()"
+      [attr.aria-label]="copied() ? 'Código copiado' : 'Copiar código'"
+      (click)="copy()"
+    >
+      {{ copied() ? 'Copiado' : 'Copiar' }}
+    </button>
+  </figcaption>
+
+  <div class="terminal__body" tabindex="0" role="region" [attr.aria-label]="'Trecho de código: ' + heading()">
+    @for (line of lines(); track $index) {
+      <div [class]="'terminal__line terminal__line--' + line.kind">
+        @if (line.kind === 'command') {
+          <span class="terminal__prompt" aria-hidden="true">{{ prompt() }}</span>
+        }<span class="terminal__text">{{ line.text }}</span>
+      </div>
+    }
+  </div>
+</figure>

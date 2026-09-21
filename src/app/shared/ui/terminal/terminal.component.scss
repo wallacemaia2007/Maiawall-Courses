@@ -1,0 +1,126 @@
+:host {
+  display: block;
+  margin-block: 1.25rem;
+}
+
+:host(:first-child) {
+  margin-top: 0;
+}
+
+:host(:last-child) {
+  margin-bottom: 0;
+}
+
+.terminal {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-line-dark);
+  border-radius: var(--radius-md);
+  background: var(--color-panel-dark-deep);
+  box-shadow: var(--shadow-md);
+  color: #f2f0ea;
+}
+
+.terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--color-line-dark);
+  background: var(--color-panel-dark);
+}
+
+.terminal__dots {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.terminal__dots i {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: var(--radius-full);
+  background: #ff5f57;
+}
+
+.terminal__dots i:nth-child(2) {
+  background: #febc2e;
+}
+
+.terminal__dots i:nth-child(3) {
+  background: #28c840;
+}
+
+.terminal__title {
+  min-width: 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal__copy {
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--color-line-dark);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--motion-fast) ease,
+    color var(--motion-fast) ease;
+  user-select: none;
+}
+
+.terminal__copy:hover,
+.terminal__copy:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.terminal__copy.is-copied {
+  color: #83c6ae;
+}
+
+.terminal__body {
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.terminal__body:focus-visible,
+.terminal__copy:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+.terminal__line {
+  min-height: 1.7em;
+  white-space: pre;
+}
+
+.terminal__prompt {
+  margin-right: 0.75ch;
+  color: #83c6ae;
+  user-select: none;
+}
+
+.terminal__line--output .terminal__text {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.terminal__line--comment .terminal__text {
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.terminal__line--continuation .terminal__text {
+  padding-left: calc(1ch + 0.75ch);
+}

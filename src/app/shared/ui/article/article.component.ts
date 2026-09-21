@@ -1,8 +1,10 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   HostListener,
   OnDestroy,
+  computed,
   input,
   output,
   signal,
@@ -10,10 +12,13 @@ import {
 
 import { Attachment } from '../../../core/models/attachment.model';
 import { LessonImage } from '../../../features/courses/models/course.model';
+import { parseLessonContent } from '../../utils/lesson-content.utils';
+import { TerminalComponent } from '../terminal/terminal.component';
 
 @Component({
   selector: 'app-article',
   standalone: true,
+  imports: [NgTemplateOutlet, TerminalComponent],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +30,8 @@ export class ArticleComponent implements OnDestroy {
   readonly content = input<string>();
   readonly image = input<LessonImage>();
   readonly attachments = input<Attachment[]>();
+
+  protected readonly blocks = computed(() => parseLessonContent(this.content()));
 
   readonly checkable = input(false);
   readonly marked = input(false);
