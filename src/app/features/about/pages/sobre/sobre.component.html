@@ -1,27 +1,36 @@
-<section class="sobre-page">
+<section class="sobre-page" data-sobre>
+  <div class="sobre-page__bg" data-sobre-bg aria-hidden="true">
+    @if (instructor.avatarUrl) {
+      <img
+        class="sobre-page__bg-photo"
+        data-sobre-bg-photo
+        [src]="instructor.avatarUrl"
+        alt=""
+        draggable="false"
+        fetchpriority="high"
+      />
+    }
+    <div class="sobre-page__bg-scrim" data-sobre-bg-scrim></div>
+  </div>
+
   <div class="sobre-page__inner mw-container">
     <div class="sobre-page__copy">
-      <p class="sobre-page__eyebrow" appReveal>Quem está por trás da Maiawall Cursos</p>
-      <h1 class="sobre-page__title" appReveal [appRevealDelay]="80">{{ instructor.tagline }}</h1>
+      <p class="sobre-page__eyebrow" data-sobre-anim>Quem está por trás da Maiawall Cursos</p>
+      <h1 class="sobre-page__title" data-sobre-anim>{{ instructor.tagline }}</h1>
       @for (paragraph of instructor.bioParagraphs ?? []; track paragraph) {
-        <p class="sobre-page__text" appReveal [appRevealDelay]="140">{{ paragraph }}</p>
+        <p class="sobre-page__text" data-sobre-anim>{{ paragraph }}</p>
       }
       @if (instructor.highlights?.length) {
-        <ul class="sobre-page__highlights" appReveal [appRevealDelay]="200">
+        <ul class="sobre-page__highlights" data-sobre-anim>
           @for (item of instructor.highlights; track item) {
             <li>{{ item }}</li>
           }
         </ul>
       }
-      <div class="sobre-page__actions" appReveal [appRevealDelay]="240">
+      <div class="sobre-page__actions" data-sobre-anim>
         <a class="mw-btn mw-btn--primary" routerLink="/cursos">Ver cursos</a>
         @for (social of instructor.socialLinks ?? []; track social.url) {
-          <a
-            class="sobre-page__link"
-            [href]="social.url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a class="sobre-page__link" [href]="social.url" target="_blank" rel="noopener noreferrer">
             @if (social.icon) {
               @switch (social.icon) {
                 @case ('github') {
@@ -64,22 +73,5 @@
         }
       </div>
     </div>
-
-    <figure class="sobre-page__portrait" appReveal [appRevealDelay]="160">
-      <!--
-        Placeholder: foto atual é uma selfie informal (public/assets/instructor.png).
-        Trocar por uma foto mais profissional quando houver.
-      -->
-      @if (instructor.avatarUrl) {
-        <img
-          class="sobre-page__photo"
-          [src]="instructor.avatarUrl"
-          [alt]="'Retrato de ' + instructor.name + ', instrutor dos cursos da Maiawall'"
-        />
-      } @else {
-        <span class="sobre-page__photo" aria-hidden="true">{{ instructor.name.slice(0, 1) }}</span>
-      }
-      <figcaption>{{ instructor.name }} · Instrutor da Maiawall Cursos</figcaption>
-    </figure>
   </div>
 </section>

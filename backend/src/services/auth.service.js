@@ -28,6 +28,7 @@ function sanitizeUser(user) {
     avatarUrl: user.avatarUrl,
     provider: user.provider,
     emailVerified: Boolean(user.emailVerified),
+    hasPassword: Boolean(user.passwordHash),
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
@@ -296,4 +297,6 @@ const AuthService = {
 module.exports = {
   AuthService,
   sanitizeUser,
+  validatePassword,
+  validateRequiredString,
 };

@@ -138,6 +138,34 @@ const UserRepository = {
     return this.findById(id);
   },
 
+  async changeEmail(id, oldEmail, newEmail, update) {
+    if (!isValidId(id)) {
+      return null;
+    }
+
+    const database = await getDatabase();
+    const userRef = database.collection(USERS_COLLECTION).doc(id);
+    const oldEmailRef = database.collection(EMAILS_COLLECTION).doc(oldEmail.toLowerCase());
+    const newEmailRef = database.collection(EMAILS_COLLECTION).doc(newEmail.toLowerCase());
+
+    await database.runTransaction(async (transaction) => {
+      const existing = await transaction.get(newEmailRef);
+
+      if (existing.exists && existing.data().userId !== id) {
+        throw new AppError(409, 'EMAIL_ALREADY_REGISTERED', 'E-mail ja cadastrado');
+      }
+
+      transaction.update(userRef, update);
+      transaction.set(newEmailRef, { userId: id });
+
+      if (oldEmail.toLowerCase() !== newEmail.toLowerCase()) {
+        transaction.delete(oldEmailRef);
+      }
+    });
+
+    return this.findById(id);
+  },
+
   async clearRefreshToken(id) {
     if (!isValidId(id)) {
       return;

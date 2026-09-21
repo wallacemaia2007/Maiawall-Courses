@@ -1,10 +1,379 @@
-<section class="profile-page mw-container">
-  <header class="profile-hero"><div class="profile-hero__avatar" aria-hidden="true">{{ (user()?.name ?? '?').charAt(0).toUpperCase() }}</div><div><p class="profile-hero__eyebrow">Seu perfil</p><h1>{{ user()?.name }}</h1><p class="profile-hero__meta">Aqui ficam apenas as leituras que voce iniciou.</p></div><button class="mw-btn mw-btn--outline profile-hero__logout" type="button" (click)="logout()">Sair</button></header>
-  <section class="learning-history">
-    <div class="learning-history__head"><div><p class="profile-hero__eyebrow">Continuar estudando</p><h2>Seus cursos</h2></div><a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver catalogo</a></div>
-    @if (overview().loading) { <div class="profile-page__status"><app-loading-spinner label="Carregando seu historico" size="lg" /></div> }
-    @else if (overview().error) { <app-empty-state title="Historico indisponivel" [message]="overview().error"><button type="button" class="mw-btn mw-btn--outline" (click)="retry()">Tentar novamente</button></app-empty-state> }
-    @else if (overview().data?.startedCourses?.length) { <div class="learning-history__list">@for (item of overview().data!.startedCourses; track item.course.id) { <article class="learning-history__item"><div><h3>{{ item.course.title }}</h3><p>{{ item.completedChapters }} capitulo(s) concluidos</p></div>@if (item.lastChapter) { <a [routerLink]="['/cursos', item.course.slug, 'capitulo', item.lastChapter.slug]">Continuar: {{ item.lastChapter.title }}</a> } @else { <a [routerLink]="['/cursos', item.course.slug]">Ver curso</a> }</article> }</div> }
-    @else { <app-empty-state title="Nenhum curso iniciado" message="Quando voce abrir um capitulo, ele aparecera aqui para voce continuar de onde parou."><a class="mw-btn mw-btn--primary" routerLink="/cursos">Explorar cursos</a></app-empty-state> }
+<section class="profile-page mw-container" aria-labelledby="profile-title">
+  <header class="profile-hero">
+    <div class="profile-hero__identity">
+      <div class="profile-hero__avatar">
+        @if (user()?.avatarUrl) {
+          <img
+            [src]="user()!.avatarUrl"
+            [alt]="'Foto de ' + user()!.name"
+            (error)="replaceBrokenImage($event)"
+          />
+        } @else {
+          <span aria-hidden="true">{{ (user()?.name ?? '?').charAt(0).toUpperCase() }}</span>
+        }
+      </div>
+      <div class="profile-hero__copy">
+        <p class="profile-eyebrow">Área de aprendizagem</p>
+        <div class="profile-hero__title-row">
+          <h1 id="profile-title">Olá, {{ user()?.name }}.</h1>
+          @if (roleLabel()) {
+            <span class="profile-hero__role">{{ roleLabel() }}</span>
+          }
+        </div>
+        <p>Retome seus estudos e acompanhe tudo o que você já avançou.</p>
+        @if (memberSince()) {
+          <span class="profile-hero__member">Por aqui desde {{ memberSince() }}</span>
+        }
+      </div>
+    </div>
+    <div class="profile-hero__actions">
+      <a class="mw-btn mw-btn--primary" routerLink="/cursos">Explorar cursos</a>
+      <button class="profile-text-button" type="button" (click)="logout()">Sair da conta</button>
+    </div>
+  </header>
+
+  @if (overview().loading) {
+    <section class="profile-status-card" aria-live="polite">
+      <app-loading-spinner label="Carregando seu histórico" size="lg" />
+      <p>Organizando seu progresso mais recente…</p>
+    </section>
+  } @else if (overview().error) {
+    <section class="profile-status-card">
+      <app-empty-state title="Histórico indisponível" [message]="overview().error">
+        <button type="button" class="mw-btn mw-btn--outline" (click)="retry()">
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    </section>
+  } @else if (featuredCourse()) {
+    @let featured = featuredCourse()!;
+    <section class="learning-summary" aria-labelledby="learning-summary-title">
+      <div class="section-heading">
+        <div>
+          <p class="profile-eyebrow">Seu ritmo</p>
+          <h2 id="learning-summary-title">Visão geral</h2>
+        </div>
+        <p>Um resumo baseado nos capítulos que você abriu e concluiu.</p>
+      </div>
+      <dl class="learning-stats">
+        <div class="learning-stat">
+          <dt>Cursos iniciados</dt>
+          <dd>{{ learningStats().startedCourses }}</dd>
+        </div>
+        <div class="learning-stat">
+          <dt>Capítulos concluídos</dt>
+          <dd>{{ learningStats().completedChapters }}</dd>
+        </div>
+        <div class="learning-stat learning-stat--accent">
+          <dt>Progresso geral</dt>
+          <dd>{{ learningStats().overallProgress }}%</dd>
+        </div>
+        <div class="learning-stat">
+          <dt>Cursos finalizados</dt>
+          <dd>{{ learningStats().completedCourses }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <article class="continue-card" [class.continue-card--complete]="progressOf(featured) === 100">
+      <div class="continue-card__media">
+        <img
+          [src]="courseImage(featured)"
+          [alt]="'Capa do curso ' + featured.course.title"
+          (error)="replaceBrokenImage($event)"
+        />
+      </div>
+      <div class="continue-card__content">
+        <div class="continue-card__topline">
+          <span>{{
+            progressOf(featured) === 100 ? 'Curso concluído' : 'Continue de onde parou'
+          }}</span>
+          @if (featured.lastActivityAt) {
+            <time [attr.datetime]="featured.lastActivityAt"
+              >Último acesso em {{ formatDate(featured.lastActivityAt) }}</time
+            >
+          }
+        </div>
+        <div>
+          <div class="course-tags">
+            <span>{{ categoryLabel(featured.course.category) }}</span>
+            @if (featured.course.level) {
+              <span>{{ levelLabel(featured.course.level) }}</span>
+            }
+          </div>
+          <h2>{{ featured.course.title }}</h2>
+          @if (featured.course.shortDescription) {
+            <p class="continue-card__description">{{ featured.course.shortDescription }}</p>
+          }
+        </div>
+        <div
+          class="course-progress"
+          [attr.aria-label]="progressOf(featured) + '% do curso concluído'"
+        >
+          <div class="course-progress__labels">
+            <span
+              >{{ featured.completedChapters }} de
+              {{ featured.course.totalChapters }} capítulos</span
+            >
+            <strong>{{ progressOf(featured) }}%</strong>
+          </div>
+          <div class="course-progress__track" aria-hidden="true">
+            <span [style.--progress]="progressOf(featured) + '%'"></span>
+          </div>
+        </div>
+        <div class="continue-card__action">
+          @if (featured.resumeChapter) {
+            <a
+              class="mw-btn mw-btn--primary"
+              [routerLink]="[
+                '/cursos',
+                featured.course.slug,
+                'capitulo',
+                featured.resumeChapter.slug,
+              ]"
+            >
+              Continuar: {{ featured.resumeChapter.title }}
+            </a>
+          } @else {
+            <a class="mw-btn mw-btn--primary" [routerLink]="['/cursos', featured.course.slug]">
+              {{ progressOf(featured) === 100 ? 'Revisar curso' : 'Ver curso' }}
+            </a>
+          }
+        </div>
+      </div>
+    </article>
+
+    <div class="learning-grid">
+      <section class="profile-panel courses-panel" aria-labelledby="courses-title">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <p class="profile-eyebrow">Sua biblioteca</p>
+            <h2 id="courses-title">Outros cursos</h2>
+          </div>
+          <a routerLink="/cursos">Ver catálogo</a>
+        </div>
+        @if (otherCourses().length) {
+          <div class="course-list">
+            @for (item of otherCourses(); track item.course.id) {
+              <article class="course-row">
+                <img
+                  [src]="courseImage(item)"
+                  [alt]="'Capa do curso ' + item.course.title"
+                  loading="lazy"
+                  (error)="replaceBrokenImage($event)"
+                />
+                <div class="course-row__content">
+                  <div class="course-row__heading">
+                    <div>
+                      <span>{{ categoryLabel(item.course.category) }}</span>
+                      <h3>{{ item.course.title }}</h3>
+                    </div>
+                    <strong>{{ progressOf(item) }}%</strong>
+                  </div>
+                  <div class="course-progress__track" aria-hidden="true">
+                    <span [style.--progress]="progressOf(item) + '%'"></span>
+                  </div>
+                  <div class="course-row__footer">
+                    <span
+                      >{{ item.completedChapters }} de
+                      {{ item.course.totalChapters }} capítulos</span
+                    >
+                    @if (item.resumeChapter) {
+                      <a
+                        [routerLink]="[
+                          '/cursos',
+                          item.course.slug,
+                          'capitulo',
+                          item.resumeChapter.slug,
+                        ]"
+                        >Continuar</a
+                      >
+                    } @else {
+                      <a [routerLink]="['/cursos', item.course.slug]">{{
+                        progressOf(item) === 100 ? 'Revisar' : 'Ver curso'
+                      }}</a>
+                    }
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="panel-empty">
+            Seu próximo curso aparecerá aqui quando você começar uma nova leitura.
+          </p>
+        }
+      </section>
+
+      <section class="profile-panel activity-panel" aria-labelledby="activity-title">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <p class="profile-eyebrow">Histórico recente</p>
+            <h2 id="activity-title">Últimas conquistas</h2>
+          </div>
+        </div>
+        @if (recentActivity().length) {
+          <ol class="activity-list">
+            @for (
+              activity of recentActivity();
+              track activity.course.id + ':' + activity.chapter.id
+            ) {
+              <li>
+                <span class="activity-list__marker" aria-hidden="true">✓</span>
+                <div>
+                  <a
+                    [routerLink]="[
+                      '/cursos',
+                      activity.course.slug,
+                      'capitulo',
+                      activity.chapter.slug,
+                    ]"
+                    >{{ activity.chapter.title }}</a
+                  >
+                  <p>{{ activity.course.title }}</p>
+                  <time [attr.datetime]="activity.completedAt"
+                    >Concluído em {{ formatDate(activity.completedAt) }}</time
+                  >
+                </div>
+              </li>
+            }
+          </ol>
+        } @else {
+          <p class="panel-empty">Conclua um capítulo para começar seu histórico de conquistas.</p>
+        }
+      </section>
+    </div>
+  } @else {
+    <section class="profile-panel learning-empty">
+      <div class="learning-empty__number" aria-hidden="true">01</div>
+      <app-empty-state
+        title="Seu próximo aprendizado começa aqui"
+        message="Abra um capítulo do catálogo e este espaço passa a organizar seu progresso automaticamente."
+      >
+        <a class="mw-btn mw-btn--primary" routerLink="/cursos">Explorar cursos</a>
+      </app-empty-state>
+    </section>
+  }
+
+  <section class="account-section" aria-labelledby="account-title">
+    <div class="section-heading">
+      <div>
+        <p class="profile-eyebrow">Preferências</p>
+        <h2 id="account-title">Sua conta</h2>
+      </div>
+      <p>Dados de acesso ficam disponíveis sem disputar espaço com seu aprendizado.</p>
+    </div>
+    <div class="account-grid">
+      <article class="profile-panel account-card">
+        <div class="account-card__head">
+          <div>
+            <h3>Dados pessoais</h3>
+            <p>Informações usadas para identificar sua conta.</p>
+          </div>
+          @if (!editingAccount()) {
+            <button class="profile-text-button" type="button" (click)="startEditingAccount()">
+              Editar perfil
+            </button>
+          }
+        </div>
+        @if (emailVerificationNotice()) {
+          <p class="account-notice" role="status">{{ emailVerificationNotice() }}</p>
+        }
+        @if (editingAccount()) {
+          <form
+            class="account-form"
+            [formGroup]="accountForm"
+            (ngSubmit)="saveProfile()"
+            novalidate
+          >
+            @if (saveError()) {
+              <p class="field-error account-form__error" role="alert">{{ saveError() }}</p>
+            }
+            <div class="form-field">
+              <label for="account-name">Nome</label
+              ><input id="account-name" type="text" formControlName="name" autocomplete="name" />
+              @if (nameControl.touched && nameControl.hasError('required')) {
+                <small class="field-error">Informe seu nome.</small>
+              }
+            </div>
+            <div class="form-field">
+              <label for="account-email">E-mail</label
+              ><input
+                id="account-email"
+                type="email"
+                formControlName="email"
+                autocomplete="email"
+              />
+              @if (emailControl.touched && emailControl.hasError('required')) {
+                <small class="field-error">Informe seu e-mail.</small>
+              } @else if (emailControl.touched && emailControl.hasError('email')) {
+                <small class="field-error">Informe um e-mail válido.</small>
+              }
+            </div>
+            <div class="account-form__actions">
+              <button
+                class="mw-btn mw-btn--outline"
+                type="button"
+                (click)="cancelEditingAccount()"
+                [disabled]="saving()"
+              >
+                Cancelar
+              </button>
+              <button
+                class="mw-btn mw-btn--primary"
+                type="submit"
+                [disabled]="saving() || accountForm.invalid || accountForm.pristine"
+                [attr.aria-busy]="saving()"
+              >
+                {{ saving() ? 'Salvando…' : 'Salvar alterações' }}
+              </button>
+            </div>
+          </form>
+        } @else {
+          <dl class="account-details">
+            <div>
+              <dt>Nome</dt>
+              <dd>{{ user()?.name }}</dd>
+            </div>
+            <div>
+              <dt>E-mail</dt>
+              <dd>
+                {{ user()?.email }}
+                <span [class.is-pending]="user()?.emailVerified === false">{{
+                  user()?.emailVerified === false ? 'Verificação pendente' : 'Verificado'
+                }}</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Forma de acesso</dt>
+              <dd>{{ accessMethod() }}</dd>
+            </div>
+          </dl>
+        }
+      </article>
+
+      <article class="profile-panel security-card">
+        <div>
+          <span class="security-card__icon" aria-hidden="true">•••</span>
+          <h3>Segurança</h3>
+          @if (user()?.hasPassword === false) {
+            <p>Sua conta usa {{ accessMethod() }}. Não há uma senha local para alterar.</p>
+          } @else {
+            <p>Atualize sua senha e encerre o acesso nos outros dispositivos.</p>
+          }
+        </div>
+        @if (user()?.hasPassword !== false) {
+          <button class="mw-btn mw-btn--outline" type="button" (click)="openPasswordModal()">
+            Alterar senha
+          </button>
+        }
+      </article>
+    </div>
   </section>
 </section>
+
+<app-password-change-modal
+  [isOpen]="passwordModalOpen()"
+  (closed)="closePasswordModal()"
+  (saved)="onPasswordSaved()"
+/>

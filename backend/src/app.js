@@ -8,6 +8,7 @@ const { authRouter } = require('./routes/auth.routes');
 const { oauthRouter } = require('./routes/oauth.routes');
 const { catalogRouter } = require('./routes/catalog.routes');
 const { learningRouter } = require('./routes/learning.routes');
+const { userRouter } = require('./routes/user.routes');
 const { requireAuth, optionalAuth } = require('./middleware/auth');
 const { errorHandler, notFoundHandler } = require('./middleware/error-handler');
 const { successResponse } = require('./utils/api-response');
@@ -34,6 +35,7 @@ function createApp() {
 
   app.use('/api/auth/oauth', oauthRouter);
   app.use('/api/auth', authRouter);
+  app.use('/api/users', requireAuth, userRouter);
   app.use('/api/courses', optionalAuth, catalogRouter);
   app.use('/api/learning', requireAuth, learningRouter);
   app.use(notFoundHandler);

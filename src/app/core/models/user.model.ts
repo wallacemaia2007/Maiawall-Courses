@@ -7,6 +7,8 @@ export interface User {
   role: UserRole;
   avatarUrl?: string;
   provider?: 'google' | 'github';
+  emailVerified?: boolean;
+  hasPassword?: boolean;
   active?: boolean;
   createdAt?: string;
   updatedAt?: string;
