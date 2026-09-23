@@ -63,10 +63,10 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/lessons/api-flow.svg",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--fundamentos-da-comunicacao-web.png",
             "position": "center",
-            "alt": "Fluxo entre cliente, API e banco de dados",
-            "caption": "O cliente conversa com a API; a API aplica regras e acessa os dados necessários."
+            "alt": "Fundamentos da comunicação Web",
+            "caption": "Ilustração de abertura do capítulo Fundamentos da comunicação Web."
           },
           "attachments": [
             {
@@ -107,6 +107,12 @@
           "content": "<p><strong>HTTP</strong> é um protocolo de aplicação baseado em mensagens de requisição e resposta. Ele não exige que o servidor mantenha memória da requisição anterior para entender a próxima; por isso, dizemos que cada requisição é independente por padrão.</p>\n                    <p><strong>HTTPS</strong> é HTTP transportado por uma conexão protegida por TLS. O TLS ajuda a preservar a confidencialidade, a integridade e a autenticidade do servidor durante o transporte. HTTPS não corrige uma regra de negócio ruim nem valida os dados sozinho, mas reduz o risco de alguém ler ou alterar a mensagem no caminho.</p>\n                    <p>Como o HTTP é stateless, aplicações usam mecanismos explícitos para manter contexto, como cookies, sessões ou tokens. Um token enviado no header <code>Authorization</code> não transforma HTTP em stateful; ele apenas fornece àquela requisição as credenciais necessárias.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/api/apis-metodos-http-e-json--protocolo-http-e-mensagens.png",
+            "position": "center",
+            "alt": "Protocolo HTTP e estrutura das mensagens",
+            "caption": "Ilustração de apoio do capítulo Protocolo HTTP e estrutura das mensagens."
+          },
           "attachments": [
             {
               "id": "ref-rfc-9110",
@@ -154,10 +160,10 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/lessons/url-anatomy.svg",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--urls-endpoints-e-parametros.png",
             "position": "center",
-            "alt": "Partes coloridas de uma URL de API",
-            "caption": "Protocolo, host, porta, caminho e query string têm responsabilidades diferentes."
+            "alt": "URLs, endpoints e parâmetros",
+            "caption": "Ilustração de abertura do capítulo URLs, endpoints e parâmetros."
           }
         },
         {
@@ -198,10 +204,10 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/lessons/http-methods.svg",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--metodos-http-e-crud.png",
             "position": "center",
-            "alt": "Tabela relacionando métodos HTTP e operações CRUD",
-            "caption": "O método expressa a intenção da operação sobre um recurso."
+            "alt": "Métodos HTTP e CRUD",
+            "caption": "Ilustração de abertura do capítulo Métodos HTTP e CRUD."
           },
           "attachments": [
             {
@@ -256,6 +262,12 @@
           "content": "<p><strong>JSON</strong> é um formato textual para representar dados estruturados. Apesar do nome mencionar JavaScript, ele é independente de linguagem e é suportado por praticamente todas as plataformas Web.</p>\n                    <p>Um documento JSON pode conter objetos entre chaves, arrays entre colchetes, strings entre aspas duplas, números, os valores booleanos <code>true</code> e <code>false</code> e o valor <code>null</code>.</p>\n                    <p>JSON não aceita comentários, funções, datas como tipo nativo ou chaves sem aspas. Quando uma API documenta seu contrato em JSON, o cliente precisa respeitar a estrutura e os tipos esperados.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/api/apis-metodos-http-e-json--json-bodies-e-serializacao.png",
+            "position": "center",
+            "alt": "JSON, bodies e serialização",
+            "caption": "Ilustração de apoio do capítulo JSON, bodies e serialização."
+          },
           "attachments": [
             {
               "id": "ref-json-mdn",
@@ -285,6 +297,13 @@
           "content": "<p>Para enviar JSON, o cliente deve indicar o formato no header <code>Content-Type</code>. Para pedir JSON na resposta, use <code>Accept</code>. O body sozinho não informa de forma confiável como deve ser interpretado.</p>\n                    <pre><code>POST /api/lessons\nAccept: application/json\nContent-Type: application/json\n\n{\n  \"title\": \"Minha primeira chamada\",\n  \"order\": 1\n}</code></pre>\n                    <p>O servidor pode validar que <code>title</code> existe, que <code>order</code> é número e que valores desconhecidos devem ser ignorados ou rejeitados. Uma resposta de validação deve indicar o problema de maneira estruturada para que o cliente consiga orientar o usuário.</p>",
           "order": 4,
           "isPublic": true
+        },
+        {
+          "title": "Analisando um JSON completo do catálogo",
+          "type": "article",
+          "content": "<p>O retorno abaixo é um pedaço realista de um catálogo de cursos. Ele combina todos os elementos que você já viu: objetos aninhados, arrays de objetos, números, booleanos, strings, datas e o valor <code>null</code>.</p>\n<pre><code class=\"language-json\">{\n  \"api\": {\n    \"name\": \"Maiawall Education API\",\n    \"version\": \"v1\",\n    \"baseUrl\": \"https://api.maiawall.com\",\n    \"maintenance\": false\n  },\n  \"resource\": \"courses\",\n  \"query\": {\n    \"level\": \"iniciante\",\n    \"page\": 1,\n    \"limit\": 10,\n    \"sort\": \"rating\",\n    \"filters\": {}\n  },\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 10,\n    \"totalItems\": 237,\n    \"totalPages\": 24\n  },\n  \"items\": [\n    {\n      \"id\": 42,\n      \"title\": \"APIs, Métodos HTTP e JSON\",\n      \"slug\": \"apis-metodos-http-e-json\",\n      \"published\": true,\n      \"durationMinutes\": 120,\n      \"rating\": {\n        \"average\": 4.8,\n        \"count\": 312\n      },\n      \"instructor\": {\n        \"name\": \"Ana Souza\",\n        \"active\": true,\n        \"specialties\": [\"HTTP\", \"REST\", \"Node.js\"]\n      },\n      \"pricing\": {\n        \"currency\": \"BRL\",\n        \"listPrice\": 0,\n        \"promoPrice\": null\n      },\n      \"tags\": [\"web\", \"backend\", \"iniciante\"],\n      \"modules\": [\n        { \"id\": 1, \"title\": \"Fundamentos\", \"lessons\": 3 },\n        { \"id\": 2, \"title\": \"HTTP na prática\", \"lessons\": 5 },\n        { \"id\": 3, \"title\": \"JSON avançado\", \"lessons\": null }\n      ],\n      \"createdAt\": \"2026-03-14T10:00:00Z\",\n      \"updatedAt\": null\n    },\n    {\n      \"id\": 43,\n      \"title\": \"Git para iniciantes\",\n      \"slug\": \"git-para-iniciantes\",\n      \"published\": true,\n      \"durationMinutes\": 90,\n      \"rating\": {\n        \"average\": 4.5,\n        \"count\": 189\n      },\n      \"instructor\": {\n        \"name\": \"Bruno Lima\",\n        \"active\": true,\n        \"specialties\": [\"Git\", \"Versionamento\"]\n      },\n      \"pricing\": {\n        \"currency\": \"BRL\",\n        \"listPrice\": 49.9,\n        \"promoPrice\": 29.9\n      },\n      \"tags\": [\"devops\", \"iniciante\"],\n      \"modules\": null,\n      \"createdAt\": \"2026-02-01T09:30:00Z\",\n      \"updatedAt\": \"2026-04-02T18:12:00Z\"\n    }\n  ]\n}</code></pre>\n<p>Antes de ler o restante, analise o exemplo e responda mentalmente:</p>\n<ol>\n  <li>Quais chaves têm valores simples (string, número, booleano ou <code>null</code>)?</li>\n  <li>Quais chaves têm valores compostos (objeto ou array)?</li>\n  <li>Quantos itens o array <code>items</code> possui?</li>\n  <li>Em <code>modules</code>, o que o valor <code>null</code> do terceiro módulo pode significar?</li>\n  <li>Por que <code>updatedAt</code> do primeiro curso é <code>null</code> e do segundo não?</li>\n</ol>\n<p>Observe também a hierarquia: <code>query</code> reflete parte da URL, <code>pagination</code> traz metadados de navegação e cada item guarda seu próprio <code>instructor</code> e <code>pricing</code>. Um contrato assim fica mais fácil de ler quando você separa o que descreve a coleção do que descreve cada item.</p>",
+          "order": 5,
+          "isPublic": true
         }
       ]
     },
@@ -301,7 +320,13 @@
           "type": "article",
           "content": "<p><strong>Headers</strong> são pares nome-valor que descrevem a requisição ou a resposta. Eles podem informar o formato do body, as preferências do cliente, a política de cache, a origem da chamada e as credenciais usadas.</p>\n                    <p>Headers não substituem o body. Um header pode dizer que o conteúdo é JSON, mas os dados continuam no body. Também não trate headers recebidos do cliente como verdade absoluta; o servidor precisa validar tudo que influencia segurança ou regra de negócio.</p>\n                    <pre><code>Accept: application/json\nContent-Type: application/json\nCache-Control: no-store\nUser-Agent: navegador</code></pre>",
           "order": 1,
-          "isPublic": true
+          "isPublic": true,
+          "image": {
+            "url": "/assets/courses/api/apis-metodos-http-e-json--headers-autenticacao-e-cors.png",
+            "position": "center",
+            "alt": "Headers, autenticação e CORS",
+            "caption": "Ilustração de apoio do capítulo Headers, autenticação e CORS."
+          }
         },
         {
           "title": "Content-Type e Accept",
@@ -348,6 +373,12 @@
           "content": "<p>O status code é um número de três dígitos. O primeiro dígito indica a família do resultado:</p>\n                    <ul>\n                      <li><strong>1xx:</strong> informação e processamento provisório.</li>\n                      <li><strong>2xx:</strong> a requisição foi entendida e processada com sucesso.</li>\n                      <li><strong>3xx:</strong> o cliente precisa seguir uma instrução de redirecionamento ou reutilizar uma representação.</li>\n                      <li><strong>4xx:</strong> há um problema na requisição ou nas condições do cliente.</li>\n                      <li><strong>5xx:</strong> o servidor não conseguiu concluir uma requisição aparentemente válida.</li>\n                    </ul>\n                    <p>O status não substitui uma mensagem de erro útil, mas fornece uma primeira classificação rápida. Sempre combine o código com a URL, os headers, o body e os logs disponíveis.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/api/apis-metodos-http-e-json--status-codes-e-diagnostico.png",
+            "position": "center",
+            "alt": "Status codes e diagnóstico",
+            "caption": "Ilustração de apoio do capítulo Status codes e diagnóstico."
+          },
           "attachments": [
             {
               "id": "ref-status-mdn",
@@ -393,7 +424,13 @@
           "type": "article",
           "content": "<p><strong>REST</strong> é um estilo arquitetural para projetar serviços distribuídos. Uma API RESTful costuma modelar recursos, identificá-los com URLs e usar a semântica dos métodos HTTP para operar sobre suas representações.</p>\n                    <p>Isso não significa que toda API que usa JSON ou URLs seja automaticamente RESTful. O valor prático para iniciantes está em buscar contratos previsíveis: recursos bem nomeados, métodos coerentes, status apropriados e respostas que representem o estado atual.</p>\n                    <pre><code>GET  /api/courses\nGET  /api/courses/42\nGET  /api/courses/42/lessons\nPOST /api/courses/42/enrollments</code></pre>\n                    <p>Uma rota orientada a recurso não elimina operações específicas. Quando houver uma ação que não se encaixa naturalmente em CRUD, documente a decisão em vez de esconder a intenção em um GET.</p>",
           "order": 1,
-          "isPublic": true
+          "isPublic": true,
+          "image": {
+            "url": "/assets/courses/api/apis-metodos-http-e-json--rest-devtools-e-pratica.png",
+            "position": "center",
+            "alt": "REST, DevTools e prática com fetch",
+            "caption": "Ilustração de apoio do capítulo REST, DevTools e prática com fetch."
+          }
         },
         {
           "title": "Filtros, paginação e respostas de coleção",
@@ -409,7 +446,7 @@
           "order": 3,
           "isPublic": true,
           "image": {
-            "url": "/assets/lessons/devtools-network.svg",
+            "url": "/assets/courses/api/devtools-network.png",
             "position": "center",
             "alt": "Mock da aba Network do DevTools com uma requisição selecionada",
             "caption": "A aba Network permite investigar o que foi enviado e o que voltou."
@@ -437,7 +474,7 @@
           "order": 5,
           "isPublic": true,
           "image": {
-            "url": "/assets/lessons/api-flow.svg",
+            "url": "/assets/courses/api/api-flow.png",
             "position": "center",
             "alt": "Fluxo entre cliente, API e banco de dados",
             "caption": "O cliente conversa com a API; a API aplica regras e acessa os dados necessários."

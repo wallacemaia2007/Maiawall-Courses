@@ -58,6 +58,7 @@
         </figure>
       </div>
     } @else {
+      <ng-container [ngTemplateOutlet]="body" [ngTemplateOutletContext]="{ stack: true }" />
       <figure class="article__figure article__figure--center">
         <button
           type="button"
@@ -72,7 +73,6 @@
           <figcaption>{{ image.caption }}</figcaption>
         }
       </figure>
-      <ng-container [ngTemplateOutlet]="body" [ngTemplateOutletContext]="{ stack: true }" />
     }
   } @else {
     <ng-container [ngTemplateOutlet]="body" />
