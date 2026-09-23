@@ -1,20 +1,22 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { toApiError } from '../../../../core/models/api-error.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { ArticleComponent } from '../../../../shared/ui/article/article.component';
-import { ChapterDetail, Lesson } from '../../models/course.model';
+import { Chapter, ChapterDetail, Lesson } from '../../models/course.model';
 import { ChapterService } from '../../services/chapter.service';
+import { CourseService } from '../../services/course.service';
 import { AuthStateService } from '../../../../core/auth/auth-state.service';
 import { LearningService } from '../../../learning/services/learning.service';
 
 interface CourseChapterState {
   chapter: ChapterDetail | null;
   courseSlug: string;
+  courseChapters: Chapter[];
   loading: boolean;
   errorMessage: string;
 }
@@ -30,6 +32,7 @@ interface CourseChapterState {
 export class CourseChapterComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly chapterService = inject(ChapterService);
+  private readonly courseService = inject(CourseService);
   private readonly authState = inject(AuthStateService);
   private readonly learningService = inject(LearningService);
   protected readonly completionStatus = signal<'idle' | 'saving' | 'completed'>('idle');
@@ -40,10 +43,14 @@ export class CourseChapterComponent {
         const courseSlug = params.get('slug') ?? '';
         const chapterSlug = params.get('chapterSlug') ?? '';
 
-        return this.chapterService.getBySlug(courseSlug, chapterSlug).pipe(
-          map((chapter) => ({
+        return forkJoin({
+          chapter: this.chapterService.getBySlug(courseSlug, chapterSlug),
+          course: this.courseService.getBySlug(courseSlug).pipe(catchError(() => of(null))),
+        }).pipe(
+          map(({ chapter, course }) => ({
             chapter,
             courseSlug,
+            courseChapters: course?.chapters ?? [],
             loading: false,
             errorMessage: '',
           })),
@@ -51,6 +58,7 @@ export class CourseChapterComponent {
             of({
               chapter: null,
               courseSlug,
+              courseChapters: [],
               loading: false,
               errorMessage: toApiError(error).message,
             }),
@@ -62,6 +70,7 @@ export class CourseChapterComponent {
       initialValue: {
         chapter: null,
         courseSlug: '',
+        courseChapters: [],
         loading: true,
         errorMessage: '',
       } satisfies CourseChapterState,
@@ -73,6 +82,22 @@ export class CourseChapterComponent {
   protected readonly lessons = computed(() =>
     [...(this.state().chapter?.lessons ?? [])].sort((a, b) => a.order - b.order),
   );
+
+  protected readonly nextChapter = computed(() => {
+    const chapter = this.chapter();
+    if (!chapter) return null;
+    const chapters = this.state().courseChapters;
+    const index = chapters.findIndex((item) => item.id === chapter.id || item.slug === chapter.slug);
+    return index >= 0 ? (chapters[index + 1] ?? null) : null;
+  });
+
+  protected readonly previousChapter = computed(() => {
+    const chapter = this.chapter();
+    if (!chapter) return null;
+    const chapters = this.state().courseChapters;
+    const index = chapters.findIndex((item) => item.id === chapter.id || item.slug === chapter.slug);
+    return index > 0 ? (chapters[index - 1] ?? null) : null;
+  });
 
   protected readonly isAuthenticated = this.authState.isAuthenticated;
 

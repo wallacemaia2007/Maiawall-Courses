@@ -21,6 +21,8 @@
 
 .course-chapter-page__back {
   display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   margin-bottom: 1.4rem;
   color: var(--color-primary);
   font-weight: 800;
@@ -74,4 +76,38 @@
 .lesson-list {
   display: block;
   max-width: 760px;
+}
+
+.course-chapter-page__pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 920px;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.course-chapter-page__pager-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color var(--motion-base) ease, transform var(--motion-base) var(--ease-out);
+}
+
+.course-chapter-page__pager-link:hover {
+  color: var(--color-primary-dark, var(--color-primary));
+}
+
+.course-chapter-page__pager-link--prev:hover {
+  transform: translateX(-0.15rem);
+}
+
+.course-chapter-page__pager-link--next:hover {
+  transform: translateX(0.15rem);
 }

@@ -19,7 +19,7 @@
       <header class="course-chapter-page__hero">
         <div class="mw-container">
           <a class="course-chapter-page__back" [routerLink]="['/cursos', state().courseSlug]">
-            Voltar ao curso
+            <span aria-hidden="true">←</span> Voltar ao curso
           </a>
           <p class="course-chapter-page__eyebrow">
             Capitulo {{ chapter.order }}
@@ -62,6 +62,27 @@
             Voltar ao curso
           </a>
         </app-empty-state>
+      }
+
+      @if (previousChapter(); as previous) {
+        <nav class="course-chapter-page__pager" aria-label="Navegacao entre capitulos">
+          <a class="course-chapter-page__pager-link course-chapter-page__pager-link--prev" [routerLink]="['/cursos', state().courseSlug, 'capitulo', previous.slug]">
+            <span aria-hidden="true">←</span> Capitulo anterior
+          </a>
+          @if (nextChapter(); as next) {
+            <a class="course-chapter-page__pager-link course-chapter-page__pager-link--next" [routerLink]="['/cursos', state().courseSlug, 'capitulo', next.slug]">
+              Proximo capitulo <span aria-hidden="true">→</span>
+            </a>
+          }
+        </nav>
+      } @else {
+        @if (nextChapter(); as next) {
+          <nav class="course-chapter-page__pager" aria-label="Navegacao entre capitulos">
+            <a class="course-chapter-page__pager-link course-chapter-page__pager-link--next" [routerLink]="['/cursos', state().courseSlug, 'capitulo', next.slug]">
+              Proximo capitulo <span aria-hidden="true">→</span>
+            </a>
+          </nav>
+        }
       }
       </div>
     } @else {
