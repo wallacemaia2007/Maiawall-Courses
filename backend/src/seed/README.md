@@ -1,7 +1,13 @@
 # Seed local de cursos
 
-`courses.json` e a fonte única de verdade do catálogo local. Edite os campos de
-curso, capítulos e aulas nesse arquivo e execute, a partir de `backend/`:
+O catálogo local é dividido em um JSON por curso, dentro de `backend/src/seed/`:
+
+- `apis-metodos-http-e-json.json`
+- `git-para-iniciantes.json`
+- `docker-containerizacao-na-pratica.json`
+
+Edite os campos de curso, capítulos e aulas nesses arquivos e execute, a partir
+de `backend/`:
 
 ```powershell
 npm.cmd run seed:courses
@@ -35,4 +41,5 @@ Na linha de abertura vai a linguagem e, opcionalmente, um título:
 - Qualquer outra linguagem (`yaml`, `json`, `http`, `ts`...): janela de código
   sem prompt.
 
-Após editar o JSON, rode o seed de novo para atualizar o Firestore.
+Após editar o JSON do curso, rode o seed de novo para atualizar o Firestore.
+O loader `course-catalog.js` combina os três JSONs em um único catálogo.

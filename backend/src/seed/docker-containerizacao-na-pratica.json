@@ -1,0 +1,1618 @@
+{
+  "slug": "docker-containerizacao-na-pratica",
+  "bannerUrl": "/assets/banners/ufu.docker.png",
+  "title": "Docker: Conteinerização na Prática",
+  "shortDescription": "Aprenda Docker na prática: containers, imagens, Dockerfiles, volumes, redes e Compose com uma API e PostgreSQL.",
+  "description": "Minicurso prático para compreender e aplicar conteinerização do primeiro docker run ao projeto final com API, PostgreSQL, persistência, redes e Docker Compose. A trilha combina conceitos, comandos de terminal, Dockerfiles, boas práticas e diagnóstico de aplicações containerizadas.",
+  "category": "devops",
+  "level": "iniciante",
+  "durationMinutes": 240,
+  "objectives": [
+    "Explicar containers, imagens, Engine, Client e Registry",
+    "Usar a Docker CLI para criar, iniciar, parar, inspecionar e remover containers",
+    "Publicar portas e conectar serviços por redes Docker",
+    "Construir imagens com Dockerfile e controlar o build context",
+    "Persistir dados com volumes e bind mounts",
+    "Orquestrar múltiplos serviços com Docker Compose",
+    "Integrar uma API Node.js a um PostgreSQL",
+    "Aplicar boas práticas de segurança, tamanho, tags e observabilidade"
+  ],
+  "requirements": [
+    "Docker Desktop instalado ou Docker Engine disponível",
+    "Terminal e editor de código",
+    "Navegador atualizado",
+    "Conhecimentos básicos de linha de comando",
+    "Nenhum conhecimento prévio de Docker é necessário"
+  ],
+  "syllabus": [
+    "Introdução ao Docker",
+    "Conceitos Fundamentais do Docker",
+    "Docker Desktop",
+    "Docker CLI: Trabalhando com Containers",
+    "Portas e Comunicação com Containers",
+    "Imagens Docker",
+    "Dockerfile",
+    "Build Context e Dockerignore",
+    "Volumes e Persistência",
+    "Redes Docker",
+    "Docker Compose",
+    "Docker Compose: API + Banco de Dados",
+    "Comandos e Recursos Úteis",
+    "Boas Práticas e Próximos Passos",
+    "Projeto Final: Aplicação Containerizada"
+  ],
+  "outcomes": [
+    "Criar e operar containers com segurança",
+    "Construir uma imagem própria a partir de um Dockerfile",
+    "Persistir dados e conectar serviços por nome em uma rede Docker",
+    "Subir uma aplicação API + PostgreSQL com Compose",
+    "Diagnosticar logs, portas, volumes e consumo de recursos"
+  ],
+  "published": true,
+  "chapters": [
+    {
+      "slug": "introducao-ao-docker",
+      "title": "Introdução ao Docker",
+      "description": "Construa o modelo mental da conteinerização e entenda onde Docker resolve problemas reais.",
+      "order": 1,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é Docker?",
+          "type": "article",
+          "content": "Docker é uma plataforma para empacotar e executar aplicações em containers. O container compartilha o kernel do sistema hospedeiro, mas recebe um ambiente isolado com filesystem, processos, rede e configurações próprios.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Por que Docker foi criado?",
+          "type": "article",
+          "content": "Docker popularizou uma forma declarativa e repetível de distribuir aplicações. A ideia é transportar o artefato e suas dependências entre ambientes sem depender de configurações manuais feitas máquina a máquina.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "O problema do \"funciona na minha máquina\"",
+          "type": "article",
+          "content": "Esse problema acontece quando versões, bibliotecas, variáveis ou serviços diferem entre desenvolvimento e produção. Uma imagem documenta boa parte desse ambiente e reduz diferenças, embora não substitua testes e configuração segura.",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "O que é conteinerização?",
+          "type": "article",
+          "content": "Conteinerização empacota processos e dependências em unidades isoladas que compartilham o kernel do host. Containers são mais leves que máquinas virtuais porque não carregam um sistema operacional completo por aplicação.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Containers x Máquinas Virtuais",
+          "type": "article",
+          "content": "Uma máquina virtual virtualiza hardware e normalmente executa um sistema operacional convidado inteiro. Um container isola processos no mesmo kernel. VMs oferecem isolamento mais amplo; containers costumam iniciar mais rápido e consumir menos recursos.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Onde o Docker é utilizado?",
+          "type": "article",
+          "content": "<p><strong>Onde o Docker é utilizado?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Docker no desenvolvimento, testes e produção",
+          "type": "article",
+          "content": "<p><strong>Docker no desenvolvimento, testes e produção</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Primeiro container",
+          "type": "code",
+          "content": "<p><strong>Primeiro container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run hello-world\n```",
+          "order": 8,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "conceitos-fundamentais-do-docker",
+      "title": "Conceitos Fundamentais do Docker",
+      "description": "Conheça as peças que formam o ecossistema Docker e o ciclo de vida de um container.",
+      "order": 2,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é um Container?",
+          "type": "article",
+          "content": "<p><strong>O que é um Container?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "O que é uma Imagem?",
+          "type": "article",
+          "content": "<p><strong>O que é uma Imagem?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Container x Imagem",
+          "type": "article",
+          "content": "<p><strong>Container x Imagem</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Engine",
+          "type": "article",
+          "content": "O Docker Engine é o conjunto que executa e gerencia containers, imagens, redes e volumes. Ele inclui um daemon e uma API que recebem as operações solicitadas pelo cliente.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Client",
+          "type": "article",
+          "content": "O Docker Client é a interface usada para enviar comandos ao Engine. A CLI transforma comandos como docker run em chamadas para a API do daemon local ou remoto.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Registry",
+          "type": "article",
+          "content": "Um registry armazena e distribui imagens. O Docker Hub é um registry público, mas empresas também podem operar registries privados para controlar acesso e origem dos artefatos.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Hub",
+          "type": "article",
+          "content": "Docker Hub hospeda imagens públicas e privadas, tags, descrições e, em alguns casos, automações. Antes de usar uma imagem, verifique mantenedor, versão, documentação e política de atualização.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Arquitetura básica do Docker",
+          "type": "article",
+          "content": "O cliente envia uma instrução ao daemon. O daemon consulta imagens locais ou um registry, cria o container e conecta os recursos solicitados. O container executa o processo principal definido pela imagem.",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Ciclo de vida de um Container",
+          "type": "article",
+          "content": "Um container pode ser criado, iniciado, parado, reiniciado e removido. Parar um container preserva sua camada gravável; removê-lo descarta essa camada, enquanto volumes nomeados podem continuar existindo.",
+          "order": 9,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "docker-desktop",
+      "title": "Docker Desktop",
+      "description": "Prepare o ambiente visual e compare a interface do Docker Desktop com a linha de comando.",
+      "order": 3,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é Docker Desktop?",
+          "type": "article",
+          "content": "<p><strong>O que é Docker Desktop?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Instalação e configuração",
+          "type": "article",
+          "content": "<p><strong>Instalação e configuração</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Conhecendo a interface",
+          "type": "article",
+          "content": "<p><strong>Conhecendo a interface</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Containers",
+          "type": "article",
+          "content": "<p><strong>Containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Images",
+          "type": "article",
+          "content": "<p><strong>Images</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Volumes",
+          "type": "article",
+          "content": "<p><strong>Volumes</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Networks",
+          "type": "article",
+          "content": "<p><strong>Networks</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Desktop x Docker CLI",
+          "type": "article",
+          "content": "<p><strong>Docker Desktop x Docker CLI</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Criar um container pelo Docker Desktop",
+          "type": "article",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar um container pelo Docker Desktop</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Iniciar e parar containers",
+          "type": "article",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Iniciar e parar containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Visualizar logs",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Visualizar logs</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose logs -f\n```",
+          "order": 11,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "docker-cli-containers",
+      "title": "Docker CLI: Trabalhando com Containers",
+      "description": "Use os principais comandos da Docker CLI para criar, consultar, operar e diagnosticar containers.",
+      "order": 4,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é a Docker CLI?",
+          "type": "article",
+          "content": "<p><strong>O que é a Docker CLI?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "docker run",
+          "type": "code",
+          "content": "<p><strong>docker run</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name web -d nginx\n```",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "docker ps",
+          "type": "code",
+          "content": "<p><strong>docker ps</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker ps\n```",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "docker ps -a",
+          "type": "code",
+          "content": "<p><strong>docker ps -a</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker ps -a\n```",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "docker start",
+          "type": "code",
+          "content": "<p><strong>docker start</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker start web\n```",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "docker stop",
+          "type": "code",
+          "content": "<p><strong>docker stop</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker stop web\n```",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "docker restart",
+          "type": "code",
+          "content": "<p><strong>docker restart</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker restart web\n```",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "docker rm",
+          "type": "code",
+          "content": "<p><strong>docker rm</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker rm web\n```",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "docker logs",
+          "type": "code",
+          "content": "<p><strong>docker logs</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker logs --tail 50 web\n```",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "docker exec",
+          "type": "code",
+          "content": "<p><strong>docker exec</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker exec -it web sh\n```",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "docker inspect",
+          "type": "code",
+          "content": "<p><strong>docker inspect</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker inspect web\n```",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Criar um container Nginx",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar um container Nginx</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name web -d nginx\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Iniciar e parar o container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Iniciar e parar o container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker stop web\ndocker start web\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Acessar o terminal do container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Acessar o terminal do container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker exec -it web sh\n```",
+          "order": 14,
+          "isPublic": true
+        },
+        {
+          "title": "Visualizar logs",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Visualizar logs</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose logs -f\n```",
+          "order": 15,
+          "isPublic": true
+        },
+        {
+          "title": "Inspecionar o container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Inspecionar o container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker inspect web\n```",
+          "order": 16,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "portas-e-comunicacao",
+      "title": "Portas e Comunicação com Containers",
+      "description": "Publique aplicações containerizadas e entenda a diferença entre portas internas e portas do host.",
+      "order": 5,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "Como containers recebem requisições?",
+          "type": "article",
+          "content": "<p><strong>Como containers recebem requisições?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Porta do Host x Porta do Container",
+          "type": "article",
+          "content": "A porta do container pertence ao namespace de rede isolado. A porta do host é a porta acessível na máquina. O mapeamento liga uma à outra, por exemplo host 8080 para container 80.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Port Mapping",
+          "type": "article",
+          "content": "Publicar uma porta não torna o serviço automaticamente seguro ou público na Internet. Escolha a interface e a porta com cuidado, especialmente em servidores compartilhados.",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Parâmetro -p",
+          "type": "article",
+          "content": "O formato -p host:container publica uma porta. -p 8080:80 permite acessar a porta 80 do container pela porta 8080 do host.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "EXPOSE",
+          "type": "article",
+          "content": "EXPOSE documenta a porta que a aplicação espera usar dentro da imagem. Ele não publica a porta sozinho; para acesso pelo host ainda é necessário -p ou uma configuração equivalente.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "localhost",
+          "type": "article",
+          "content": "Dentro de um container, localhost aponta para o próprio container, não para o host nem para outro serviço. Em Compose, use o nome do serviço para comunicação entre containers.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Acessando aplicações containerizadas",
+          "type": "article",
+          "content": "<p><strong>Acessando aplicações containerizadas</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Executar Nginx",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Executar Nginx</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name web -d -p 8080:80 nginx\n```",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Mapear a porta 8080:80",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Mapear a porta 8080:80</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name web -d -p 8080:80 nginx\n```",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Acessar pelo navegador",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Acessar pelo navegador</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ncurl http://localhost:8080\n```",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Testar diferentes portas",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Testar diferentes portas</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name web-8081 -d -p 8081:80 nginx\n```",
+          "order": 11,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "imagens-docker",
+      "title": "Imagens Docker",
+      "description": "Baixe, inspecione, versione e remova imagens com segurança.",
+      "order": 6,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que são imagens Docker?",
+          "type": "article",
+          "content": "Imagem é um artefato imutável formado por camadas. Ela contém filesystem, metadados e a configuração necessária para criar containers, mas não é o processo em execução.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Como imagens são construídas?",
+          "type": "article",
+          "content": "O build lê o Dockerfile e o contexto, executa instruções em sequência e cria camadas reutilizáveis. O cache pode acelerar builds quando entradas anteriores não mudaram.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Layers",
+          "type": "article",
+          "content": "Cada camada representa uma alteração na imagem. Camadas comuns podem ser compartilhadas, mas comandos que copiam muitos arquivos ou deixam caches aumentam o tamanho final.",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Hub",
+          "type": "article",
+          "content": "Docker Hub hospeda imagens públicas e privadas, tags, descrições e, em alguns casos, automações. Antes de usar uma imagem, verifique mantenedor, versão, documentação e política de atualização.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Buscando imagens",
+          "type": "article",
+          "content": "<p><strong>Buscando imagens</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Baixando imagens",
+          "type": "article",
+          "content": "<p><strong>Baixando imagens</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Listando imagens",
+          "type": "article",
+          "content": "<p><strong>Listando imagens</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Removendo imagens",
+          "type": "article",
+          "content": "<p><strong>Removendo imagens</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Tags e versões",
+          "type": "article",
+          "content": "<p><strong>Tags e versões</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Imagens latest x versões específicas",
+          "type": "article",
+          "content": "latest é apenas uma tag e pode mudar. Em ambientes reprodutíveis, fixe uma versão conhecida e, quando necessário, um digest; atualize deliberadamente e teste.",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Imagens Alpine",
+          "type": "article",
+          "content": "Alpine é uma base pequena, mas usa musl libc e pode ter diferenças de compatibilidade. Tamanho menor não é o único critério: suporte, segurança e compatibilidade também importam.",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "docker pull",
+          "type": "code",
+          "content": "<p><strong>docker pull</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker pull nginx:alpine\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "docker images",
+          "type": "code",
+          "content": "<p><strong>docker images</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker images\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Trabalhar com tags",
+          "type": "code",
+          "content": "<p><strong>Trabalhar com tags</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker tag nginx:alpine meu-nginx:teste\n```",
+          "order": 14,
+          "isPublic": true
+        },
+        {
+          "title": "Executar diferentes versões de uma imagem",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Executar diferentes versões de uma imagem</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --rm nginx:1.27 nginx -v\n```",
+          "order": 15,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "dockerfile",
+      "title": "Dockerfile",
+      "description": "Escreva Dockerfiles reproduzíveis e transforme código-fonte em imagens executáveis.",
+      "order": 7,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é um Dockerfile?",
+          "type": "article",
+          "content": "Dockerfile é uma receita declarativa para construir uma imagem. Ele deve ser legível, determinístico e não deve conter senhas, tokens ou arquivos desnecessários.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Para que serve?",
+          "type": "article",
+          "content": "<p><strong>Para que serve?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Estrutura de um Dockerfile",
+          "type": "article",
+          "content": "<p><strong>Estrutura de um Dockerfile</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "FROM",
+          "type": "article",
+          "content": "FROM define a imagem base e inicia uma nova etapa. Prefira bases oficiais e versões explícitas.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "WORKDIR",
+          "type": "article",
+          "content": "WORKDIR define o diretório de trabalho das instruções seguintes e do processo principal. Ele é preferível a encadear muitos cd em comandos RUN.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "COPY",
+          "type": "article",
+          "content": "COPY transfere arquivos do contexto para a imagem. Combine-o com .dockerignore para evitar segredos, dependências e artefatos locais.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "RUN",
+          "type": "article",
+          "content": "RUN executa comandos durante o build. Limpe caches na mesma camada quando possível para não carregar dados inúteis na imagem final.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "CMD",
+          "type": "article",
+          "content": "CMD define o comando padrão executado quando um container é iniciado. Ele pode ser substituído por argumentos passados em docker run.",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "ENTRYPOINT",
+          "type": "article",
+          "content": "ENTRYPOINT define o executável principal da imagem. Use-o quando o container deve se comportar como um programa específico; combine com CMD para argumentos padrão.",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "EXPOSE",
+          "type": "article",
+          "content": "EXPOSE documenta a porta que a aplicação espera usar dentro da imagem. Ele não publica a porta sozinho; para acesso pelo host ainda é necessário -p ou uma configuração equivalente.",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "ENV",
+          "type": "article",
+          "content": "ENV define variáveis disponíveis no build ou no runtime conforme o uso. Não use ENV para secrets, porque valores podem ficar expostos na imagem ou em inspeções.",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Criar um Dockerfile",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar um Dockerfile</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\nFROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nCMD [\"npm\", \"start\"]\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Construir uma imagem",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Construir uma imagem</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker build -t minha-app:1.0 .\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Executar a imagem criada",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Executar a imagem criada</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --rm -p 3000:3000 minha-app:1.0\n```",
+          "order": 14,
+          "isPublic": true
+        },
+        {
+          "title": "Alterar a aplicação e reconstruir",
+          "type": "code",
+          "content": "<p><strong>Alterar a aplicação e reconstruir</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker build --no-cache -t minha-app:2.0 .\n```",
+          "order": 15,
+          "isPublic": true
+        },
+        {
+          "title": "docker build -t minha-app .",
+          "type": "code",
+          "content": "<p><strong>docker build -t minha-app .</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker build -t minha-app .\n```",
+          "order": 16,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "build-context-e-dockerignore",
+      "title": "Build Context e Dockerignore",
+      "description": "Controle o contexto enviado ao build e reduza o tamanho e o risco das imagens.",
+      "order": 8,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é o Build Context?",
+          "type": "article",
+          "content": "O contexto é o conjunto de arquivos enviado ao daemon durante docker build. O ponto final em docker build -t app . representa a pasta usada como contexto.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "O que acontece durante o docker build?",
+          "type": "article",
+          "content": "O Docker lê o Dockerfile, envia o contexto, resolve instruções e tenta reutilizar cache. Um contexto grande deixa o processo lento e aumenta o risco de copiar dados indevidos.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Por que não devemos copiar todos os arquivos?",
+          "type": "article",
+          "content": "<p><strong>Por que não devemos copiar todos os arquivos?</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": ".dockerignore",
+          "type": "article",
+          "content": "O .dockerignore exclui padrões do contexto. Ele deve acompanhar o Dockerfile e refletir o que a aplicação realmente precisa para ser construída.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Arquivos desnecessários",
+          "type": "article",
+          "content": "<p><strong>Arquivos desnecessários</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "node_modules",
+          "type": "article",
+          "content": "<p><strong>node_modules</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": ".git",
+          "type": "article",
+          "content": "<p><strong>.git</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": ".env",
+          "type": "article",
+          "content": "<p><strong>.env</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "dist",
+          "type": "article",
+          "content": "<p><strong>dist</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Arquivos temporários",
+          "type": "article",
+          "content": "<p><strong>Arquivos temporários</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Boas práticas para imagens",
+          "type": "article",
+          "content": "<p><strong>Boas práticas para imagens</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Criar .dockerignore",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar .dockerignore</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\nnode_modules\n.git\n.env\ndist\n*.log\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Comparar builds",
+          "type": "code",
+          "content": "<p><strong>Comparar builds</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker build -t app:com-contexto .\ndocker image ls app\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Analisar o conteúdo da imagem",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Analisar o conteúdo da imagem</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker history minha-app:1.0\ndocker inspect minha-app:1.0\n```",
+          "order": 14,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "volumes-e-persistencia",
+      "title": "Volumes e Persistência",
+      "description": "Separe o ciclo de vida do container do ciclo de vida dos dados.",
+      "order": 9,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "Containers são temporários?",
+          "type": "article",
+          "content": "O processo e a camada gravável de um container são temporários por padrão. Dados importantes devem ser colocados em volumes ou em um serviço externo apropriado.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "O problema da persistência",
+          "type": "article",
+          "content": "Se dados ficam apenas na camada do container, removê-lo pode removê-los junto. Bancos, uploads e filas precisam de uma estratégia explícita de persistência e backup.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "O que são volumes?",
+          "type": "article",
+          "content": "Volumes são áreas gerenciadas pelo Docker e desacopladas do ciclo de vida do container. São adequados para dados de aplicações e bancos quando o host não precisa editar diretamente os arquivos.",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Volumes",
+          "type": "article",
+          "content": "Volumes nomeados podem ser criados, listados, inspecionados e montados em vários containers. O Docker administra o local físico e a existência do volume.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Bind Mounts",
+          "type": "article",
+          "content": "Bind mount mapeia um caminho do host para dentro do container. É útil em desenvolvimento, mas acopla o container à estrutura e às permissões do host.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Volume x Bind Mount",
+          "type": "article",
+          "content": "Use volume para dados gerenciados e persistentes; use bind mount quando precisar refletir arquivos locais, como código-fonte em desenvolvimento. Em ambos, considere permissões e segurança.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Criando volumes",
+          "type": "article",
+          "content": "<p><strong>Criando volumes</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Montando volumes em containers",
+          "type": "article",
+          "content": "<p><strong>Montando volumes em containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Criar um volume",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar um volume</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker volume create dados-app\n```",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Montar o volume em um container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Montar o volume em um container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name app -d -v dados-app:/var/lib/app nginx\n```",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Criar dados",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar dados</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker exec app sh -c \"echo persistente > /var/lib/app/arquivo.txt\"\n```",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Remover o container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Remover o container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker rm -f app\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Criar outro container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar outro container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run --name app-novo -d -v dados-app:/var/lib/app nginx\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Verificar que os dados continuam",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Verificar que os dados continuam</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker exec app-novo cat /var/lib/app/arquivo.txt\n```",
+          "order": 14,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "redes-docker",
+      "title": "Redes Docker",
+      "description": "Conecte containers e use o DNS interno do Docker para comunicação entre serviços.",
+      "order": 10,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "Por que containers precisam de redes?",
+          "type": "article",
+          "content": "Redes isolam tráfego e fornecem nomes para que serviços conversem sem depender de endereços IP efêmeros. Um desenho de rede claro reduz acoplamento e exposição acidental.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Network",
+          "type": "article",
+          "content": "docker network cria e administra redes virtuais. Containers na mesma rede podem se descobrir por nome e trocar tráfego conforme as regras do driver.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Rede Bridge",
+          "type": "article",
+          "content": "Bridge é o driver comum para redes locais de containers. Uma rede bridge criada pelo usuário oferece resolução de nomes mais previsível que a bridge padrão.",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Criando uma network",
+          "type": "article",
+          "content": "<p><strong>Criando uma network</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Conectando containers",
+          "type": "article",
+          "content": "<p><strong>Conectando containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Comunicação entre containers",
+          "type": "article",
+          "content": "<p><strong>Comunicação entre containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "DNS interno do Docker",
+          "type": "article",
+          "content": "Na rede criada pelo Docker, o nome do container ou serviço resolve para o endereço interno atual. Por isso, a aplicação deve conectar em db:5432, não em um IP fixo.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Container x localhost",
+          "type": "article",
+          "content": "<p><strong>Container x localhost</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Criar uma network",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar uma network</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker network create app-net\n```",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Conectar dois containers",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Conectar dois containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run -d --name backend --network app-net nginx\ndocker run -d --name client --network app-net curlimages/curl\n```",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Fazer um container acessar o outro",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Fazer um container acessar o outro</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker exec client curl http://backend\n```",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Entender por que usamos o nome do serviço/container",
+          "type": "article",
+          "content": "<p><strong>Entender por que usamos o nome do serviço/container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 12,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "docker-compose",
+      "title": "Docker Compose",
+      "description": "Descreva aplicações com múltiplos serviços em um arquivo Compose versionado.",
+      "order": 11,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "O que é Docker Compose?",
+          "type": "article",
+          "content": "Compose descreve serviços, redes, volumes e configurações em YAML. Um único comando pode criar a topologia inteira de uma aplicação local.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Por que utilizar Compose?",
+          "type": "article",
+          "content": "Compose reduz comandos manuais e torna a configuração revisável no Git. Ele é excelente para desenvolvimento, testes de integração e ambientes pequenos; produção pode exigir uma plataforma de orquestração.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Aplicações com múltiplos containers",
+          "type": "article",
+          "content": "<p><strong>Aplicações com múltiplos containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "compose.yaml",
+          "type": "article",
+          "content": "O compose.yaml declara serviços e seus recursos. YAML é sensível à indentação, então mantenha a estrutura simples e valide com docker compose config.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Services",
+          "type": "article",
+          "content": "Cada service representa um tipo de processo, como api, db ou frontend. Replicar um serviço não significa que ele compartilha automaticamente filesystem ou estado com os demais.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "image",
+          "type": "article",
+          "content": "image escolhe uma imagem existente para o serviço. Use tags controladas e, quando necessário, digests para obter reprodutibilidade.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "build",
+          "type": "article",
+          "content": "build instrui o Compose a construir uma imagem a partir de um Dockerfile e contexto. Pode receber caminho e opções de build.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "ports",
+          "type": "article",
+          "content": "<p><strong>ports</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "environment",
+          "type": "article",
+          "content": "environment injeta configuração no processo do container. Prefira arquivos .env locais e secrets apropriados; não versione credenciais reais.",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "volumes",
+          "type": "article",
+          "content": "volumes declara montagens e permite persistir dados ou compartilhar arquivos conforme a necessidade do serviço.",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "networks",
+          "type": "article",
+          "content": "networks separa ou conecta serviços. Por padrão, os serviços do mesmo projeto Compose compartilham uma rede interna.",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "depends_on",
+          "type": "article",
+          "content": "depends_on expressa ordem básica de inicialização, mas não garante que a aplicação dependente esteja pronta. Use healthchecks e lógica de retry para disponibilidade real.",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Criar primeiro compose.yaml",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar primeiro compose.yaml</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\nservices:\n  web:\n    image: nginx:alpine\n    ports:\n      - \"8080:80\"\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Subir múltiplos containers",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Subir múltiplos containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up -d\n```",
+          "order": 14,
+          "isPublic": true
+        },
+        {
+          "title": "Parar os serviços",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Parar os serviços</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose down\n```",
+          "order": 15,
+          "isPublic": true
+        },
+        {
+          "title": "Visualizar logs",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Visualizar logs</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose logs -f\n```",
+          "order": 16,
+          "isPublic": true
+        },
+        {
+          "title": "Reconstruir serviços",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Reconstruir serviços</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up -d --build\n```",
+          "order": 17,
+          "isPublic": true
+        },
+        {
+          "title": "docker compose up",
+          "type": "code",
+          "content": "<p><strong>docker compose up</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up\n```",
+          "order": 18,
+          "isPublic": true
+        },
+        {
+          "title": "docker compose up -d",
+          "type": "code",
+          "content": "<p><strong>docker compose up -d</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up -d\n```",
+          "order": 19,
+          "isPublic": true
+        },
+        {
+          "title": "docker compose down",
+          "type": "code",
+          "content": "<p><strong>docker compose down</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose down\n```",
+          "order": 20,
+          "isPublic": true
+        },
+        {
+          "title": "docker compose ps",
+          "type": "code",
+          "content": "<p><strong>docker compose ps</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose ps\n```",
+          "order": 21,
+          "isPublic": true
+        },
+        {
+          "title": "docker compose logs",
+          "type": "code",
+          "content": "<p><strong>docker compose logs</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose logs -f\n```",
+          "order": 22,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "compose-api-banco",
+      "title": "Docker Compose: API + Banco de Dados",
+      "description": "Monte uma arquitetura próxima da realidade com API, PostgreSQL, rede e persistência.",
+      "order": 12,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "Arquitetura de uma aplicação containerizada",
+          "type": "article",
+          "content": "Uma arquitetura comum separa a API do banco. A API recebe requisições externas; o banco fica em uma rede interna e armazena dados em volume persistente.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Container da API",
+          "type": "article",
+          "content": "O container da API deve executar um processo principal, receber configuração por ambiente e expor somente a porta necessária. Logs devem ir para stdout e stderr.",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Container do banco",
+          "type": "article",
+          "content": "O banco deve usar uma imagem apropriada, volume para dados, credenciais fora da imagem e uma política de backup. Em desenvolvimento, Compose simplifica sua inicialização.",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Comunicação entre serviços",
+          "type": "article",
+          "content": "A API usa o nome do serviço do banco como hostname. A porta usada é a porta interna do banco, não uma porta publicada no host.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Variáveis de ambiente",
+          "type": "article",
+          "content": "Variáveis permitem separar configuração de código. Valide variáveis obrigatórias na inicialização e nunca trate .env como um mecanismo completo de segurança.",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Volumes para banco de dados",
+          "type": "article",
+          "content": "O volume preserva o diretório de dados do PostgreSQL quando o container é recriado. Persistência não substitui backup, migração ou observabilidade.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Networks no Compose",
+          "type": "article",
+          "content": "A rede do Compose fornece DNS por nome de serviço e pode separar tráfego interno de portas publicadas para o host.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Dependências entre serviços",
+          "type": "article",
+          "content": "A API pode depender do banco existir, mas ainda precisa lidar com o tempo de inicialização. Healthchecks e retries tornam o startup mais robusto.",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Configuração de conexão com banco",
+          "type": "article",
+          "content": "Use host igual ao nome do serviço, porta interna, banco, usuário e senha fornecidos por configuração. Nunca use localhost para alcançar o PostgreSQL de outro container.",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Subir API e PostgreSQL com Compose",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Subir API e PostgreSQL com Compose</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up -d\ndocker compose ps\ndocker compose logs api\n```",
+          "order": 10,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "comandos-recursos-uteis",
+      "title": "Comandos e Recursos Úteis",
+      "description": "Monitore recursos, diagnostique containers e limpe objetos não utilizados.",
+      "order": 13,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "docker cp",
+          "type": "code",
+          "content": "<p><strong>docker cp</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker cp web:/usr/share/nginx/html/index.html ./index.html\n```",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "docker stats",
+          "type": "code",
+          "content": "<p><strong>docker stats</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker stats\n```",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "docker top",
+          "type": "code",
+          "content": "<p><strong>docker top</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker top web\n```",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "docker system df",
+          "type": "code",
+          "content": "<p><strong>docker system df</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker system df\n```",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "docker system prune",
+          "type": "code",
+          "content": "<p><strong>docker system prune</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker system prune\n```",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Restart Policies",
+          "type": "article",
+          "content": "Políticas como unless-stopped e on-failure definem como o Docker reage à saída de um processo. Elas não corrigem crash loops nem substituem monitoramento.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Healthchecks",
+          "type": "article",
+          "content": "Healthcheck mede se o serviço está funcional, não apenas se o processo existe. Um bom check deve ser barato, determinístico e alinhado ao contrato de disponibilidade.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Variáveis de ambiente",
+          "type": "article",
+          "content": "Variáveis permitem separar configuração de código. Valide variáveis obrigatórias na inicialização e nunca trate .env como um mecanismo completo de segurança.",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Logs",
+          "type": "article",
+          "content": "<p><strong>Logs</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Tags",
+          "type": "article",
+          "content": "<p><strong>Tags</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Limpeza de containers e imagens",
+          "type": "article",
+          "content": "<p><strong>Limpeza de containers e imagens</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Monitorar containers",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Monitorar containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker ps\ndocker stats --no-stream\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Analisar utilização de recursos",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Analisar utilização de recursos</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker system df\ndocker stats --no-stream\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Limpar recursos não utilizados",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Limpar recursos não utilizados</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker container prune\ndocker image prune\n```",
+          "order": 14,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "boas-praticas-proximos-passos",
+      "title": "Boas Práticas e Próximos Passos",
+      "description": "Adote práticas seguras e prepare o caminho para CI/CD, cloud e orquestração.",
+      "order": 14,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "Imagens pequenas",
+          "type": "article",
+          "content": "<p><strong>Imagens pequenas</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Escolha de imagens base",
+          "type": "article",
+          "content": "<p><strong>Escolha de imagens base</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Tags em vez de depender sempre de latest",
+          "type": "article",
+          "content": "<p><strong>Tags em vez de depender sempre de latest</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Não colocar secrets na imagem",
+          "type": "article",
+          "content": "Tudo que entra em uma imagem pode ser inspecionado por quem obtém o artefato. Injete secrets em runtime por mecanismos apropriados e faça rotação quando houver exposição.",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Uso correto de .dockerignore",
+          "type": "article",
+          "content": "<p><strong>Uso correto de .dockerignore</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Multi-stage Builds",
+          "type": "article",
+          "content": "Multi-stage separa a etapa de compilação da imagem final. Dependências de build ficam fora do runtime, reduzindo tamanho e superfície de ataque.",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Registry",
+          "type": "article",
+          "content": "Um registry armazena e distribui imagens. O Docker Hub é um registry público, mas empresas também podem operar registries privados para controlar acesso e origem dos artefatos.",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Docker Hub",
+          "type": "article",
+          "content": "Docker Hub hospeda imagens públicas e privadas, tags, descrições e, em alguns casos, automações. Antes de usar uma imagem, verifique mantenedor, versão, documentação e política de atualização.",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Docker em CI/CD",
+          "type": "article",
+          "content": "No CI, construa a imagem, execute testes, faça scan e publique um artefato versionado. Deploy deve ser uma promoção controlada de uma imagem já validada.",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Docker em Cloud",
+          "type": "article",
+          "content": "Serviços de cloud podem executar imagens em VMs, plataformas gerenciadas ou clusters. Avalie rede, logs, secrets, persistência, custo e estratégia de atualização.",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Docker x Kubernetes",
+          "type": "article",
+          "content": "Docker empacota e executa containers; Kubernetes orquestra workloads distribuídos, disponibilidade, rollout e descoberta em escala. Aprenda Docker antes de aprofundar orquestração.",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Quando utilizar Docker Compose",
+          "type": "article",
+          "content": "Compose é uma escolha prática para desenvolvimento local, ambientes de demonstração e testes com vários serviços. Ele não deve ser tratado automaticamente como solução para toda produção.",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Próximos passos para estudar Docker",
+          "type": "article",
+          "content": "<p><strong>Próximos passos para estudar Docker</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 13,
+          "isPublic": true
+        }
+      ]
+    },
+    {
+      "slug": "projeto-final",
+      "title": "Projeto Final: Aplicação Containerizada",
+      "description": "Reúna os conceitos em uma aplicação com API, banco, portas, volume, rede e Compose.",
+      "order": 15,
+      "isPublic": true,
+      "requiresLogin": false,
+      "lessons": [
+        {
+          "title": "Objetivo do projeto",
+          "type": "article",
+          "content": "Crie uma aplicação pequena, mas completa, que possa ser iniciada por outra pessoa com poucos comandos. O critério é reproduzir o ambiente, não construir uma aplicação grande.",
+          "order": 1,
+          "isPublic": true
+        },
+        {
+          "title": "Criar uma aplicação simples",
+          "type": "article",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar uma aplicação simples</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 2,
+          "isPublic": true
+        },
+        {
+          "title": "Criar o Dockerfile",
+          "type": "article",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar o Dockerfile</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 3,
+          "isPublic": true
+        },
+        {
+          "title": "Construir a imagem",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Construir a imagem</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker build -t app-final:1.0 .\n```",
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Executar o container",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Executar o container</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run -d --name api -p 3000:3000 app-final:1.0\n```",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Configurar portas",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Configurar portas</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker run -d -p 3000:3000 app-final:1.0\n```",
+          "order": 6,
+          "isPublic": true
+        },
+        {
+          "title": "Criar um volume",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar um volume</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker volume create dados-app\n```",
+          "order": 7,
+          "isPublic": true
+        },
+        {
+          "title": "Criar uma network",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar uma network</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker network create app-net\n```",
+          "order": 8,
+          "isPublic": true
+        },
+        {
+          "title": "Adicionar um banco PostgreSQL",
+          "type": "article",
+          "content": "<p><strong>Adicionar um banco PostgreSQL</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 9,
+          "isPublic": true
+        },
+        {
+          "title": "Criar o compose.yaml",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Criar o compose.yaml</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose config\n```",
+          "order": 10,
+          "isPublic": true
+        },
+        {
+          "title": "Configurar variáveis de ambiente",
+          "type": "article",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Configurar variáveis de ambiente</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>",
+          "order": 11,
+          "isPublic": true
+        },
+        {
+          "title": "Subir todos os serviços",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Subir todos os serviços</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up -d --build\n```",
+          "order": 12,
+          "isPublic": true
+        },
+        {
+          "title": "Testar a comunicação API → Banco",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Testar a comunicação API → Banco</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose exec api getent hosts db\ndocker compose logs db\n```",
+          "order": 13,
+          "isPublic": true
+        },
+        {
+          "title": "Derrubar os containers",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Derrubar os containers</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose down\n```",
+          "order": 14,
+          "isPublic": true
+        },
+        {
+          "title": "Subir novamente",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Subir novamente</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose up -d\n```",
+          "order": 15,
+          "isPublic": true
+        },
+        {
+          "title": "Confirmar a persistência dos dados",
+          "type": "code",
+          "content": "<p><strong>Prática:</strong> execute esta etapa em um projeto de laboratório. Antes de remover ou recriar recursos, confirme o nome com <code>docker ps -a</code> e verifique se os dados importantes estão em um volume.</p><p><strong>Confirmar a persistência dos dados</strong> é uma parte do fluxo de conteinerização estudado neste capítulo. Relacione o conceito ao serviço que você está construindo e confirme o resultado observando containers, imagens, redes, volumes e logs.</p>\n```bash\ndocker compose down\ndocker compose up -d\ndocker compose exec db psql -U app -d appdb\n```",
+          "order": 16,
+          "isPublic": true
+        },
+        {
+          "title": "Fluxo final da aplicação",
+          "type": "article",
+          "content": "O fluxo final conecta código, Dockerfile, imagem, container, portas, volume, network e Compose. Documente comandos, variáveis, testes e como reiniciar sem perder os dados.",
+          "order": 17,
+          "isPublic": true
+        }
+      ]
+    }
+  ]
+}

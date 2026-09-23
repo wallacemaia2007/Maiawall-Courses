@@ -212,7 +212,8 @@ npm --prefix backend run dev
 | `npm --prefix backend run seed:courses` | Recria o catalogo local no Firestore |
 | `npm run kill:ports` | Libera as portas locais no Windows |
 
-O seed usa `backend/src/seed/courses.json` como fonte do catalogo e recria as
+O seed usa os JSONs de `backend/src/seed/` (um arquivo por curso, combinados
+pelo `course-catalog.js`) como fonte do catalogo e recria as
 colecoes de cursos, capitulos e aulas sem alterar os usuarios.
 
 ## Documentacao

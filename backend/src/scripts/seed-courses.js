@@ -1,6 +1,6 @@
 const { connectDatabase, closeDatabase } = require('../config/database');
 const { env } = require('../config/env');
-const courseCatalog = require('../seed/courses.json');
+const courseCatalog = require('../seed/course-catalog');
 
 const SEED_SOURCE = 'local-course-catalog';
 

@@ -15,7 +15,7 @@ const {
   seedCourses,
   validateCatalog,
 } = require('./seed-courses');
-const courseCatalog = require('../seed/courses.json');
+const courseCatalog = require('../seed/course-catalog');
 
 function assertProductionSeedEnvironment(currentEnv = env, argumentsList = process.argv) {
   if (currentEnv.appEnv !== 'production') {
