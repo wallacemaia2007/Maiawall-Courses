@@ -30,7 +30,11 @@ export class AuthStateService {
   setSession(session: AuthSession): void {
     this.tokenStorage.setTokens(session.tokens);
     this.accessTokenSignal.set(session.tokens.accessToken);
-    this.refreshTokenSignal.set(session.tokens.refreshToken ?? null);
+    // /auth/me responde sem refreshToken (ver AuthService.sessionForUser no
+    // backend); se não vier um novo, mantém o que já estava guardado em vez
+    // de zerar — senão toda revalidação de sessão "perde" o refresh token
+    // em memória mesmo ele continuando salvo no localStorage.
+    this.refreshTokenSignal.set(session.tokens.refreshToken ?? this.refreshTokenSignal());
     this.userSignal.set(session.user);
   }
 
