@@ -34,12 +34,9 @@
       <div class="mw-container course-chapter-page__body">
       @if (lessons().length > 0) {
         @if (isAuthenticated()) {
-          <div class="course-chapter-page__completion">
-            <span>@if (completionStatus() === 'completed') { Capitulo concluido } @else { Terminou a leitura? }</span>
-            <button class="mw-btn mw-btn--primary" type="button" (click)="markComplete()" [disabled]="completionStatus() !== 'idle'">
-              @if (completionStatus() === 'saving') { Salvando... } @else if (completionStatus() === 'completed') { Concluido } @else { Marcar como concluido }
-            </button>
-          </div>
+          @if (completionStatus() === 'completed') {
+            <p class="course-chapter-page__completion-note">Capitulo concluido</p>
+          }
         }
         <div class="lesson-list">
           @for (lesson of lessons(); track trackLesson($index, lesson)) {

@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  HostListener,
+  inject,
+  OnDestroy,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -21,6 +30,9 @@ interface CourseChapterState {
   errorMessage: string;
 }
 
+const COMPLETION_BOTTOM_OFFSET = 24;
+const COMPLETION_DELAY_MS = 10_000;
+
 @Component({
   selector: 'app-course-chapter',
   standalone: true,
@@ -29,13 +41,14 @@ interface CourseChapterState {
   styleUrl: './course-chapter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseChapterComponent {
+export class CourseChapterComponent implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly chapterService = inject(ChapterService);
   private readonly courseService = inject(CourseService);
   private readonly authState = inject(AuthStateService);
   private readonly learningService = inject(LearningService);
   protected readonly completionStatus = signal<'idle' | 'saving' | 'completed'>('idle');
+  private completionTimer = 0;
 
   protected readonly state = toSignal(
     this.route.paramMap.pipe(
@@ -112,7 +125,39 @@ export class CourseChapterComponent {
     });
   }
 
-  protected markComplete(): void {
+  @HostListener('window:scroll')
+  private onWindowScroll(): void {
+    const chapter = this.chapter();
+    if (!chapter || this.completionStatus() === 'completed') {
+      this.clearCompletionTimer();
+      return;
+    }
+
+    const reachedBottom =
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - COMPLETION_BOTTOM_OFFSET;
+
+    if (reachedBottom) {
+      if (!this.completionTimer) {
+        this.completionTimer = window.setTimeout(() => this.completeIfIdle(), COMPLETION_DELAY_MS);
+      }
+    } else {
+      this.clearCompletionTimer();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.clearCompletionTimer();
+  }
+
+  private clearCompletionTimer(): void {
+    if (this.completionTimer) {
+      window.clearTimeout(this.completionTimer);
+      this.completionTimer = 0;
+    }
+  }
+
+  private completeIfIdle(): void {
+    this.completionTimer = 0;
     const chapter = this.chapter();
     if (!chapter || this.completionStatus() !== 'idle') return;
     this.completionStatus.set('saving');
