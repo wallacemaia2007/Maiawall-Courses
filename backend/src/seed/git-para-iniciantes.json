@@ -79,6 +79,12 @@
           "content": "<p><strong>Foco da aula:</strong> O que é Git?.</p><p>Git é um sistema distribuído de controle de versão utilizado para registrar alterações em arquivos e acompanhar a evolução de projetos. Ele permite criar históricos, comparar versões, recuperar estados anteriores e trabalhar em paralelo com outras pessoas.</p><p>Git é distribuído: cada clone possui uma cópia do histórico necessário para trabalhar localmente. Muitas operações de leitura e criação de commits funcionam sem conexão.</p><p>O Git registra snapshots e relações entre commits. Assim, é possível descobrir quem mudou um arquivo, comparar versões e recuperar um estado anterior.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--introducao-ao-git.png",
+            "position": "center",
+            "alt": "Introdução ao Git",
+            "caption": "Ilustração de abertura do capítulo Introdução ao Git."
+          },
           "attachments": [
             {
               "id": "ref-git-book",
@@ -141,6 +147,12 @@
           "content": "<p><strong>Foco da aula:</strong> Verificando a instalação.</p>```bash\ngit --version\n```<p>O comando confirma se o executável está disponível no PATH. Se falhar, instale o Git pelo gerenciador adequado ao sistema operacional e abra um novo terminal.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--instalacao-e-configuracao.png",
+            "position": "center",
+            "alt": "Instalação e Configuração",
+            "caption": "Ilustração de abertura do capítulo Instalação e Configuração."
+          },
           "attachments": []
         },
         {
@@ -182,6 +194,12 @@
           "content": "<p><strong>Foco da aula:</strong> O que é um repositório?.</p><p>Um repositório Git é o espaço onde o Git mantém as informações necessárias para acompanhar as versões de um projeto. Ele contém o histórico e as informações internas utilizadas pelo Git.</p><p>Um repositório é um projeto acompanhado pelo Git. A pasta <code>.git</code> guarda objetos, referências, índice e configurações que permitem reconstruir o histórico.</p><p>O working tree contém os arquivos que você lê e edita; os commits registram snapshots ligados por uma história.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--primeiro-repositorio.png",
+            "position": "center",
+            "alt": "Primeiro Repositório",
+            "caption": "Ilustração de abertura do capítulo Primeiro Repositório."
+          },
           "attachments": []
         },
         {
@@ -237,6 +255,12 @@
           "content": "<p><strong>Foco da aula:</strong> Área de staging.</p>```bash\ngit add arquivo.js\ngit status\n```<p><code>git add</code> não cria um commit: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas pode incluir arquivos indesejados; combine-o com um <code>.gitignore</code> bem definido.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--staging-e-commits.png",
+            "position": "center",
+            "alt": "Staging e Commits",
+            "caption": "Ilustração de abertura do capítulo Staging e Commits."
+          },
           "attachments": []
         },
         {
@@ -287,6 +311,12 @@
           "content": "<p><strong>Foco da aula:</strong> Consultando o histórico.</p>```bash\ngit log\ngit log --oneline\n```<p><code>git log --oneline</code> mostra uma visão compacta. Use <code>--decorate --graph --all</code> para entender branches e referências.</p>```bash\ngit log --oneline --decorate --graph --all\n```",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--historico-e-diferencas.png",
+            "position": "center",
+            "alt": "Histórico e Diferenças",
+            "caption": "Ilustração de abertura do capítulo Histórico e Diferenças."
+          },
           "attachments": []
         },
         {
@@ -329,6 +359,12 @@
           "content": "<p><strong>Foco da aula:</strong> Conhecendo o GitHub.</p><p>GitHub é uma plataforma de hospedagem e colaboração para projetos Git. Além de armazenar repositórios, oferece recursos para colaboração, revisão de código, gerenciamento de tarefas e automação.</p><p>O GitHub combina hospedagem de código e colaboração. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma simplificar o primeiro push.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--github-e-repositorios-remotos.png",
+            "position": "center",
+            "alt": "GitHub e Repositórios Remotos",
+            "caption": "Ilustração de abertura do capítulo GitHub e Repositórios Remotos."
+          },
           "attachments": []
         },
         {
@@ -371,6 +407,12 @@
           "content": "<p><strong>Foco da aula:</strong> Git Push.</p>```bash\ngit push -u origin main\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 1,
           "isPublic": true,
+          "image": {
+            "url": "/assets/courses/git/git-para-iniciantes--push-pull-e-fetch.png",
+            "position": "center",
+            "alt": "Push, Pull e Fetch",
+            "caption": "Ilustração de abertura do capítulo Push, Pull e Fetch."
+          },
           "attachments": []
         },
         {
