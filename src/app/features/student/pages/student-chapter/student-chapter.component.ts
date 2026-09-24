@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, forkJoin, map, of, startWith, Subject, switchMap } from 'rxjs';
@@ -11,8 +11,10 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { ArticleComponent } from '../../../../shared/ui/article/article.component';
+import { CourseSummaryComponent } from '../../../../shared/ui/course-summary/course-summary.component';
 import { ChapterProgress, CourseProgress } from '../../models/progress.model';
 import { ProgressService } from '../../services/progress.service';
+import { LearningService } from '../../../learning/services/learning.service';
 
 interface StudentChapterState {
   loading: boolean;
@@ -26,7 +28,7 @@ interface StudentChapterState {
 @Component({
   selector: 'app-student-chapter',
   standalone: true,
-  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, ArticleComponent],
+  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, ArticleComponent, CourseSummaryComponent],
   templateUrl: './student-chapter.component.html',
   styleUrl: './student-chapter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,9 +38,11 @@ export class StudentChapterComponent {
   private readonly chapterService = inject(ChapterService);
   private readonly courseService = inject(CourseService);
   private readonly progressService = inject(ProgressService);
+  private readonly learningService = inject(LearningService);
   private readonly notificationService = inject(NotificationService);
 
   private readonly reload$ = new Subject<void>();
+  private readonly serverCompletedChapterIds = signal<Set<string>>(new Set());
 
   protected readonly completing = signal(false);
   protected readonly markedLessonIds = signal<Set<string>>(new Set());
@@ -135,6 +139,17 @@ export class StudentChapterComponent {
     () => this.state().chapterProgress?.status === 'completed',
   );
 
+  protected readonly completedChapterIds = computed(() => {
+    const ids = new Set(this.serverCompletedChapterIds());
+    const chapter = this.state().chapter;
+    if (chapter && this.isCompleted()) {
+      ids.add(chapter.id);
+    }
+    return ids;
+  });
+
+  protected readonly chapterLink = (chapter: Chapter): unknown[] => ['/app/capitulo', chapter.id];
+
   protected readonly isLocked = computed(() => {
     const chapter = this.state().chapter;
     if (!chapter || chapter.isPublic) {
@@ -182,6 +197,30 @@ export class StudentChapterComponent {
     const marked = this.markedLessonIds();
     return lessons.every((lesson) => marked.has(lesson.id));
   });
+
+  constructor() {
+    effect((onCleanup) => {
+      const courseId = this.state().chapter?.courseId;
+      if (!courseId) {
+        this.serverCompletedChapterIds.set(new Set());
+        return;
+      }
+
+      const subscription = this.learningService.courseProgress(courseId).subscribe({
+        next: (progress) =>
+          this.serverCompletedChapterIds.set(
+            new Set(
+              progress
+                .filter((item) => item.status === 'completed')
+                .map((item) => item.chapterId),
+            ),
+          ),
+        error: () => this.serverCompletedChapterIds.set(new Set()),
+      });
+
+      onCleanup(() => subscription.unsubscribe());
+    });
+  }
 
   protected toggleLesson(lesson: Lesson): void {
     if (this.isCompleted()) {

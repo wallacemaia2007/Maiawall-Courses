@@ -1,0 +1,41 @@
+<aside class="course-summary">
+  <h2 class="course-summary__title">Sumário</h2>
+
+  @if (courseTitle()) {
+    <p class="course-summary__course">{{ courseTitle() }}</p>
+  }
+
+  <app-progress-bar
+    class="course-summary__progress"
+    [percent]="percent()"
+    label="{{ completedCount() }} de {{ totalCount() }} capítulos"
+  />
+
+  <ol class="course-summary__list">
+    @for (chapter of sortedChapters(); track trackChapter($index, chapter)) {
+      <li class="course-summary__item">
+        <a
+          class="course-summary__link"
+          [class.is-completed]="isCompleted(chapter)"
+          [class.is-active]="isActive(chapter)"
+          [routerLink]="chapterLink(chapter)"
+        >
+          <span class="course-summary__marker" aria-hidden="true">
+            @if (isCompleted(chapter)) {
+              ✓
+            } @else {
+              {{ chapter.order }}
+            }
+          </span>
+          <span class="course-summary__label">{{ chapter.title }}</span>
+        </a>
+      </li>
+    }
+  </ol>
+
+  @if (completedCount() > 0 && completedCount() < totalCount()) {
+    <p class="course-summary__hint">Continue lendo para avançar no curso.</p>
+  } @else if (completedCount() === totalCount() && totalCount() > 0) {
+    <p class="course-summary__hint">Parabéns! Você concluiu todos os capítulos.</p>
+  }
+</aside>

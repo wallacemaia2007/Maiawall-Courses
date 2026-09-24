@@ -123,6 +123,13 @@
 }
 
 .chapter-body__side {
+  position: sticky;
+  top: calc(var(--app-topbar-height, 56px) + 24px);
+  align-self: start;
+  max-height: calc(100vh - var(--app-topbar-height, 56px) - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
   display: grid;
   gap: 24px;
 }
@@ -282,6 +289,10 @@
 @media (max-width: 900px) {
   .chapter-body {
     grid-template-columns: 1fr;
+  }
+
+  .chapter-body__side {
+    position: static;
   }
 }
 

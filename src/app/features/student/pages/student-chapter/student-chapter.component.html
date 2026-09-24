@@ -185,6 +185,14 @@
           </main>
 
           <aside class="chapter-body__side">
+            <app-course-summary
+              [courseTitle]="state().course?.title ?? ''"
+              [chapters]="allChapters()"
+              [activeChapterId]="chapter.id"
+              [completedChapterIds]="completedChapterIds()"
+              [linkFor]="chapterLink"
+            />
+
             <section class="detail-panel">
               <h2>Navegação</h2>
               <div class="chapter-nav">

@@ -57,7 +57,25 @@
 }
 
 .course-chapter-page__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: 2rem;
+  align-items: start;
   padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+.course-chapter-page__main {
+  min-width: 0;
+}
+
+.course-chapter-page__side {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 
 .course-chapter-page__completion-note {
@@ -109,4 +127,16 @@
 
 .course-chapter-page__pager-link--next:hover {
   transform: translateX(0.15rem);
+}
+
+@media (max-width: 940px) {
+  .course-chapter-page__body {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .course-chapter-page__side {
+    position: static;
+    order: -1;
+  }
 }

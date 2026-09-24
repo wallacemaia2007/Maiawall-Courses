@@ -20,11 +20,14 @@ import { Chapter, ChapterDetail, Lesson } from '../../models/course.model';
 import { ChapterService } from '../../services/chapter.service';
 import { CourseService } from '../../services/course.service';
 import { AuthStateService } from '../../../../core/auth/auth-state.service';
+import { GuestProgressService } from '../../../../core/services/guest-progress.service';
 import { LearningService } from '../../../learning/services/learning.service';
+import { CourseSummaryComponent } from '../../../../shared/ui/course-summary/course-summary.component';
 
 interface CourseChapterState {
   chapter: ChapterDetail | null;
   courseSlug: string;
+  courseTitle: string;
   courseChapters: Chapter[];
   loading: boolean;
   errorMessage: string;
@@ -36,7 +39,7 @@ const COMPLETION_DELAY_MS = 10_000;
 @Component({
   selector: 'app-course-chapter',
   standalone: true,
-  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, ArticleComponent],
+  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, ArticleComponent, CourseSummaryComponent],
   templateUrl: './course-chapter.component.html',
   styleUrl: './course-chapter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +50,9 @@ export class CourseChapterComponent implements OnDestroy {
   private readonly courseService = inject(CourseService);
   private readonly authState = inject(AuthStateService);
   private readonly learningService = inject(LearningService);
+  private readonly guestProgressService = inject(GuestProgressService);
   protected readonly completionStatus = signal<'idle' | 'saving' | 'completed'>('idle');
+  private readonly serverCompletedChapterIds = signal<Set<string>>(new Set());
   private completionTimer = 0;
 
   protected readonly state = toSignal(
@@ -63,6 +68,7 @@ export class CourseChapterComponent implements OnDestroy {
           map(({ chapter, course }) => ({
             chapter,
             courseSlug,
+            courseTitle: course?.title ?? '',
             courseChapters: course?.chapters ?? [],
             loading: false,
             errorMessage: '',
@@ -71,6 +77,7 @@ export class CourseChapterComponent implements OnDestroy {
             of({
               chapter: null,
               courseSlug,
+              courseTitle: '',
               courseChapters: [],
               loading: false,
               errorMessage: toApiError(error).message,
@@ -83,6 +90,7 @@ export class CourseChapterComponent implements OnDestroy {
       initialValue: {
         chapter: null,
         courseSlug: '',
+        courseTitle: '',
         courseChapters: [],
         loading: true,
         errorMessage: '',
@@ -114,14 +122,69 @@ export class CourseChapterComponent implements OnDestroy {
 
   protected readonly isAuthenticated = this.authState.isAuthenticated;
 
+  protected readonly completedChapterIds = computed(() => {
+    const chapter = this.chapter();
+    const ids = new Set(this.serverCompletedChapterIds());
+    if (chapter) {
+      if (!this.isAuthenticated()) {
+        const guest = this.guestProgressService.value()[chapter.courseId] ?? {};
+        Object.keys(guest).forEach((id) => ids.add(id));
+      }
+      if (this.completionStatus() === 'completed') {
+        ids.add(chapter.id);
+      }
+    }
+    return ids;
+  });
+
+  protected readonly chapterLink = (chapter: Chapter): unknown[] => [
+    '/cursos',
+    this.state().courseSlug,
+    'capitulo',
+    chapter.slug,
+  ];
+
   constructor() {
     effect((onCleanup) => {
       const chapter = this.chapter();
-      if (!chapter || !this.authState.isAuthenticated()) return;
-      const subscription = this.learningService.markRead(chapter.id).subscribe({
-        next: (progress) => this.completionStatus.set(progress.status === 'completed' ? 'completed' : 'idle'),
+      if (!chapter) {
+        this.serverCompletedChapterIds.set(new Set());
+        return;
+      }
+
+      if (!this.isAuthenticated()) {
+        this.completionStatus.set(
+          this.guestProgressService.isChapterComplete(chapter.courseId, chapter.id)
+            ? 'completed'
+            : 'idle',
+        );
+        this.serverCompletedChapterIds.set(new Set());
+        return;
+      }
+
+      const readSubscription = this.learningService.markRead(chapter.id).subscribe({
+        next: (progress) =>
+          this.completionStatus.set(progress.status === 'completed' ? 'completed' : 'idle'),
       });
-      onCleanup(() => subscription.unsubscribe());
+
+      const courseProgressSubscription = this.learningService.courseProgress(chapter.courseId).subscribe(
+        {
+          next: (progress) =>
+            this.serverCompletedChapterIds.set(
+              new Set(
+                progress
+                  .filter((item) => item.status === 'completed')
+                  .map((item) => item.chapterId),
+              ),
+            ),
+          error: () => this.serverCompletedChapterIds.set(new Set()),
+        },
+      );
+
+      onCleanup(() => {
+        readSubscription.unsubscribe();
+        courseProgressSubscription.unsubscribe();
+      });
     });
   }
 
@@ -161,6 +224,13 @@ export class CourseChapterComponent implements OnDestroy {
     const chapter = this.chapter();
     if (!chapter || this.completionStatus() !== 'idle') return;
     this.completionStatus.set('saving');
+
+    if (!this.isAuthenticated()) {
+      this.guestProgressService.markChapterComplete(chapter.courseId, chapter.id);
+      this.completionStatus.set('completed');
+      return;
+    }
+
     this.learningService.markComplete(chapter.id).subscribe({
       next: () => this.completionStatus.set('completed'),
       error: () => this.completionStatus.set('idle'),

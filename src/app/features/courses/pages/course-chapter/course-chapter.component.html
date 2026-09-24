@@ -32,11 +32,10 @@
       </header>
 
       <div class="mw-container course-chapter-page__body">
+      <div class="course-chapter-page__main">
       @if (lessons().length > 0) {
-        @if (isAuthenticated()) {
-          @if (completionStatus() === 'completed') {
-            <p class="course-chapter-page__completion-note">Capitulo concluido</p>
-          }
+        @if (completionStatus() === 'completed') {
+          <p class="course-chapter-page__completion-note">Capitulo concluido</p>
         }
         <div class="lesson-list">
           @for (lesson of lessons(); track trackLesson($index, lesson)) {
@@ -80,6 +79,19 @@
             </a>
           </nav>
         }
+      }
+      </div>
+
+      @if (state().courseChapters.length > 0) {
+        <aside class="course-chapter-page__side">
+          <app-course-summary
+            [courseTitle]="state().courseTitle"
+            [chapters]="state().courseChapters"
+            [activeChapterId]="chapter.id"
+            [completedChapterIds]="completedChapterIds()"
+            [linkFor]="chapterLink"
+          />
+        </aside>
       }
       </div>
     } @else {
