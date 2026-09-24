@@ -10,6 +10,7 @@ import { Routes } from '@angular/router';
  *   /admin/alunos
  *   /admin/submissoes
  *   /admin/certificados
+ *   /admin/duvidas
  */
 export const ADMIN_ROUTES: Routes = [
   {
@@ -76,6 +77,13 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () =>
           import('./pages/admin-certificate-list/admin-certificate-list.component').then(
             (m) => m.AdminCertificateListComponent,
+          ),
+      },
+      {
+        path: 'duvidas',
+        loadComponent: () =>
+          import('./pages/admin-question-list/admin-question-list.component').then(
+            (m) => m.AdminQuestionListComponent,
           ),
       },
     ],

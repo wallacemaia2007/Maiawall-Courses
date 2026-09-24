@@ -90,10 +90,15 @@ export class LoginComponent implements OnInit {
   private redirectUrl(): string {
     const redirect = this.route.snapshot.queryParamMap.get('redirect');
 
-    if (redirect?.startsWith('/cursos') || redirect === '/perfil') {
+    if (
+      redirect?.startsWith('/cursos') ||
+      redirect?.startsWith('/app') ||
+      redirect?.startsWith('/admin') ||
+      redirect === '/perfil'
+    ) {
       return redirect;
     }
 
-    return '/';
+    return '/app/dashboard';
   }
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, forkJoin, map, of, startWith, Subject, switchMap } from 'rxjs';
 
-import { ChapterDetail, CourseDetail, Lesson } from '../../../courses/models/course.model';
+import { Chapter, ChapterDetail, CourseDetail, Lesson } from '../../../courses/models/course.model';
 import { CourseService } from '../../../courses/services/course.service';
 import { ChapterService } from '../../../courses/services/chapter.service';
 import { apiErrorMessage } from '../../../../core/models/api-error.model';

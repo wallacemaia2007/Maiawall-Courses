@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './core/guards/auth.guard';
+import { authChildGuard, authGuard } from './core/guards/auth.guard';
 import { guestChildGuard, guestGuard } from './core/guards/guest.guard';
-import { roleGuard } from './core/guards/role.guard';
+import { roleChildGuard, roleGuard } from './core/guards/role.guard';
 
 /*
  * Mapa de rotas da aplicação.
@@ -41,15 +41,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/profile/pages/profile/profile.component').then((m) => m.ProfileComponent),
       },
-      {
-        path: 'admin/duvidas',
-        canActivate: [authGuard, roleGuard(['ADMIN'])],
-        loadComponent: () =>
-          import('./features/admin/pages/admin-question-list/admin-question-list.component').then(
-            (m) => m.AdminQuestionListComponent,
-          ),
-      },
     ],
+  },
+  {
+    path: 'app',
+    canActivate: [authGuard],
+    canActivateChild: [authChildGuard],
+    loadChildren: () =>
+      import('./features/student/student.routes').then((m) => m.STUDENT_ROUTES),
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard(['ADMIN'])],
+    canActivateChild: [authChildGuard, roleChildGuard(['ADMIN'])],
+    loadChildren: () =>
+      import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
     path: '',
