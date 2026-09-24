@@ -76,14 +76,14 @@
         {
           "title": "O que é Git?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é Git?.</p><p>Git é um sistema distribuído de controle de versão utilizado para registrar alterações em arquivos e acompanhar a evolução de projetos. Ele permite criar históricos, comparar versões, recuperar estados anteriores e trabalhar em paralelo com outras pessoas.</p><p>Git é distribuído: cada clone possui uma cópia do histórico necessário para trabalhar localmente. Muitas operações de leitura e criação de commits funcionam sem conexão.</p><p>O Git registra snapshots e relações entre commits. Assim, é possível descobrir quem mudou um arquivo, comparar versões e recuperar um estado anterior.</p>",
+          "content": "<p>Git é um sistema distribuído de controle de versão utilizado para registrar alterações em arquivos e acompanhar a evolução de projetos. Ele permite criar históricos, comparar versões, recuperar estados anteriores e trabalhar em paralelo com outras pessoas.</p><p>Git é *distribuído*: cada clone possui uma cópia do histórico necessário para trabalhar localmente. Muitas operações de leitura e criação de commits funcionam sem conexão.</p><p>O Git registra snapshots e relações entre commits. Assim, é possível descobrir quem mudou um arquivo, comparar versões e recuperar um estado anterior.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--introducao-ao-git.png",
+            "url": "/assets/lessons/git-lifecycle.svg",
             "position": "center",
-            "alt": "Introdução ao Git",
-            "caption": "Ilustração de abertura do capítulo Introdução ao Git."
+            "alt": "Ciclo de trabalho do Git entre arquivos, staging e histórico",
+            "caption": "As alterações passam pelo diretório de trabalho, pela staging area e pelo repositório."
           },
           "attachments": [
             {
@@ -92,18 +92,12 @@
               "kind": "document",
               "url": "https://git-scm.com/docs"
             }
-          ],
-          "image": {
-            "url": "/assets/lessons/git-lifecycle.svg",
-            "position": "center",
-            "alt": "Ciclo de trabalho do Git entre arquivos, staging e histórico",
-            "caption": "As alterações passam pelo diretório de trabalho, pela staging area e pelo repositório."
-          }
+          ]
         },
         {
           "title": "Por que utilizar controle de versão?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Por que utilizar controle de versão?.</p><p>Sem controle de versão, acompanhar alterações pode se tornar difícil conforme um projeto cresce. O Git permite registrar mudanças, comparar versões, recuperar arquivos e trabalhar de forma organizada em equipe.</p><p>Controle de versão reduz o risco de perder trabalho e torna as mudanças auditáveis. Em vez de criar cópias manuais, o histórico organiza pontos de decisão nomeados.</p><ul><li>• Recupere um estado anterior sem apagar o trabalho atual.</li><li>• Compare uma alteração antes de compartilhá-la.</li><li>• Trabalhe em paralelo sem sobrescrever a cópia de outra pessoa.</li></ul>",
+          "content": "<p>Sem controle de versão, acompanhar alterações pode se tornar difícil conforme um projeto cresce. O Git permite registrar mudanças, comparar versões, recuperar arquivos e trabalhar de forma organizada em equipe.</p><p>Controle de versão *reduz o risco de perder trabalho* e torna as mudanças auditáveis. Em vez de criar cópias manuais, o histórico organiza *pontos de decisão nomeados*.</p><ul><li>• Recupere um estado anterior sem apagar o trabalho atual.</li><li>• Compare uma alteração antes de compartilhá-la.</li><li>• Trabalhe em paralelo sem sobrescrever a cópia de outra pessoa.</li></ul>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -111,7 +105,7 @@
         {
           "title": "Git x GitHub",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Git x GitHub.</p><p>Git é a ferramenta de controle de versão executada localmente e também utilizada para comunicação com repositórios remotos. GitHub é uma plataforma que hospeda repositórios Git e oferece recursos como Pull Requests, Issues, Actions e colaboração entre desenvolvedores.</p><p>Git é o programa e o formato de repositório usados para versionar. GitHub é um serviço que hospeda repositórios Git e acrescenta autenticação, colaboração, revisão, Issues, Actions e Releases.</p><p>Você pode usar Git sem GitHub, hospedar Git em outra plataforma ou manter um repositório apenas local.</p>",
+          "content": "<p>Git é a ferramenta de controle de versão executada localmente e também utilizada para comunicação com repositórios remotos. GitHub é uma plataforma que hospeda repositórios Git e oferece recursos como Pull Requests, Issues, Actions e colaboração entre desenvolvedores.</p><p>Git é o programa e o formato de repositório usados para versionar. GitHub é um serviço que hospeda repositórios Git e acrescenta autenticação, colaboração, revisão, Issues, Actions e Releases.</p><p>Você *pode usar Git sem GitHub*, hospedar Git em outra plataforma ou manter um repositório apenas local.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": [
@@ -126,7 +120,7 @@
         {
           "title": "Git local x repositório remoto",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Git local x repositório remoto.</p><p>Um projeto pode possuir um repositório Git local no computador e estar conectado a um repositório remoto hospedado em uma plataforma como o GitHub. O repositório local registra alterações e o remoto permite compartilhar e sincronizar o projeto.</p><p>O repositório local contém commits e branches no computador. O remoto é outra cópia identificada por um nome, normalmente <code>origin</code>. Ele não é sincronizado automaticamente: enviar e buscar alterações são ações explícitas.</p><p>Use <code>git remote -v</code> para conferir os endereços e <code>git log --all</code> para visualizar referências já buscadas.</p>",
+          "content": "<p>Um projeto pode possuir um repositório Git local no computador e estar conectado a um repositório remoto hospedado em uma plataforma como o GitHub. O repositório local registra alterações e o remoto permite compartilhar e sincronizar o projeto.</p><p>O repositório local contém commits e branches no computador. O remoto é outra cópia identificada por um nome, normalmente <code>origin</code>. Ele *não é sincronizado automaticamente*: enviar e buscar alterações são ações explícitas.</p><p>Use <code>git remote -v</code> para conferir os endereços e <code>git log --all</code> para visualizar referências já buscadas.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -144,7 +138,7 @@
         {
           "title": "Verificando a instalação",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Verificando a instalação.</p>```bash\ngit --version\n```<p>O comando confirma se o executável está disponível no PATH. Se falhar, instale o Git pelo gerenciador adequado ao sistema operacional e abra um novo terminal.</p>",
+          "content": "```bash\ngit --version\n```\n<p>O comando confirma se o executável está disponível no PATH. Se falhar, instale o Git pelo gerenciador adequado ao sistema operacional e abra um novo terminal.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -158,7 +152,7 @@
         {
           "title": "Configurando nome e e-mail",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Configurando nome e e-mail.</p>```bash\ngit config --global user.name \"Seu Nome\"\ngit config --global user.email \"seu@email.com\"\n```<p>Nome e e-mail ficam registrados no autor de cada commit. Eles são metadados de atribuição, não uma senha ou prova de identidade.</p><p>Revise a configuração com <code>git config --list --show-origin</code>.</p>",
+          "content": "```bash\ngit config --global user.name \"Seu Nome\"\ngit config --global user.email \"seu@email.com\"\n```\n<p>Nome e e-mail ficam registrados no autor de cada commit. Eles são metadados de atribuição, **não uma senha ou prova de identidade**.</p><p>Revise a configuração com <code>git config --list --show-origin</code>.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": [
@@ -173,7 +167,7 @@
         {
           "title": "Configurações globais e locais",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Configurações globais e locais.</p><p>As configurações do Git podem ser definidas globalmente para o usuário ou localmente para um projeto específico. Isso permite controlar quais informações serão utilizadas nos commits.</p><p>A configuração global vale para o usuário. A configuração local, salva em <code>.git/config</code>, tem precedência dentro do repositório atual.</p>```bash\ngit config --global user.name \"Seu Nome\"\ngit config user.name\n```",
+          "content": "<p>As configurações do Git podem ser definidas globalmente para o usuário ou localmente para um projeto específico. Isso permite controlar quais informações serão utilizadas nos commits.</p><p>A configuração global vale para o usuário. A configuração local, salva em <code>.git/config</code>, *tem precedência* dentro do repositório atual.</p>\n```bash\ngit config --global user.name \"Seu Nome\"\ngit config user.name\n```",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -191,7 +185,7 @@
         {
           "title": "O que é um repositório?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é um repositório?.</p><p>Um repositório Git é o espaço onde o Git mantém as informações necessárias para acompanhar as versões de um projeto. Ele contém o histórico e as informações internas utilizadas pelo Git.</p><p>Um repositório é um projeto acompanhado pelo Git. A pasta <code>.git</code> guarda objetos, referências, índice e configurações que permitem reconstruir o histórico.</p><p>O working tree contém os arquivos que você lê e edita; os commits registram snapshots ligados por uma história.</p>",
+          "content": "<p>Um repositório Git é o espaço onde o Git mantém as informações necessárias para acompanhar as versões de um projeto. Ele contém o histórico e as informações internas utilizadas pelo Git.</p><p>Um repositório é *um projeto acompanhado pelo Git*. A pasta <code>.git</code> guarda objetos, referências, índice e configurações que permitem reconstruir o histórico.</p><p>O working tree contém os arquivos que você lê e edita; os commits registram snapshots ligados por uma história.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -205,7 +199,7 @@
         {
           "title": "Inicializando um repositório",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Inicializando um repositório.</p>```bash\ngit init\ngit status\n```<p>Relacione este conceito ao estado atual do repositório e confirme o resultado com <code>git status</code>. Faça a atividade em um projeto de teste para repetir os comandos com segurança.</p>",
+          "content": "```bash\ngit init\ngit status\n```\n<p>Relacione este conceito ao estado atual do repositório e confirme o resultado com <code>git status</code>. Faça a atividade em *um projeto de teste* para repetir os comandos com segurança.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": [
@@ -220,7 +214,7 @@
         {
           "title": "A pasta .git",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> A pasta .git.</p><p>Ao executar git init, o Git cria uma pasta oculta chamada .git. Ela contém informações internas do repositório, incluindo histórico, referências e configurações. Normalmente essa pasta não deve ser alterada manualmente.</p><p>Não edite arquivos internos de <code>.git</code> como forma normal de operação. Use os comandos do Git para preservar referências e a integridade do repositório.</p>",
+          "content": "<p>Ao executar git init, o Git cria uma pasta oculta chamada .git. Ela contém informações internas do repositório, incluindo histórico, referências e configurações. Normalmente essa pasta não deve ser alterada manualmente.</p><p>**Não edite arquivos internos de <code>.git</code>** como forma normal de operação. Use os comandos do Git para preservar referências e a integridade do repositório.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -228,7 +222,7 @@
         {
           "title": "Working Directory, Staging Area e Repository",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Working Directory, Staging Area e Repository.</p><p>O Git trabalha com diferentes estados. O Working Directory representa os arquivos em que você está trabalhando. A Staging Area contém as alterações selecionadas para o próximo commit. O Repository contém os commits registrados no histórico.</p><p>A staging area é uma seleção consciente para o próximo commit. O fluxo recomendado é editar, revisar com <code>git diff</code>, selecionar com <code>git add</code>, revisar com <code>git diff --staged</code> e registrar com <code>git commit</code>.</p>",
+          "content": "<p>O Git trabalha com diferentes estados. O Working Directory representa os arquivos em que você está trabalhando. A Staging Area contém as alterações selecionadas para o próximo commit. O Repository contém os commits registrados no histórico.</p><p>A staging area é *uma seleção consciente* para o próximo commit. O fluxo recomendado é editar, revisar com <code>git diff</code>, selecionar com <code>git add</code>, revisar com <code>git diff --staged</code> e registrar com <code>git commit</code>.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": [],
@@ -252,7 +246,7 @@
         {
           "title": "Área de staging",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Área de staging.</p>```bash\ngit add arquivo.js\ngit status\n```<p><code>git add</code> não cria um commit: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas pode incluir arquivos indesejados; combine-o com um <code>.gitignore</code> bem definido.</p>",
+          "content": "```bash\ngit add arquivo.js\ngit status\n```\n<p><code>git add</code> *não cria um commit*: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas *pode incluir arquivos indesejados*; combine-o com um <code>.gitignore</code> bem definido.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -266,7 +260,7 @@
         {
           "title": "Adicionando todas as alterações",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Adicionando todas as alterações.</p>```bash\ngit add .\ngit status\n```<p><code>git add</code> não cria um commit: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas pode incluir arquivos indesejados; combine-o com um <code>.gitignore</code> bem definido.</p>",
+          "content": "```bash\ngit add .\ngit status\n```\n<p><code>git add</code> *não cria um commit*: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas *pode incluir arquivos indesejados*; combine-o com um <code>.gitignore</code> bem definido.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -274,7 +268,7 @@
         {
           "title": "O que é um commit?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é um commit?.</p><p>Um commit registra um conjunto de alterações no histórico do repositório. Um bom commit representa uma mudança coerente e possui uma mensagem que ajuda outras pessoas a entenderem sua intenção.</p><p>Um commit é um ponto do histórico que registra snapshot, autor, data, mensagem e commit pai. Um bom commit é pequeno o suficiente para ser entendido e completo o suficiente para manter o projeto coerente.</p>",
+          "content": "<p>Um commit registra um conjunto de alterações no histórico do repositório. Um bom commit representa uma *mudança coerente* e possui uma mensagem que ajuda outras pessoas a entenderem sua intenção.</p><p>Um commit é *um ponto do histórico* que registra snapshot, autor, data, mensagem e commit pai. Um bom commit é pequeno o suficiente para ser entendido e completo o suficiente para manter o projeto coerente.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -282,7 +276,7 @@
         {
           "title": "Criando um commit",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Criando um commit.</p>```bash\ngit add .\ngit commit -m \"feat: adiciona tela de login\"\n```<p>Crie o commit somente depois de revisar o staged diff. A mensagem deve explicar a intenção, não apenas repetir o nome do arquivo.</p>```bash\ngit diff --staged\ngit commit -m \"feat: adiciona formulário de cadastro\"\ngit status\n```",
+          "content": "```bash\ngit add .\ngit commit -m \"feat: adiciona tela de login\"\n```\n<p>Crie o commit *somente depois de revisar o staged diff*. A mensagem deve *explicar a intenção*, não apenas repetir o nome do arquivo.</p>\n```bash\ngit diff --staged\ngit commit -m \"feat: adiciona formulário de cadastro\"\ngit status\n```",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -290,7 +284,7 @@
         {
           "title": "Boas mensagens de commit",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Boas mensagens de commit.</p><p>Mensagens de commit devem ser claras e representar a alteração realizada. Um projeto pode adotar convenções como feat para funcionalidades, fix para correções e docs para documentação.</p><p>Use uma convenção consistente, como <code>feat</code>, <code>fix</code>, <code>docs</code>, <code>refactor</code> e <code>chore</code>. Evite mensagens vagas como “ajustes”; use o corpo do commit quando for necessário contexto.</p>",
+          "content": "<p>Mensagens de commit devem *ser claras* e representar a alteração realizada. Um projeto pode adotar convenções como feat para funcionalidades, fix para correções e docs para documentação.</p><p>Use uma convenção consistente, como <code>feat</code>, <code>fix</code>, <code>docs</code>, <code>refactor</code> e <code>chore</code>. Evite *mensagens vagas* como “ajustes”; use o corpo do commit quando for necessário contexto.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": []
@@ -308,7 +302,7 @@
         {
           "title": "Consultando o histórico",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Consultando o histórico.</p>```bash\ngit log\ngit log --oneline\n```<p><code>git log --oneline</code> mostra uma visão compacta. Use <code>--decorate --graph --all</code> para entender branches e referências.</p>```bash\ngit log --oneline --decorate --graph --all\n```",
+          "content": "```bash\ngit log\ngit log --oneline\n```\n<p><code>git log --oneline</code> mostra uma visão compacta. Use <code>--decorate --graph --all</code> para entender branches e referências.</p>\n```bash\ngit log --oneline --decorate --graph --all\n```",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -322,7 +316,7 @@
         {
           "title": "Visualizando um commit",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Visualizando um commit.</p>```bash\ngit show <commit>\n```<p>Use o histórico como ferramenta de diagnóstico: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
+          "content": "```bash\ngit show <commit>\n```\n<p>Use o histórico como *ferramenta de diagnóstico*: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -330,7 +324,7 @@
         {
           "title": "Comparando alterações",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Comparando alterações.</p>```bash\ngit diff\ngit diff --staged\n```<p>Use o histórico como ferramenta de diagnóstico: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
+          "content": "```bash\ngit diff\ngit diff --staged\n```\n<p>Use o histórico como *ferramenta de diagnóstico*: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -338,7 +332,7 @@
         {
           "title": "Visualizando o histórico em formato de árvore",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Visualizando o histórico em formato de árvore.</p>```bash\ngit log --oneline --graph --all\n```<p>Use o histórico como ferramenta de diagnóstico: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
+          "content": "```bash\ngit log --oneline --graph --all\n```\n<p>Use o histórico como *ferramenta de diagnóstico*: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -356,7 +350,7 @@
         {
           "title": "Conhecendo o GitHub",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Conhecendo o GitHub.</p><p>GitHub é uma plataforma de hospedagem e colaboração para projetos Git. Além de armazenar repositórios, oferece recursos para colaboração, revisão de código, gerenciamento de tarefas e automação.</p><p>O GitHub combina hospedagem de código e colaboração. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma simplificar o primeiro push.</p>",
+          "content": "<p>GitHub é uma plataforma de hospedagem e colaboração para projetos Git. Além de armazenar repositórios, oferece recursos para colaboração, revisão de código, gerenciamento de tarefas e automação.</p><p>O GitHub combina *hospedagem de código e colaboração*. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma *simplificar o primeiro push*.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -370,7 +364,7 @@
         {
           "title": "Criando um repositório no GitHub",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Criando um repositório no GitHub.</p><p>Um repositório remoto pode ser criado no GitHub para receber o projeto local. Ao criar o repositório, é possível definir seu nome, visibilidade e outras configurações.</p><p>O GitHub combina hospedagem de código e colaboração. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma simplificar o primeiro push.</p>",
+          "content": "<p>Um repositório remoto pode ser criado no GitHub para receber o projeto local. Ao criar o repositório, é possível definir seu nome, visibilidade e outras configurações.</p><p>O GitHub combina *hospedagem de código e colaboração*. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma *simplificar o primeiro push*.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -378,7 +372,7 @@
         {
           "title": "Conectando o projeto ao remoto",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Conectando o projeto ao remoto.</p>```bash\ngit remote add origin <url>\ngit remote -v\n```<p>Associe um nome local a uma URL e confirme o resultado. Nunca coloque tokens diretamente na URL salva.</p>```bash\ngit remote add origin https://github.com/usuario/projeto.git\ngit remote -v\n```",
+          "content": "```bash\ngit remote add origin <url>\ngit remote -v\n```\n<p>Associe um nome local a uma URL e confirme o resultado. **Nunca coloque tokens diretamente na URL salva**.</p>\n```bash\ngit remote add origin https://github.com/usuario/projeto.git\ngit remote -v\n```",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -386,7 +380,7 @@
         {
           "title": "Entendendo origin e main",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Entendendo origin e main.</p><p>origin é um nome convencional utilizado para identificar o repositório remoto principal. main é o nome frequentemente utilizado para a branch principal de um projeto, embora outros nomes também possam ser utilizados.</p><p><code>origin</code> é apenas um apelido para remoto. <code>main</code> é um nome convencional para a branch principal, não uma exigência técnica.</p>",
+          "content": "<p>origin é um nome convencional utilizado para identificar o repositório remoto principal. main é o nome frequentemente utilizado para a branch principal de um projeto, embora outros nomes também possam ser utilizados.</p><p><code>origin</code> é *apenas um apelido para remoto*. <code>main</code> é um nome convencional para a branch principal, *não uma exigência técnica*.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -404,7 +398,7 @@
         {
           "title": "Git Push",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Push.</p>```bash\ngit push -u origin main\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "```bash\ngit push -u origin main\n```\n<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> *traz referências sem integrar na branch atual*.</li><li>• <strong>Pull:</strong> *busca e integra* por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, *preserve o trabalho local* e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -418,7 +412,7 @@
         {
           "title": "Git Fetch",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Fetch.</p>```bash\ngit fetch\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "```bash\ngit fetch\n```\n<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> *traz referências sem integrar na branch atual*.</li><li>• <strong>Pull:</strong> *busca e integra* por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, *preserve o trabalho local* e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -426,7 +420,7 @@
         {
           "title": "Git Pull",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Pull.</p>```bash\ngit pull\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "```bash\ngit pull\n```\n<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> *traz referências sem integrar na branch atual*.</li><li>• <strong>Pull:</strong> *busca e integra* por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, *preserve o trabalho local* e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -434,7 +428,7 @@
         {
           "title": "Push, Pull e Fetch: qual a diferença?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Push, Pull e Fetch: qual a diferença?.</p><p>Push envia commits do repositório local para o remoto. Fetch busca informações e novos commits do remoto sem integrar automaticamente essas alterações à branch atual. Pull busca alterações e realiza a integração dessas alterações ao repositório local.</p><ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "<p>Push envia commits do repositório local para o remoto. Fetch busca informações e novos commits do remoto sem integrar automaticamente essas alterações à branch atual. Pull busca alterações e realiza a integração dessas alterações ao repositório local.</p><ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> *traz referências sem integrar na branch atual*.</li><li>• <strong>Pull:</strong> *busca e integra* por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, *preserve o trabalho local* e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -452,7 +446,7 @@
         {
           "title": "O que é uma branch?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é uma branch?.</p><p>Uma branch representa uma linha de desenvolvimento dentro do repositório. Ela permite trabalhar em alterações sem modificar diretamente a linha principal enquanto o trabalho ainda está em desenvolvimento.</p><p>Uma branch é uma referência móvel para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, confira mudanças não commitadas para evitar perda ou bloqueios inesperados.</p>",
+          "content": "<p>Uma branch representa uma linha de desenvolvimento dentro do repositório. Ela permite trabalhar em alterações sem modificar diretamente a linha principal enquanto o trabalho ainda está em desenvolvimento.</p><p>Uma branch é *uma referência móvel* para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, *confira mudanças não commitadas* para evitar perda ou bloqueios inesperados.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": [],
@@ -466,7 +460,7 @@
         {
           "title": "Listando branches",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Listando branches.</p>```bash\ngit branch\ngit branch -a\n```<p>Uma branch é uma referência móvel para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, confira mudanças não commitadas para evitar perda ou bloqueios inesperados.</p>",
+          "content": "```bash\ngit branch\ngit branch -a\n```\n<p>Uma branch é *uma referência móvel* para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, *confira mudanças não commitadas* para evitar perda ou bloqueios inesperados.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -474,7 +468,7 @@
         {
           "title": "Criando uma branch",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Criando uma branch.</p>```bash\ngit switch -c feature/login\n```<p>Uma branch é uma referência móvel para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, confira mudanças não commitadas para evitar perda ou bloqueios inesperados.</p>",
+          "content": "```bash\ngit switch -c feature/login\n```\n<p>Uma branch é *uma referência móvel* para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, *confira mudanças não commitadas* para evitar perda ou bloqueios inesperados.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": [],
@@ -488,7 +482,7 @@
         {
           "title": "Trocando de branch",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Trocando de branch.</p>```bash\ngit switch main\ngit switch feature/login\n```<p>Uma branch é uma referência móvel para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, confira mudanças não commitadas para evitar perda ou bloqueios inesperados.</p>",
+          "content": "```bash\ngit switch main\ngit switch feature/login\n```\n<p>Uma branch é *uma referência móvel* para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, *confira mudanças não commitadas* para evitar perda ou bloqueios inesperados.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -496,7 +490,7 @@
         {
           "title": "Trabalhando com branches de funcionalidade",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Trabalhando com branches de funcionalidade.</p><p>Uma prática comum é criar uma branch para cada funcionalidade ou correção. Isso permite desenvolver, testar e revisar a alteração antes de integrá-la à branch principal.</p><p>Uma branch é uma referência móvel para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, confira mudanças não commitadas para evitar perda ou bloqueios inesperados.</p>",
+          "content": "<p>Uma prática comum é *criar uma branch para cada funcionalidade ou correção*. Isso permite desenvolver, testar e revisar a alteração antes de integrá-la à branch principal.</p><p>Uma branch é *uma referência móvel* para uma linha de commits. Use nomes que expressem o trabalho, como <code>feature/login</code>, <code>fix/timeout</code> e <code>docs/installation</code>.</p><p>Antes de trocar de branch, *confira mudanças não commitadas* para evitar perda ou bloqueios inesperados.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": []
@@ -514,7 +508,7 @@
         {
           "title": "O que é Merge?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é Merge?.</p><p>Merge é a operação utilizada para integrar o histórico de uma branch em outra. Um exemplo comum é integrar uma branch de funcionalidade à branch principal.</p><p>Merge integra o histórico de uma branch em outra. Antes de integrar, atualize a branch de destino, rode os testes e revise o histórico. Fast-forward e commit de merge são resultados diferentes da mesma operação.</p>",
+          "content": "<p>Merge é a operação utilizada para integrar o histórico de uma branch em outra. Um exemplo comum é integrar uma branch de funcionalidade à branch principal.</p><p>Merge integra o histórico de uma branch em outra. Antes de integrar, *atualize a branch de destino*, rode os testes e revise o histórico. Fast-forward e commit de merge são *resultados diferentes* da mesma operação.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": []
@@ -522,7 +516,7 @@
         {
           "title": "Realizando um Merge",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Realizando um Merge.</p>```bash\ngit switch main\ngit merge feature/login\n```<p>Merge integra o histórico de uma branch em outra. Antes de integrar, atualize a branch de destino, rode os testes e revise o histórico. Fast-forward e commit de merge são resultados diferentes da mesma operação.</p>",
+          "content": "```bash\ngit switch main\ngit merge feature/login\n```\n<p>Merge integra o histórico de uma branch em outra. Antes de integrar, *atualize a branch de destino*, rode os testes e revise o histórico. Fast-forward e commit de merge são *resultados diferentes* da mesma operação.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -530,7 +524,7 @@
         {
           "title": "O que é uma Pull Request?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é uma Pull Request?.</p><p>Uma Pull Request é uma solicitação para que alterações de uma branch sejam revisadas e integradas a outra branch em uma plataforma como o GitHub.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p>Uma Pull Request é uma solicitação para que alterações de uma branch sejam revisadas e integradas a outra branch em uma plataforma como o GitHub.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, *não apenas estilo*.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": [
@@ -551,7 +545,7 @@
         {
           "title": "Criando uma Pull Request",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Criando uma Pull Request.</p><p>Depois de enviar a branch para o GitHub, uma Pull Request pode ser criada informando a branch de origem, a branch de destino, título e descrição das alterações.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p>Depois de enviar a branch para o GitHub, uma Pull Request pode ser criada informando a branch de origem, a branch de destino, título e descrição das alterações.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, *não apenas estilo*.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -559,7 +553,7 @@
         {
           "title": "Code Review",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Code Review.</p><p>Code Review é o processo de analisar alterações antes de integrá-las ao projeto. Comentários e sugestões podem ser feitos diretamente na Pull Request.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p>Code Review é o processo de analisar alterações antes de integrá-las ao projeto. Comentários e sugestões podem ser feitos diretamente na Pull Request.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, *não apenas estilo*.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": []
@@ -567,7 +561,7 @@
         {
           "title": "Fluxo de uma Pull Request",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Fluxo de uma Pull Request.</p><p>Um fluxo comum é: criar branch, desenvolver, realizar commits, enviar a branch com push, abrir uma Pull Request, revisar as alterações e realizar o merge após a aprovação ou conclusão do processo definido pela equipe.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p>Um fluxo comum é: criar branch, desenvolver, realizar commits, enviar a branch com push, abrir uma Pull Request, revisar as alterações e realizar o merge após a aprovação ou conclusão do processo definido pela equipe.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, *não apenas estilo*.</p>",
           "order": 6,
           "isPublic": true,
           "attachments": [],
@@ -591,7 +585,7 @@
         {
           "title": "O que é um conflito?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é um conflito?.</p><p>Um conflito acontece quando o Git não consegue determinar automaticamente como combinar alterações incompatíveis feitas em diferentes históricos.</p><p>Conflito é uma decisão pendente, não corrupção do repositório. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
+          "content": "<p>Um conflito acontece quando o Git *não consegue determinar automaticamente* como combinar alterações incompatíveis feitas em diferentes históricos.</p><p>*Conflito é uma decisão pendente, não corrupção do repositório*. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": [],
@@ -605,7 +599,7 @@
         {
           "title": "Identificando um conflito",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Identificando um conflito.</p>```bash\n<<<<<<< HEAD\nSua alteração\n=======\nOutra alteração\n>>>>>>> outra-branch\n```<p>Conflito é uma decisão pendente, não corrupção do repositório. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
+          "content": "```bash\n<<<<<<< HEAD\nSua alteração\n=======\nOutra alteração\n>>>>>>> outra-branch\n```\n<p>*Conflito é uma decisão pendente, não corrupção do repositório*. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -613,7 +607,7 @@
         {
           "title": "Resolvendo um conflito",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Resolvendo um conflito.</p><p>Para resolver um conflito, é necessário analisar as versões envolvidas, escolher ou combinar as alterações desejadas, remover os marcadores de conflito e então adicionar e registrar o resultado.</p><p>Conflito é uma decisão pendente, não corrupção do repositório. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
+          "content": "<p>Para resolver um conflito, é necessário analisar as versões envolvidas, escolher ou combinar as alterações desejadas, remover os marcadores de conflito e então adicionar e registrar o resultado.</p><p>*Conflito é uma decisão pendente, não corrupção do repositório*. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": [],
@@ -627,7 +621,7 @@
         {
           "title": "Finalizando a resolução",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Finalizando a resolução.</p>```bash\ngit add .\ngit commit -m \"fix: resolve conflito de merge\"\n```<p>Conflito é uma decisão pendente, não corrupção do repositório. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
+          "content": "```bash\ngit add .\ngit commit -m \"fix: resolve conflito de merge\"\n```\n<p>*Conflito é uma decisão pendente, não corrupção do repositório*. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -645,7 +639,7 @@
         {
           "title": "O que é .gitignore?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é .gitignore?.</p><p>O arquivo .gitignore define arquivos e diretórios que o Git deve ignorar ao identificar alterações. Ele é utilizado para evitar que arquivos desnecessários ou sensíveis sejam adicionados ao repositório.</p><p><code>.gitignore</code> vale para arquivos ainda não rastreados; ele não remove um segredo já commitado. Use padrões para dependências, builds, caches, logs e arquivos de ambiente.</p>```bash\nnode_modules/\ndist/\n.env\n*.log\n```",
+          "content": "<p>O arquivo .gitignore define arquivos e diretórios que o Git deve ignorar ao identificar alterações. Ele é utilizado para evitar que arquivos desnecessários ou sensíveis sejam adicionados ao repositório.</p><p><code>.gitignore</code> vale para arquivos ainda não rastreados; **ele não remove um segredo já commitado**. Use padrões para dependências, builds, caches, logs e arquivos de ambiente.</p>\n```bash\nnode_modules/\ndist/\n.env\n*.log\n```",
           "order": 1,
           "isPublic": true,
           "attachments": []
@@ -653,7 +647,7 @@
         {
           "title": "Criando um .gitignore",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Criando um .gitignore.</p>```bash\nnode_modules/\n.env\ndist/\ntarget/\n*.log\n```<p><code>.gitignore</code> vale para arquivos ainda não rastreados; ele não remove um segredo já commitado. Use padrões para dependências, builds, caches, logs e arquivos de ambiente.</p>```bash\nnode_modules/\ndist/\n.env\n*.log\n```",
+          "content": "```bash\nnode_modules/\n.env\ndist/\ntarget/\n*.log\n```\n<p><code>.gitignore</code> vale para arquivos ainda não rastreados; **ele não remove um segredo já commitado**. Use padrões para dependências, builds, caches, logs e arquivos de ambiente.</p>\n```bash\nnode_modules/\ndist/\n.env\n*.log\n```",
           "order": 2,
           "isPublic": true,
           "attachments": [
@@ -668,7 +662,7 @@
         {
           "title": "Não envie informações sensíveis",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Não envie informações sensíveis.</p><p>Senhas, tokens, chaves privadas, credenciais e outras informações sensíveis não devem ser armazenadas diretamente no repositório. Arquivos como .env podem ser ignorados e os valores devem ser configurados de maneira apropriada para cada ambiente.</p><p>Senhas, tokens e chaves privadas não devem entrar no histórico. Se um segredo foi publicado, revogue-o imediatamente, gere outro e faça a limpeza adequada do histórico.</p>",
+          "content": "<p>Senhas, tokens, chaves privadas, credenciais e outras informações sensíveis não devem ser armazenadas diretamente no repositório. Arquivos como .env podem ser ignorados e os valores devem ser configurados de maneira apropriada para cada ambiente.</p><p>**Senhas, tokens e chaves privadas não devem entrar no histórico**. Se um segredo foi publicado, **revogue-o imediatamente**, gere outro e faça a limpeza adequada do histórico.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -676,7 +670,7 @@
         {
           "title": "README e organização do repositório",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> README e organização do repositório.</p><p>Um README bem estruturado ajuda outras pessoas a entenderem o objetivo do projeto, como instalá-lo, executá-lo e contribuir. Organização e documentação tornam o repositório mais fácil de utilizar.</p><p>O README deve explicar objetivo, pré-requisitos, instalação, comandos, variáveis de ambiente e como contribuir. Uma documentação curta e executável reduz dependência de conhecimento oral.</p>",
+          "content": "<p>Um README bem estruturado ajuda outras pessoas a entenderem o objetivo do projeto, como instalá-lo, executá-lo e contribuir. Organização e documentação tornam o repositório mais fácil de utilizar.</p><p>O README deve explicar objetivo, pré-requisitos, instalação, comandos, variáveis de ambiente e como contribuir. Uma documentação curta e executável *reduz dependência de conhecimento oral*.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -694,7 +688,7 @@
         {
           "title": "Desfazendo alterações com restore",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Desfazendo alterações com restore.</p>```bash\ngit restore arquivo.js\ngit restore --staged arquivo.js\n```<p><code>restore</code> atua sobre arquivos e staging. <code>reset</code> move referências e pode reescrever o estado local. <code>revert</code> cria um novo commit que desfaz outro e costuma ser mais seguro no histórico compartilhado.</p>",
+          "content": "```bash\ngit restore arquivo.js\ngit restore --staged arquivo.js\n```\n<p><code>restore</code> atua sobre arquivos e staging. <code>reset</code> move referências e pode reescrever o estado local. <code>revert</code> cria um novo commit que desfaz outro e *costuma ser mais seguro no histórico compartilhado*.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": [
@@ -709,7 +703,7 @@
         {
           "title": "Reset e Revert",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Reset e Revert.</p><p>git reset pode alterar a posição da referência atual e o estado do staging ou dos arquivos dependendo da opção utilizada. git revert cria um novo commit que desfaz as alterações de um commit anterior. Esses comandos devem ser utilizados com atenção, especialmente em branches compartilhadas.</p><p><code>restore</code> atua sobre arquivos e staging. <code>reset</code> move referências e pode reescrever o estado local. <code>revert</code> cria um novo commit que desfaz outro e costuma ser mais seguro no histórico compartilhado.</p>",
+          "content": "<p>git reset pode alterar a posição da referência atual e o estado do staging ou dos arquivos dependendo da opção utilizada. git revert cria um novo commit que desfaz as alterações de um commit anterior. Esses comandos devem ser utilizados com *atenção, especialmente em branches compartilhadas*.</p><p><code>restore</code> atua sobre arquivos e staging. <code>reset</code> move referências e pode reescrever o estado local. <code>revert</code> cria um novo commit que desfaz outro e *costuma ser mais seguro no histórico compartilhado*.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -717,7 +711,7 @@
         {
           "title": "Git Stash",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Stash.</p>```bash\ngit stash\ngit stash list\ngit stash pop\n```<p><code>stash</code> guarda temporariamente alterações para permitir troca de contexto. Use uma mensagem e recupere com cuidado; quando a mudança já está coerente, um commit temporário é mais rastreável.</p>",
+          "content": "```bash\ngit stash\ngit stash list\ngit stash pop\n```\n<p><code>stash</code> *guarda temporariamente alterações* para permitir troca de contexto. Use uma mensagem e recupere com cuidado; quando a mudança já está coerente, *um commit temporário é mais rastreável*.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -725,7 +719,7 @@
         {
           "title": "Git Rebase",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Git Rebase.</p><p>Rebase é uma operação que reaplica commits sobre uma nova base, podendo produzir um histórico linear. É um conceito importante para aprofundar os estudos de Git e deve ser utilizado com cuidado em históricos compartilhados.</p><p>Rebase reaplica commits sobre uma nova base e cria novos hashes. Ele pode deixar o histórico linear, mas não deve ser usado sem cuidado em commits que outras pessoas já consumiram.</p>```bash\ngit fetch origin\ngit rebase origin/main\n```",
+          "content": "<p>Rebase é uma operação que reaplica commits sobre uma nova base, podendo produzir um histórico linear. É um conceito importante para aprofundar os estudos de Git e deve ser utilizado com cuidado em históricos compartilhados.</p><p>Rebase reaplica commits sobre uma nova base e *cria novos hashes*. Ele pode deixar o histórico linear, mas **não deve ser usado sem cuidado** em commits que outras pessoas já consumiram.</p>\n```bash\ngit fetch origin\ngit rebase origin/main\n```",
           "order": 4,
           "isPublic": true,
           "attachments": [
@@ -740,7 +734,7 @@
         {
           "title": "Cherry-pick",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Cherry-pick.</p>```bash\ngit cherry-pick <commit>\n```<p>Esses comandos reescrevem ou reaplicam mudanças e podem alterar hashes. Use-os em branches sob seu controle e explique a decisão quando o histórico for compartilhado.</p>",
+          "content": "```bash\ngit cherry-pick <commit>\n```\n<p>Esses comandos reescrevem ou reaplicam mudanças e podem alterar hashes. Use-os *em branches sob seu controle* e explique a decisão quando o histórico for compartilhado.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": []
@@ -748,7 +742,7 @@
         {
           "title": "Commit Amend",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Commit Amend.</p>```bash\ngit commit --amend\n```<p>Esses comandos reescrevem ou reaplicam mudanças e podem alterar hashes. Use-os em branches sob seu controle e explique a decisão quando o histórico for compartilhado.</p>",
+          "content": "```bash\ngit commit --amend\n```\n<p>Esses comandos reescrevem ou reaplicam mudanças e podem alterar hashes. Use-os *em branches sob seu controle* e explique a decisão quando o histórico for compartilhado.</p>",
           "order": 6,
           "isPublic": true,
           "attachments": []
@@ -756,7 +750,7 @@
         {
           "title": "Tags e versões",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Tags e versões.</p>```bash\ngit tag v1.0.0\ngit push origin v1.0.0\n```<p>Tags nomeiam pontos específicos do histórico. Para releases importantes, prefira tags anotadas com mensagem e publique-as no remoto.</p>```bash\ngit tag -a v1.0.0 -m \"primeira versão\"\ngit push origin v1.0.0\n```",
+          "content": "```bash\ngit tag v1.0.0\ngit push origin v1.0.0\n```\n<p>Tags nomeiam pontos específicos do histórico. Para releases importantes, *prefira tags anotadas com mensagem* e publique-as no remoto.</p>\n```bash\ngit tag -a v1.0.0 -m \"primeira versão\"\ngit push origin v1.0.0\n```",
           "order": 7,
           "isPublic": true,
           "attachments": []
@@ -774,7 +768,7 @@
         {
           "title": "Issues",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Issues.</p><p>Issues permitem registrar tarefas, problemas, sugestões e outras demandas relacionadas a um projeto.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, sem esconder decisões importantes apenas em mensagens privadas.</p>",
+          "content": "<p>Issues permitem registrar tarefas, problemas, sugestões e outras demandas relacionadas a um projeto.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, *sem esconder decisões importantes* apenas em mensagens privadas.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": []
@@ -782,7 +776,7 @@
         {
           "title": "Projects",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Projects.</p><p>GitHub Projects permite organizar tarefas e acompanhar o andamento do trabalho utilizando diferentes visualizações e fluxos.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, sem esconder decisões importantes apenas em mensagens privadas.</p>",
+          "content": "<p>GitHub Projects permite organizar tarefas e acompanhar o andamento do trabalho utilizando diferentes visualizações e fluxos.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, *sem esconder decisões importantes* apenas em mensagens privadas.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -790,7 +784,7 @@
         {
           "title": "Releases",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Releases.</p><p>Releases permitem publicar versões do projeto associadas a tags e disponibilizar informações ou artefatos relacionados a essas versões.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, sem esconder decisões importantes apenas em mensagens privadas.</p>",
+          "content": "<p>Releases permitem publicar versões do projeto associadas a tags e disponibilizar informações ou artefatos relacionados a essas versões.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, *sem esconder decisões importantes* apenas em mensagens privadas.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": [
@@ -805,7 +799,7 @@
         {
           "title": "Fork",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Fork.</p><p>Fork cria uma cópia de um repositório na conta de outro usuário ou organização, sendo utilizado em diferentes fluxos de colaboração, especialmente em projetos públicos.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, sem esconder decisões importantes apenas em mensagens privadas.</p>",
+          "content": "<p>Fork cria uma cópia de um repositório na conta de outro usuário ou organização, sendo utilizado em diferentes fluxos de colaboração, especialmente em projetos públicos.</p><p>Esse recurso complementa o histórico: Issues registram trabalho, Projects organizam fluxo, Releases comunicam versões e Forks apoiam contribuições entre contas. Use cada ferramenta para seu objetivo, *sem esconder decisões importantes* apenas em mensagens privadas.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -813,7 +807,7 @@
         {
           "title": "GitHub Actions",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> GitHub Actions.</p><p>GitHub Actions é uma plataforma de automação integrada ao GitHub que pode ser utilizada para executar testes, builds, deploys e outros workflows automaticamente.</p><p>Actions executa workflows disparados por push, Pull Request ou tags. Um workflow pode instalar dependências, rodar testes, gerar artefatos e publicar deploy. Segredos devem ficar no mecanismo de secrets do GitHub, nunca no YAML ou nos logs.</p>",
+          "content": "<p>GitHub Actions é uma plataforma de automação integrada ao GitHub que pode ser utilizada para executar testes, builds, deploys e outros workflows automaticamente.</p><p>Actions executa workflows disparados por push, Pull Request ou tags. Um workflow pode instalar dependências, rodar testes, gerar artefatos e publicar deploy. **Segredos devem ficar no mecanismo de secrets do GitHub, nunca no YAML ou nos logs**.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": [
@@ -844,7 +838,7 @@
         {
           "title": "Criando o projeto",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Criando o projeto.</p>```bash\nmkdir meu-projeto\ncd meu-projeto\ngit init\ngit status\n```<p>O objetivo prático é produzir um fluxo reproduzível: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "```bash\nmkdir meu-projeto\ncd meu-projeto\ngit init\ngit status\n```\n<p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": []
@@ -852,7 +846,7 @@
         {
           "title": "Primeiro commit",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Primeiro commit.</p>```bash\ngit add .\ngit commit -m \"chore: inicia projeto\"\n```<p>O objetivo prático é produzir um fluxo reproduzível: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "```bash\ngit add .\ngit commit -m \"chore: inicia projeto\"\n```\n<p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -860,7 +854,7 @@
         {
           "title": "Conectando ao GitHub",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Conectando ao GitHub.</p>```bash\ngit remote add origin <url>\ngit branch -M main\ngit push -u origin main\n```<p>O objetivo prático é produzir um fluxo reproduzível: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "```bash\ngit remote add origin <url>\ngit branch -M main\ngit push -u origin main\n```\n<p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -868,7 +862,7 @@
         {
           "title": "Criando uma funcionalidade",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Criando uma funcionalidade.</p>```bash\ngit switch -c feature/nova-funcionalidade\n\n# desenvolver...\n\ngit add .\ngit commit -m \"feat: adiciona nova funcionalidade\"\ngit push -u origin feature/nova-funcionalidade\n```<p>O objetivo prático é produzir um fluxo reproduzível: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "```bash\ngit switch -c feature/nova-funcionalidade\n\n# desenvolver...\n\ngit add .\ngit commit -m \"feat: adiciona nova funcionalidade\"\ngit push -u origin feature/nova-funcionalidade\n```\n<p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -876,7 +870,7 @@
         {
           "title": "Pull Request e Merge",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Pull Request e Merge.</p><p>Depois de enviar a branch para o GitHub, crie uma Pull Request para a branch principal. Revise as alterações, faça os ajustes necessários e finalize a integração utilizando o fluxo definido pelo projeto.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p>Depois de enviar a branch para o GitHub, crie uma Pull Request para a branch principal. Revise as alterações, faça os ajustes necessários e finalize a integração utilizando o fluxo definido pelo projeto.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, *não apenas estilo*.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": [],
@@ -890,7 +884,7 @@
         {
           "title": "Fluxo diário de um desenvolvedor",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Fluxo diário de um desenvolvedor.</p>```bash\ngit pull\n\ngit switch -c feature/minha-funcionalidade\n\n# desenvolver...\n\ngit status\ngit add .\ngit commit -m \"feat: adiciona funcionalidade\"\ngit push -u origin feature/minha-funcionalidade\n\n# criar Pull Request no GitHub\n# revisar e realizar o merge\n```<p>O objetivo prático é produzir um fluxo reproduzível: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "```bash\ngit pull\n\ngit switch -c feature/minha-funcionalidade\n\n# desenvolver...\n\ngit status\ngit add .\ngit commit -m \"feat: adiciona funcionalidade\"\ngit push -u origin feature/minha-funcionalidade\n\n# criar Pull Request no GitHub\n# revisar e realizar o merge\n```\n<p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
           "order": 6,
           "isPublic": true,
           "attachments": []
@@ -898,7 +892,7 @@
         {
           "title": "Desafio final",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Desafio final.</p><p>Crie um pequeno projeto, publique-o no GitHub, faça pelo menos um commit inicial, crie uma branch para uma nova funcionalidade, realize alterações, envie a branch para o GitHub, abra uma Pull Request e integre a alteração à branch principal.</p><p>O objetivo prático é produzir um fluxo reproduzível: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "<p>Crie um pequeno projeto, publique-o no GitHub, faça pelo menos um commit inicial, crie uma branch para uma nova funcionalidade, realize alterações, envie a branch para o GitHub, abra uma Pull Request e integre a alteração à branch principal.</p><p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
           "order": 7,
           "isPublic": true,
           "attachments": []

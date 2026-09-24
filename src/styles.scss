@@ -154,7 +154,7 @@ select:focus-visible {
 
 /* Entrada suave das páginas (mesmo padrão do Maiawall Homolog) */
 [class$='-page'] {
-  animation: mw-fade-in var(--motion-slow) var(--ease-soft) both;
+  animation: mw-fade-in var(--motion-slow) var(--ease-soft) backwards;
 }
 
 @keyframes mw-fade-in {

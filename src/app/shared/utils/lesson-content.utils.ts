@@ -12,7 +12,7 @@ export function parseLessonContent(content: string | null | undefined): ContentB
   let codeMeta: string | null = null;
 
   const pushText = (): void => {
-    const html = textLines.join('\n').trim();
+    const html = applyArticleFormatting(textLines.join('\n').trim());
     if (html) blocks.push({ kind: 'text', html });
     textLines = [];
   };
@@ -32,14 +32,24 @@ export function parseLessonContent(content: string | null | undefined): ContentB
   };
 
   for (const line of lines) {
-    const fenceMatch = line.match(/^[ \t]*```([^\n`]*)[ \t]*$/);
+    const fenceMatch = line.match(/^([^\n`]*?)```([^\n`]*)[ \t]*$/);
 
     if (fenceMatch) {
+      const gluedBefore = fenceMatch[1].trim();
+      const gluedAfter = fenceMatch[2];
+
       if (codeMeta !== null) {
         pushCode();
+        if (gluedAfter.trim()) {
+          textLines.push(gluedAfter);
+        }
       } else {
         pushText();
-        codeMeta = fenceMatch[1];
+        if (gluedBefore) {
+          textLines.push(fenceMatch[1]);
+          pushText();
+        }
+        codeMeta = gluedAfter;
       }
       continue;
     }
@@ -57,6 +67,12 @@ export function parseLessonContent(content: string | null | undefined): ContentB
 
   pushText();
   return blocks;
+}
+
+function applyArticleFormatting(html: string): string {
+  return html
+    .replace(/\*\*(.+?)\*\*/g, '<span style="color: var(--color-danger)">$1</span>')
+    .replace(/\*(.+?)\*/g, '<strong style="color: var(--color-text-primary)">$1</strong>');
 }
 
 export function extractFirstCode(content: string): string {

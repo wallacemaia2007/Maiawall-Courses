@@ -90,6 +90,60 @@ describe('parseLessonContent with HTML code tags', () => {
   });
 });
 
+describe('parseLessonContent with inline formatting', () => {
+  it('transforma *texto* em negrito preto', () => {
+    expect(parseLessonContent('Texto com *destaque* aqui')).toEqual([
+      {
+        kind: 'text',
+        html: 'Texto com <strong style="color: var(--color-text-primary)">destaque</strong> aqui',
+      },
+    ]);
+  });
+
+  it('transforma **texto** em vermelho', () => {
+    expect(parseLessonContent('Cuidado com **erro**!')).toEqual([
+      { kind: 'text', html: 'Cuidado com <span style="color: var(--color-danger)">erro</span>!' },
+    ]);
+  });
+
+  it('não altera asteriscos dentro de blocos de código', () => {
+    const blocks = parseLessonContent('Use *php*:\n```bash\necho *oi*\n```');
+
+    expect(blocks).toEqual([
+      {
+        kind: 'text',
+        html: 'Use <strong style="color: var(--color-text-primary)">php</strong>:',
+      },
+      { kind: 'code', language: 'bash', title: '', code: 'echo *oi*' },
+    ]);
+  });
+});
+
+describe('parseLessonContent with glued fences', () => {
+  it('reconhece cerca colada após um parágrafo HTML', () => {
+    const blocks = parseLessonContent(
+      '<p>Um texto.</p>```bash\ngit --version\n```<p>O comando confirma.</p>',
+    );
+
+    expect(blocks).toEqual([
+      { kind: 'text', html: '<p>Um texto.</p>' },
+      { kind: 'code', language: 'bash', title: '', code: 'git --version' },
+      { kind: 'text', html: '<p>O comando confirma.</p>' },
+    ]);
+  });
+
+  it('não perde o texto que fica colado após a cerca de fechamento', () => {
+    const blocks = parseLessonContent(
+      '```bash\ngit --version\n```<p>O comando confirma.</p>',
+    );
+
+    expect(blocks).toEqual([
+      { kind: 'code', language: 'bash', title: '', code: 'git --version' },
+      { kind: 'text', html: '<p>O comando confirma.</p>' },
+    ]);
+  });
+});
+
 describe('extractFirstCode', () => {
   it('devolve o primeiro trecho de código', () => {
     expect(extractFirstCode('Texto\n```bash\ngit init\n```')).toBe('git init');
