@@ -97,7 +97,7 @@
         {
           "title": "Por que utilizar controle de versão?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Por que utilizar controle de versão?.</p><p>Sem controle de versão, acompanhar alterações pode se tornar difícil conforme um projeto cresce. O Git permite registrar mudanças, comparar versões, recuperar arquivos e trabalhar de forma organizada em equipe.</p><p>Controle de versão reduz o risco de perder trabalho e torna as mudanças auditáveis. Em vez de criar cópias manuais, o histórico organiza pontos de decisão nomeados.</p><ul><li>Recupere um estado anterior sem apagar o trabalho atual.</li><li>Compare uma alteração antes de compartilhá-la.</li><li>Trabalhe em paralelo sem sobrescrever a cópia de outra pessoa.</li></ul>",
+          "content": "<p><strong>Foco da aula:</strong> Por que utilizar controle de versão?.</p><p>Sem controle de versão, acompanhar alterações pode se tornar difícil conforme um projeto cresce. O Git permite registrar mudanças, comparar versões, recuperar arquivos e trabalhar de forma organizada em equipe.</p><p>Controle de versão reduz o risco de perder trabalho e torna as mudanças auditáveis. Em vez de criar cópias manuais, o histórico organiza pontos de decisão nomeados.</p><ul><li>• Recupere um estado anterior sem apagar o trabalho atual.</li><li>• Compare uma alteração antes de compartilhá-la.</li><li>• Trabalhe em paralelo sem sobrescrever a cópia de outra pessoa.</li></ul>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -368,7 +368,7 @@
         {
           "title": "Git Push",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Push.</p>```bash\ngit push -u origin main\n```<ul><li><strong>Push:</strong> leva commits locais ao remoto.</li><li><strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li><strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Git Push.</p>```bash\ngit push -u origin main\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 1,
           "isPublic": true,
           "attachments": []
@@ -376,7 +376,7 @@
         {
           "title": "Git Fetch",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Fetch.</p>```bash\ngit fetch\n```<ul><li><strong>Push:</strong> leva commits locais ao remoto.</li><li><strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li><strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Git Fetch.</p>```bash\ngit fetch\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -384,7 +384,7 @@
         {
           "title": "Git Pull",
           "type": "code",
-          "content": "<p><strong>Foco da aula:</strong> Git Pull.</p>```bash\ngit pull\n```<ul><li><strong>Push:</strong> leva commits locais ao remoto.</li><li><strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li><strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Git Pull.</p>```bash\ngit pull\n```<ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -392,7 +392,7 @@
         {
           "title": "Push, Pull e Fetch: qual a diferença?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Push, Pull e Fetch: qual a diferença?.</p><p>Push envia commits do repositório local para o remoto. Fetch busca informações e novos commits do remoto sem integrar automaticamente essas alterações à branch atual. Pull busca alterações e realiza a integração dessas alterações ao repositório local.</p><ul><li><strong>Push:</strong> leva commits locais ao remoto.</li><li><strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li><strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Push, Pull e Fetch: qual a diferença?.</p><p>Push envia commits do repositório local para o remoto. Fetch busca informações e novos commits do remoto sem integrar automaticamente essas alterações à branch atual. Pull busca alterações e realiza a integração dessas alterações ao repositório local.</p><ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> traz referências sem integrar na branch atual.</li><li>• <strong>Pull:</strong> busca e integra por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, preserve o trabalho local e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -488,7 +488,7 @@
         {
           "title": "O que é uma Pull Request?",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> O que é uma Pull Request?.</p><p>Uma Pull Request é uma solicitação para que alterações de uma branch sejam revisadas e integradas a outra branch em uma plataforma como o GitHub.</p><ol><li>Envie a branch com push.</li><li>Descreva o problema e a solução.</li><li>Revise o diff e aguarde os checks.</li><li>Responda aos comentários com novos commits.</li><li>Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p><strong>Foco da aula:</strong> O que é uma Pull Request?.</p><p>Uma Pull Request é uma solicitação para que alterações de uma branch sejam revisadas e integradas a outra branch em uma plataforma como o GitHub.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
           "order": 3,
           "isPublic": true,
           "attachments": [
@@ -509,7 +509,7 @@
         {
           "title": "Criando uma Pull Request",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Criando uma Pull Request.</p><p>Depois de enviar a branch para o GitHub, uma Pull Request pode ser criada informando a branch de origem, a branch de destino, título e descrição das alterações.</p><ol><li>Envie a branch com push.</li><li>Descreva o problema e a solução.</li><li>Revise o diff e aguarde os checks.</li><li>Responda aos comentários com novos commits.</li><li>Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Criando uma Pull Request.</p><p>Depois de enviar a branch para o GitHub, uma Pull Request pode ser criada informando a branch de origem, a branch de destino, título e descrição das alterações.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -517,7 +517,7 @@
         {
           "title": "Code Review",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Code Review.</p><p>Code Review é o processo de analisar alterações antes de integrá-las ao projeto. Comentários e sugestões podem ser feitos diretamente na Pull Request.</p><ol><li>Envie a branch com push.</li><li>Descreva o problema e a solução.</li><li>Revise o diff e aguarde os checks.</li><li>Responda aos comentários com novos commits.</li><li>Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Code Review.</p><p>Code Review é o processo de analisar alterações antes de integrá-las ao projeto. Comentários e sugestões podem ser feitos diretamente na Pull Request.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": []
@@ -525,7 +525,7 @@
         {
           "title": "Fluxo de uma Pull Request",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Fluxo de uma Pull Request.</p><p>Um fluxo comum é: criar branch, desenvolver, realizar commits, enviar a branch com push, abrir uma Pull Request, revisar as alterações e realizar o merge após a aprovação ou conclusão do processo definido pela equipe.</p><ol><li>Envie a branch com push.</li><li>Descreva o problema e a solução.</li><li>Revise o diff e aguarde os checks.</li><li>Responda aos comentários com novos commits.</li><li>Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Fluxo de uma Pull Request.</p><p>Um fluxo comum é: criar branch, desenvolver, realizar commits, enviar a branch com push, abrir uma Pull Request, revisar as alterações e realizar o merge após a aprovação ou conclusão do processo definido pela equipe.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
           "order": 6,
           "isPublic": true,
           "attachments": [],
@@ -834,7 +834,7 @@
         {
           "title": "Pull Request e Merge",
           "type": "article",
-          "content": "<p><strong>Foco da aula:</strong> Pull Request e Merge.</p><p>Depois de enviar a branch para o GitHub, crie uma Pull Request para a branch principal. Revise as alterações, faça os ajustes necessários e finalize a integração utilizando o fluxo definido pelo projeto.</p><ol><li>Envie a branch com push.</li><li>Descreva o problema e a solução.</li><li>Revise o diff e aguarde os checks.</li><li>Responda aos comentários com novos commits.</li><li>Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
+          "content": "<p><strong>Foco da aula:</strong> Pull Request e Merge.</p><p>Depois de enviar a branch para o GitHub, crie uma Pull Request para a branch principal. Revise as alterações, faça os ajustes necessários e finalize a integração utilizando o fluxo definido pelo projeto.</p><ol><li>• Envie a branch com push.</li><li>• Descreva o problema e a solução.</li><li>• Revise o diff e aguarde os checks.</li><li>• Responda aos comentários com novos commits.</li><li>• Integre conforme a política do projeto.</li></ol><p>Uma boa revisão considera comportamento, legibilidade, testes, segurança e impacto, não apenas estilo.</p>",
           "order": 5,
           "isPublic": true,
           "attachments": [],

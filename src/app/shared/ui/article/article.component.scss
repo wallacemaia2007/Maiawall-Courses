@@ -90,6 +90,19 @@
   margin-top: 1.4rem;
 }
 
+.article__text ol,
+.article__text ul {
+  display: grid;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0 0 0 1.35rem;
+}
+
+.article__text li {
+  margin: 0;
+}
+
 .article__empty {
   margin: 0;
   color: var(--color-text-muted);
