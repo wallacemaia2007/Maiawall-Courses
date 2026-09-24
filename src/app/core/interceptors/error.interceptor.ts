@@ -23,8 +23,7 @@ export const errorInterceptor: HttpInterceptorFn = (request, next) => {
         authState.clearSession();
 
         const currentUrl = router.url || '/';
-        const isProtectedRoute =
-          currentUrl.startsWith('/app') || currentUrl.startsWith('/admin');
+        const isProtectedRoute = currentUrl.startsWith('/admin');
 
         if (isProtectedRoute) {
           router.navigate(['/login'], {

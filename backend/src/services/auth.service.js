@@ -56,15 +56,18 @@ function validatePassword(password) {
   }
 }
 
-async function createSession(user) {
+// recordLogin=false no refresh de token: renovar sessao nao e um novo login.
+async function createSession(user, { recordLogin = true } = {}) {
   const safeUser = sanitizeUser(user);
   const accessToken = createAccessToken(safeUser);
   const refreshToken = createRefreshToken(safeUser);
+  const now = new Date();
 
   await UserRepository.updateById(safeUser.id, {
     refreshTokenHash: hashToken(refreshToken),
-    refreshTokenUpdatedAt: new Date(),
-    updatedAt: new Date(),
+    refreshTokenUpdatedAt: now,
+    ...(recordLogin ? { lastLoginAt: now } : {}),
+    updatedAt: now,
   });
 
   return {
@@ -228,7 +231,7 @@ const AuthService = {
       throw new AppError(401, 'UNAUTHORIZED', 'Refresh token invalido');
     }
 
-    return createSession(user);
+    return createSession(user, { recordLogin: false });
   },
 
   async logout(payload = {}) {

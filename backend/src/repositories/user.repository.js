@@ -86,6 +86,12 @@ const UserRepository = {
     return user;
   },
 
+  async listAll() {
+    const database = await getDatabase();
+    const snapshot = await database.collection(USERS_COLLECTION).get();
+    return snapshot.docs.map(fromFirestoreDoc).filter(Boolean);
+  },
+
   async findById(id) {
     if (!isValidId(id)) {
       return null;

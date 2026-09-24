@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthStateService } from '../../../../core/auth/auth-state.service';
 import { apiErrorMessage } from '../../../../core/models/api-error.model';
 import { OAuthProvider } from '../../../../core/models/auth.model';
 
@@ -29,6 +30,7 @@ const OAUTH_ERROR_MESSAGES: Record<string, string> = {
 export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly authState = inject(AuthStateService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -92,13 +94,12 @@ export class LoginComponent implements OnInit {
 
     if (
       redirect?.startsWith('/cursos') ||
-      redirect?.startsWith('/app') ||
       redirect?.startsWith('/admin') ||
       redirect === '/perfil'
     ) {
       return redirect;
     }
 
-    return '/app/dashboard';
+    return this.authState.hasRole('ADMIN') ? '/admin/dashboard' : '/';
   }
 }

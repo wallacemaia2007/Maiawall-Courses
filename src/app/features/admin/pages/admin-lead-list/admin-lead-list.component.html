@@ -1,0 +1,192 @@
+<section class="adm-page">
+  <header class="adm-page__header">
+    <div>
+      <h1>Leads</h1>
+      <p>Registre aqui os contatos e as origens que você tirar do analytics.</p>
+    </div>
+  </header>
+
+  <div class="adm-cards">
+    <div class="adm-card">
+      <span class="adm-card__label">Total</span>
+      <span class="adm-card__value">{{ counts().todos }}</span>
+      <span class="adm-card__hint">{{ counts().novo }} novos</span>
+    </div>
+    <div class="adm-card">
+      <span class="adm-card__label">Convertidos</span>
+      <span class="adm-card__value">{{ counts().convertido }}</span>
+      <span class="adm-card__hint">{{ conversionRate() }}% do total</span>
+    </div>
+    <div class="adm-card">
+      <span class="adm-card__label">Principais origens</span>
+      @if (topSources().length === 0) {
+        <span class="adm-card__hint">Nenhuma ainda</span>
+      } @else {
+        @for (item of topSources(); track item.source) {
+          <span class="adm-card__hint">{{ item.source }} · {{ item.total }}</span>
+        }
+      }
+    </div>
+  </div>
+
+  <section class="adm-panel" id="lead-form">
+    <h2>{{ editingId() ? 'Editar lead' : 'Novo lead' }}</h2>
+    <div class="adm-form">
+      <div class="adm-field">
+        <label for="lead-name">Nome *</label>
+        <input id="lead-name" class="adm-input" type="text" maxlength="80" [formControl]="form.controls.name" />
+      </div>
+      <div class="adm-field">
+        <label for="lead-email">E-mail</label>
+        <input id="lead-email" class="adm-input" type="email" maxlength="120" [formControl]="form.controls.email" />
+      </div>
+      <div class="adm-field">
+        <label for="lead-phone">Telefone / WhatsApp</label>
+        <input id="lead-phone" class="adm-input" type="tel" maxlength="30" [formControl]="form.controls.phone" />
+      </div>
+      <div class="adm-field">
+        <label for="lead-source">Origem *</label>
+        <input
+          id="lead-source"
+          class="adm-input"
+          type="text"
+          maxlength="60"
+          placeholder="Instagram, Google, Indicação..."
+          [formControl]="form.controls.source"
+        />
+      </div>
+      <div class="adm-field">
+        <label for="lead-medium">Meio</label>
+        <input
+          id="lead-medium"
+          class="adm-input"
+          type="text"
+          maxlength="60"
+          placeholder="orgânico, pago, e-mail..."
+          [formControl]="form.controls.medium"
+        />
+      </div>
+      <div class="adm-field">
+        <label for="lead-campaign">Campanha</label>
+        <input id="lead-campaign" class="adm-input" type="text" maxlength="80" [formControl]="form.controls.campaign" />
+      </div>
+      <div class="adm-field">
+        <label for="lead-status">Status</label>
+        <select id="lead-status" class="adm-select" [formControl]="form.controls.status">
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ statusLabels[status] }}</option>
+          }
+        </select>
+      </div>
+      <div class="adm-field">
+        <label for="lead-date">Data de captação</label>
+        <input id="lead-date" class="adm-input" type="date" [formControl]="form.controls.capturedAt" />
+      </div>
+      <div class="adm-field adm-field--wide">
+        <label for="lead-notes">Observações</label>
+        <textarea id="lead-notes" class="adm-textarea" rows="3" maxlength="1000" [formControl]="form.controls.notes"></textarea>
+      </div>
+    </div>
+
+    <div class="adm-actions" style="margin-top: 1rem">
+      <button class="mw-btn mw-btn--primary" type="button" [disabled]="form.invalid || saving()" (click)="save()">
+        {{ saving() ? 'Salvando...' : editingId() ? 'Salvar alterações' : 'Adicionar lead' }}
+      </button>
+      @if (editingId()) {
+        <button class="mw-btn mw-btn--outline" type="button" (click)="cancelEdit()">Cancelar</button>
+      }
+    </div>
+  </section>
+
+  @if (errorMessage()) {
+    <p class="adm-error" role="alert">{{ errorMessage() }}</p>
+  }
+  @if (successMessage()) {
+    <p class="adm-success" role="status">{{ successMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="adm-status">Carregando leads...</p>
+  } @else if (leads().length === 0) {
+    <p class="adm-empty">Nenhum lead cadastrado ainda. Adicione o primeiro acima.</p>
+  } @else {
+    <div class="adm-chips" role="group" aria-label="Filtrar por status">
+      <button class="adm-chip" type="button" [class.is-active]="filter() === 'todos'" (click)="filter.set('todos')">
+        Todos ({{ counts().todos }})
+      </button>
+      @for (status of statuses; track status) {
+        <button class="adm-chip" type="button" [class.is-active]="filter() === status" (click)="filter.set(status)">
+          {{ statusLabels[status] }} ({{ counts()[status] }})
+        </button>
+      }
+    </div>
+
+    @if (filtered().length === 0) {
+      <p class="adm-empty">Nenhum lead com esse status.</p>
+    } @else {
+      <div class="adm-table-wrap">
+        <table class="adm-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Lead</th>
+              <th>Origem</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (lead of filtered(); track lead.id) {
+              <tr>
+                <td>{{ lead.capturedAt | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="adm-cell-main">{{ lead.name }}</span>
+                  @if (lead.email) { <span class="adm-cell-sub">{{ lead.email }}</span> }
+                  @if (lead.phone) { <span class="adm-cell-sub">{{ lead.phone }}</span> }
+                  @if (lead.notes) { <span class="adm-cell-sub">{{ lead.notes }}</span> }
+                </td>
+                <td>
+                  <span class="adm-cell-main">{{ lead.source }}</span>
+                  @if (lead.medium || lead.campaign) {
+                    <span class="adm-cell-sub">
+                      {{ lead.medium }}{{ lead.medium && lead.campaign ? ' · ' : '' }}{{ lead.campaign }}
+                    </span>
+                  }
+                </td>
+                <td>
+                  <select
+                    class="adm-select adm-select--inline"
+                    [attr.aria-label]="'Status de ' + lead.name"
+                    (change)="changeStatus(lead, $event)"
+                  >
+                    @for (status of statuses; track status) {
+                      <option [value]="status" [selected]="status === lead.status">{{ statusLabels[status] }}</option>
+                    }
+                  </select>
+                </td>
+                <td class="is-num">
+                  <span class="adm-actions">
+                    <button class="adm-btn" type="button" (click)="edit(lead)">Editar</button>
+                    <button class="adm-btn adm-btn--danger" type="button" (click)="toDelete.set(lead)">Remover</button>
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  @if (toDelete(); as target) {
+    <app-confirm-delete-modal
+      title="Remover lead"
+      message="Esta ação não pode ser desfeita."
+      [itemName]="target.name"
+      confirmLabel="Remover"
+      [busy]="saving()"
+      (confirmed)="confirmDelete()"
+      (cancelled)="toDelete.set(null)"
+    />
+  }
+</section>

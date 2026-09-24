@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 
 const { env } = require('./config/env');
+const { adminRouter } = require('./routes/admin.routes');
 const { authRouter } = require('./routes/auth.routes');
 const { oauthRouter } = require('./routes/oauth.routes');
 const { catalogRouter } = require('./routes/catalog.routes');
@@ -40,7 +41,7 @@ function createApp() {
   app.use('/api/courses', optionalAuth, courseQuestionRouter);
   app.use('/api/courses', optionalAuth, catalogRouter);
   app.use('/api/learning', requireAuth, learningRouter);
-  app.use('/api/admin', requireAuth, requireAdmin, adminQuestionRouter);
+  app.use('/api/admin', requireAuth, requireAdmin, adminQuestionRouter, adminRouter);
   app.use(notFoundHandler);
   app.use(errorHandler);
 

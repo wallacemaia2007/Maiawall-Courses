@@ -1,3 +1,100 @@
-<section class="admin-dashboard-page">
-  Métricas da plataforma: alunos, cursos, submissões pendentes de correção.
+<section class="adm-page">
+  <header class="adm-page__header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Visão geral da plataforma.</p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="adm-error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="adm-status">Carregando métricas...</p>
+  } @else {
+  @if (data(); as d) {
+    <div class="adm-cards">
+      <a class="adm-card" routerLink="/admin/alunos">
+        <span class="adm-card__label">Alunos</span>
+        <span class="adm-card__value">{{ d.students.total }}</span>
+        <span class="adm-card__hint">
+          +{{ d.students.newLast30Days }} em 30 dias · {{ d.students.activeLast7Days }} ativos em 7 dias
+        </span>
+      </a>
+      <a class="adm-card" routerLink="/admin/cursos">
+        <span class="adm-card__label">Cursos</span>
+        <span class="adm-card__value">{{ d.courses.published }}</span>
+        <span class="adm-card__hint">publicados de {{ d.courses.total }}</span>
+      </a>
+      <div class="adm-card">
+        <span class="adm-card__label">Capítulos concluídos</span>
+        <span class="adm-card__value">{{ d.learning.completedChapters }}</span>
+        <span class="adm-card__hint">por {{ d.learning.learners }} aluno(s) com progresso</span>
+      </div>
+      <a class="adm-card" [class.is-alert]="d.questions.pending > 0" routerLink="/admin/duvidas">
+        <span class="adm-card__label">Dúvidas sem resposta</span>
+        <span class="adm-card__value">{{ d.questions.pending }}</span>
+        <span class="adm-card__hint">de {{ d.questions.total }} recebidas</span>
+      </a>
+      <a class="adm-card" routerLink="/admin/leads">
+        <span class="adm-card__label">Leads</span>
+        <span class="adm-card__value">{{ d.leads.total }}</span>
+        <span class="adm-card__hint">{{ d.leads.new }} novos · {{ d.leads.last30Days }} em 30 dias</span>
+      </a>
+    </div>
+
+    <div class="adm-grid-2">
+      <section class="adm-panel">
+        <div class="adm-panel__head">
+          <h2>Últimos acessos</h2>
+          <a class="adm-link" routerLink="/admin/alunos">Ver todos</a>
+        </div>
+        @if (d.recentStudents.length === 0) {
+          <p class="adm-cell-sub">Nenhum aluno ainda.</p>
+        } @else {
+          <ul class="adm-list">
+            @for (student of d.recentStudents; track student.id) {
+              <li class="adm-person">
+                <span class="adm-avatar" aria-hidden="true">{{ student.name.charAt(0).toUpperCase() }}</span>
+                <span>
+                  <span class="adm-cell-main">{{ student.name }}</span>
+                  <span class="adm-cell-sub">
+                    @if (student.lastLoginAt) {
+                      {{ student.lastLoginAt | date: "dd/MM/yyyy 'às' HH:mm" }}
+                    } @else {
+                      sem acesso registrado
+                    }
+                  </span>
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="adm-panel">
+        <div class="adm-panel__head">
+          <h2>Dúvidas aguardando resposta</h2>
+          <a class="adm-link" routerLink="/admin/duvidas">Responder</a>
+        </div>
+        @if (d.pendingQuestions.length === 0) {
+          <p class="adm-cell-sub">Nenhuma dúvida pendente.</p>
+        } @else {
+          <ul class="adm-list">
+            @for (question of d.pendingQuestions; track question.id) {
+              <li>
+                <span class="adm-cell-main">{{ question.question }}</span>
+                <span class="adm-cell-sub">
+                  {{ question.authorName }} · {{ question.courseTitle }} ·
+                  {{ question.createdAt | date: 'dd/MM/yyyy' }}
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+  }
+  }
 </section>

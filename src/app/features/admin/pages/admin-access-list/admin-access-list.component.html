@@ -1,0 +1,116 @@
+<section class="adm-page">
+  <header class="adm-page__header">
+    <div>
+      <h1>Acessos</h1>
+      <p>Quem pode entrar neste painel.</p>
+    </div>
+  </header>
+
+  <section class="adm-panel">
+    <h2>Dar acesso a alguém</h2>
+    <div class="adm-form">
+      <div class="adm-field adm-field--wide">
+        <label for="access-email">E-mail da conta</label>
+        <input
+          id="access-email"
+          class="adm-input"
+          type="email"
+          autocomplete="off"
+          placeholder="pessoa@exemplo.com"
+          [formControl]="email"
+          (keydown.enter)="grant()"
+        />
+        <span class="adm-cell-sub">
+          A pessoa precisa já ter conta e com e-mail verificado (ou ter entrado com Google/GitHub).
+        </span>
+      </div>
+    </div>
+    <div class="adm-actions" style="margin-top: 1rem">
+      <button class="mw-btn mw-btn--primary" type="button" [disabled]="email.invalid || saving()" (click)="grant()">
+        {{ saving() ? 'Salvando...' : 'Conceder acesso' }}
+      </button>
+    </div>
+  </section>
+
+  @if (errorMessage()) {
+    <p class="adm-error" role="alert">{{ errorMessage() }}</p>
+  }
+  @if (successMessage()) {
+    <p class="adm-success" role="status">{{ successMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="adm-status">Carregando acessos...</p>
+  } @else {
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Pessoa</th>
+            <th>Concedido por</th>
+            <th>Último acesso</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (admin of admins(); track admin.id) {
+            <tr>
+              <td>
+                <span class="adm-person">
+                  <span class="adm-avatar" aria-hidden="true">
+                    @if (admin.avatarUrl) {
+                      <img [src]="admin.avatarUrl" alt="" referrerpolicy="no-referrer" />
+                    } @else {
+                      {{ admin.name.charAt(0).toUpperCase() }}
+                    }
+                  </span>
+                  <span>
+                    <span class="adm-cell-main">
+                      {{ admin.name }}
+                      @if (admin.isSelf) { <span class="adm-badge adm-badge--info">você</span> }
+                    </span>
+                    <span class="adm-cell-sub">{{ admin.email }}</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                @if (admin.grantedBy === 'server') {
+                  <span class="adm-badge">Servidor (ADMIN_EMAILS)</span>
+                } @else {
+                  <span class="adm-badge adm-badge--success">Painel</span>
+                }
+              </td>
+              <td>
+                @if (admin.lastLoginAt) {
+                  {{ admin.lastLoginAt | date: 'dd/MM/yyyy HH:mm' }}
+                } @else {
+                  <span class="adm-cell-sub">sem registro</span>
+                }
+              </td>
+              <td class="is-num">
+                @if (admin.revocable) {
+                  <button class="adm-btn adm-btn--danger" type="button" (click)="toRevoke.set(admin)">Remover</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="adm-cell-sub">
+      Acessos vindos do servidor (variável ADMIN_EMAILS) e o seu próprio acesso não podem ser removidos por aqui.
+    </p>
+  }
+
+  @if (toRevoke(); as target) {
+    <app-confirm-delete-modal
+      title="Remover acesso ao painel"
+      message="Esta pessoa volta a ser aluna e deixa de acessar o painel."
+      [itemName]="target.name + ' (' + target.email + ')'"
+      confirmLabel="Remover acesso"
+      [busy]="saving()"
+      (confirmed)="confirmRevoke()"
+      (cancelled)="toRevoke.set(null)"
+    />
+  }
+</section>

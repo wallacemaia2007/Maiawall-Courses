@@ -62,9 +62,23 @@ guards de rota.
 
 ### Area administrativa
 
-Usuarios com perfil administrativo ou de instrutor possuem uma area dedicada
-para manter o catalogo e acompanhar a operacao da plataforma, incluindo cursos,
-conteudo, exercicios, alunos, correcoes e certificados.
+Usuarios administradores acessam o painel em `/admin`, com as paginas:
+
+- `/admin/dashboard`: metricas da plataforma (alunos, cursos, progresso,
+  duvidas sem resposta e leads).
+- `/admin/leads`: leads registrados manualmente a partir do analytics (origem,
+  meio, campanha, status), com resumo e filtro por status.
+- `/admin/cursos`: todos os cursos, publicados ou em rascunho.
+- `/admin/acessos`: quem pode entrar no painel. Concede acesso por e-mail a uma
+  conta ja existente e com e-mail verificado; acessos vindos de `ADMIN_EMAILS`
+  aparecem como somente leitura.
+- `/admin/alunos`: quem ja entrou na plataforma, com ultimo acesso e progresso.
+- `/admin/duvidas`: duvidas enviadas nos minicursos, para responder e publicar
+  no FAQ.
+
+Os dados vem de `GET /api/admin/{dashboard,courses,students,access,leads}`,
+todos protegidos por `requireAuth` + `requireAdmin`. O ultimo login e gravado em
+`users.lastLoginAt` (login, cadastro e OAuth; renovar o token nao conta).
 
 ## Stack
 

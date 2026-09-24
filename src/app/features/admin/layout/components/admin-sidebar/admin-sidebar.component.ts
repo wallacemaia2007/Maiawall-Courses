@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+
+import { AuthService } from '../../../../../core/auth/auth.service';
 
 export interface AdminSidebarNavItem {
   label: string;
@@ -16,16 +18,26 @@ export interface AdminSidebarNavItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminSidebarComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   readonly brandTitle = input('MAIAWALL');
   readonly brandSubtitle = input('ADMIN');
 
   readonly navItems = input<AdminSidebarNavItem[]>([
     { label: 'Dashboard', route: '/admin/dashboard', icon: 'dashboard' },
+    { label: 'Leads', route: '/admin/leads', icon: 'leads' },
     { label: 'Cursos', route: '/admin/cursos', icon: 'courses' },
-    { label: 'Capítulos', route: '/admin/capitulos', icon: 'chapters' },
-    { label: 'Exercícios', route: '/admin/exercicios', icon: 'exercises' },
+    { label: 'Acessos', route: '/admin/acessos', icon: 'access' },
     { label: 'Alunos', route: '/admin/alunos', icon: 'students' },
-    { label: 'Submissões', route: '/admin/submissoes', icon: 'submissions' },
-    { label: 'Certificados', route: '/admin/certificados', icon: 'certificates' },
+    { label: 'Dúvidas', route: '/admin/duvidas', icon: 'questions' },
   ]);
+
+  protected logout(): void {
+    // Mesmo se a chamada falhar (rede), o usuário sai da área admin.
+    this.authService.logout().subscribe({
+      next: () => void this.router.navigateByUrl('/'),
+      error: () => void this.router.navigateByUrl('/'),
+    });
+  }
 }

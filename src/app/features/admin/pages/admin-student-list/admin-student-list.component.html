@@ -1,3 +1,84 @@
-<section class="admin-student-list-page">
-  Gestão de alunos: matrículas, progresso e histórico.
+<section class="adm-page">
+  <header class="adm-page__header">
+    <div>
+      <h1>Alunos</h1>
+      <p>Quem já entrou na plataforma, do acesso mais recente para o mais antigo.</p>
+    </div>
+    <div class="adm-field">
+      <label for="student-search">Buscar</label>
+      <input
+        id="student-search"
+        class="adm-input"
+        type="search"
+        placeholder="Nome ou e-mail"
+        [value]="search()"
+        (input)="onSearch($event)"
+      />
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="adm-error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="adm-status">Carregando alunos...</p>
+  } @else if (students().length === 0) {
+    <p class="adm-empty">Nenhum aluno entrou ainda.</p>
+  } @else if (filtered().length === 0) {
+    <p class="adm-empty">Nenhum aluno encontrado para "{{ search() }}".</p>
+  } @else {
+    <p class="adm-cell-sub">{{ filtered().length }} de {{ students().length }} aluno(s)</p>
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Login via</th>
+            <th>Último acesso</th>
+            <th>Cadastro</th>
+            <th class="is-num">Cursos</th>
+            <th class="is-num">Capítulos concluídos</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (student of filtered(); track student.id) {
+            <tr>
+              <td>
+                <span class="adm-person">
+                  <span class="adm-avatar" aria-hidden="true">
+                    @if (student.avatarUrl) {
+                      <img [src]="student.avatarUrl" alt="" referrerpolicy="no-referrer" />
+                    } @else {
+                      {{ student.name.charAt(0).toUpperCase() }}
+                    }
+                  </span>
+                  <span>
+                    <span class="adm-cell-main">{{ student.name }}</span>
+                    <span class="adm-cell-sub">{{ student.email }}</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <span class="adm-badge">{{ providerLabel(student.provider) }}</span>
+                @if (!student.emailVerified) {
+                  <span class="adm-badge adm-badge--warning">e-mail não verificado</span>
+                }
+              </td>
+              <td>
+                @if (student.lastLoginAt) {
+                  {{ student.lastLoginAt | date: 'dd/MM/yyyy HH:mm' }}
+                } @else {
+                  <span class="adm-cell-sub">sem registro</span>
+                }
+              </td>
+              <td>{{ student.createdAt | date: 'dd/MM/yyyy' }}</td>
+              <td class="is-num">{{ student.startedCourses }}</td>
+              <td class="is-num">{{ student.completedChapters }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </section>

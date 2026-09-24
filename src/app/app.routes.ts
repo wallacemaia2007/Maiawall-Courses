@@ -9,6 +9,7 @@ import { roleChildGuard, roleGuard } from './core/guards/role.guard';
  *
  * Públicas  : /  /sobre  /cursos  /cursos/:slug  /cursos/:slug/capitulo/:chapterSlug
  * Auth      : /login  /signup  /forgot-password  /reset-password  /verify-email  /auth/callback
+ * Admin     : /admin
  * Usuário   : /perfil
  */
 export const routes: Routes = [
@@ -42,13 +43,6 @@ export const routes: Routes = [
           import('./features/profile/pages/profile/profile.component').then((m) => m.ProfileComponent),
       },
     ],
-  },
-  {
-    path: 'app',
-    canActivate: [authGuard],
-    canActivateChild: [authChildGuard],
-    loadChildren: () =>
-      import('./features/student/student.routes').then((m) => m.STUDENT_ROUTES),
   },
   {
     path: 'admin',

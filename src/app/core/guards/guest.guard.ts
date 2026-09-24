@@ -7,7 +7,8 @@ import { AuthStateService } from '../auth/auth-state.service';
 
 /*
  * Protege páginas destinadas apenas a visitantes (ex.: /login, /signup).
- * Usuário com sessão autenticada é redirecionado para a área do aluno.
+ * Usuário com sessão autenticada é redirecionado: admin -> /admin,
+ * demais -> /.
  */
 export const guestGuard: CanActivateFn = () => {
   const authState = inject(AuthStateService);
@@ -15,14 +16,18 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (authState.isAuthenticated()) {
-    return router.createUrlTree(['/app/dashboard']);
+    return router.createUrlTree([
+      authState.hasRole('ADMIN') ? '/admin/dashboard' : '/',
+    ]);
   }
 
   if (authState.accessToken()) {
     return authService.getSession().pipe(
       map((session) => {
         if (session) {
-          return router.createUrlTree(['/app/dashboard']);
+          return router.createUrlTree([
+            session.user.role === 'ADMIN' ? '/admin/dashboard' : '/',
+          ]);
         }
 
         authState.clearSession();

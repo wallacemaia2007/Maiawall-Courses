@@ -83,3 +83,11 @@ export const QUESTION_ENDPOINTS = {
   byCourse: (courseId: string) => `/courses/${courseId}/questions`,
   admin: '/admin/questions',
 } as const;
+
+export const ADMIN_ENDPOINTS = {
+  dashboard: '/admin/dashboard',
+  courses: '/admin/courses',
+  students: '/admin/students',
+  access: '/admin/access',
+  leads: '/admin/leads',
+} as const;

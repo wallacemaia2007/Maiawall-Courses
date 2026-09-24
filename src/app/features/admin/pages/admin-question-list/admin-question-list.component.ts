@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 import { toApiError } from '../../../../core/models/api-error.model';
 import { CourseQuestion } from '../../../courses/models/course-question.model';
@@ -10,7 +9,7 @@ import { CourseQuestionService } from '../../../courses/services/course-question
 @Component({
   selector: 'app-admin-question-list',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule, RouterLink],
+  imports: [DatePipe, ReactiveFormsModule],
   templateUrl: './admin-question-list.component.html',
   styleUrl: './admin-question-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +24,18 @@ export class AdminQuestionListComponent implements OnInit {
   protected readonly savingId = signal<string | null>(null);
   protected readonly savedId = signal<string | null>(null);
   protected readonly publication = signal<Record<string, boolean>>({});
+  protected readonly filter = signal<'todas' | 'pendentes'>('todas');
+
+  protected readonly pendingCount = computed(
+    () => this.questions().filter((question) => !question.answer).length,
+  );
+
+  /* Em "pendentes", a dúvida recém-respondida continua na tela até trocar de filtro. */
+  protected readonly visibleQuestions = computed(() =>
+    this.filter() === 'pendentes'
+      ? this.questions().filter((question) => !question.answer || question.id === this.savedId())
+      : this.questions(),
+  );
 
   ngOnInit(): void {
     this.load();

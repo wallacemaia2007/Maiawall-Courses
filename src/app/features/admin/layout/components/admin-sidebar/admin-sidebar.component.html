@@ -3,7 +3,7 @@
     <strong>{{ brandTitle() }}</strong>
     <span>{{ brandSubtitle() }}</span>
   </a>
-  <nav class="admin-sidebar__nav">
+  <nav class="admin-sidebar__nav" aria-label="Navegação do painel">
     @for (item of navItems(); track item.route) {
       <a
         class="admin-sidebar__item"
@@ -15,4 +15,8 @@
       </a>
     }
   </nav>
+  <div class="admin-sidebar__footer">
+    <a class="admin-sidebar__cta" routerLink="/">Ir para o site</a>
+    <button class="admin-sidebar__item " type="button" (click)="logout()">Sair</button>
+  </div>
 </aside>

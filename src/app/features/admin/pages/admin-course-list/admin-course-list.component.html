@@ -1,3 +1,66 @@
-<section class="admin-course-list-page">
-  CRUD de cursos: listagem, criação, edição e publicação.
+<section class="adm-page">
+  <header class="adm-page__header">
+    <div>
+      <h1>Cursos</h1>
+      <p>Todos os cursos cadastrados, publicados ou em rascunho.</p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="adm-error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="adm-status">Carregando cursos...</p>
+  } @else if (courses().length === 0) {
+    <p class="adm-empty">Nenhum curso cadastrado.</p>
+  } @else {
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Curso</th>
+            <th>Nível</th>
+            <th>Status</th>
+            <th class="is-num">Capítulos</th>
+            <th class="is-num">Alunos</th>
+            <th class="is-num">Concluídos</th>
+            <th>Atualizado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (course of courses(); track course.id) {
+            <tr>
+              <td>
+                @if (course.published) {
+                  <a class="adm-cell-main adm-link" [routerLink]="['/cursos', course.slug]">{{ course.title }}</a>
+                } @else {
+                  <span class="adm-cell-main">{{ course.title }}</span>
+                }
+                <span class="adm-cell-sub">
+                  {{ course.category || 'sem categoria' }}
+                  @if (course.durationMinutes) { · {{ course.durationMinutes }} min }
+                </span>
+              </td>
+              <td>{{ course.level || '—' }}</td>
+              <td>
+                @if (course.published) {
+                  <span class="adm-badge adm-badge--success">Publicado</span>
+                } @else {
+                  <span class="adm-badge adm-badge--warning">Rascunho</span>
+                }
+              </td>
+              <td class="is-num">{{ course.chapters }}</td>
+              <td class="is-num">{{ course.learners }}</td>
+              <td class="is-num">{{ course.completedChapters }}</td>
+              <td>{{ course.updatedAt | date: 'dd/MM/yyyy' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="adm-cell-sub">
+      "Alunos" = quem já abriu algum capítulo do curso. "Concluídos" = capítulos concluídos, somando todos os alunos.
+    </p>
+  }
 </section>
