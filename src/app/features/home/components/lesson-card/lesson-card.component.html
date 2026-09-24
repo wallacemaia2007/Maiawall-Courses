@@ -34,12 +34,12 @@
       <span class="lesson-card__label">Neste curso</span>
       <ol>
         @if (isResume()) {
-          @for (chapter of chapters(); track chapter.id; let index = $index) {
+          @for (chapter of outlineChapters(); track chapter.id) {
             <li
               [class.is-complete]="status()(chapter.id) === 'completed'"
               [class.is-current]="chapter.id === current()?.id"
             >
-              <span>{{ status()(chapter.id) === 'completed' ? '✓' : chapterNumber(index) }}</span>
+              <span>{{ status()(chapter.id) === 'completed' ? '✓' : chapterNumber(chapter.order - 1) }}</span>
               {{ chapter.title }}
             </li>
           }
@@ -51,6 +51,11 @@
           }
         }
       </ol>
+      @if (isResume() && canExpand()) {
+        <button class="lesson-card__outline-toggle" type="button" (click)="toggleOutline()">
+          {{ expanded() ? 'Mostrar menos' : 'Ver todos os capítulos' }}
+        </button>
+      }
     </aside>
 
     <div class="lesson-card__content">
