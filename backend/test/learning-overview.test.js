@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
 
-const { buildLearningOverview } = require('../src/routes/learning.routes');
+const { buildLearningOverview, shouldKeepCompleted } = require('../src/routes/learning.routes');
 
 const courses = [
   {
@@ -136,4 +136,15 @@ test('returns at most five completed chapters ordered by completion date', () =>
   assert.equal(result.recentCompletedChapters.length, 5);
   assert.equal(result.recentCompletedChapters[0].chapter.id, 'a-6');
   assert.equal(result.recentCompletedChapters[4].chapter.id, 'a-2');
+});
+
+test('reopening a completed chapter does not downgrade it to in-progress', () => {
+  assert.equal(shouldKeepCompleted('completed', 'in-progress'), true);
+});
+
+test('completed chapters can still be re-completed and other transitions are untouched', () => {
+  assert.equal(shouldKeepCompleted('completed', 'completed'), false);
+  assert.equal(shouldKeepCompleted('in-progress', 'in-progress'), false);
+  assert.equal(shouldKeepCompleted('in-progress', 'completed'), false);
+  assert.equal(shouldKeepCompleted(undefined, 'in-progress'), false);
 });

@@ -39,6 +39,16 @@ function timestampOf(value) {
   return Number.isNaN(date.getTime()) ? 0 : date.getTime();
 }
 
+/*
+ * O frontend chama PATCH { status: 'in-progress' } toda vez que a página do
+ * capítulo abre. Sem esta regra, reabrir um capítulo já concluído gravava
+ * 'in-progress' por cima de 'completed' e o capítulo deixava de contar como
+ * visto. Concluir é um estado final: só 'completed' pode ser regravado.
+ */
+function shouldKeepCompleted(existingStatus, requestedStatus) {
+  return existingStatus === 'completed' && requestedStatus === 'in-progress';
+}
+
 function chapterReference(chapter, completedAt) {
   if (!chapter) return null;
   return {
@@ -230,7 +240,25 @@ learningRouter.patch('/chapters/:chapterId', async (request, response, next) => 
     const progressRef = database
       .collection('chapterProgress')
       .doc(`${request.auth.userId}:${chapterId}`);
-    const existing = await progressRef.get();
+    const existingSnapshot = await progressRef.get();
+    const existing = fromFirestoreDoc(existingSnapshot);
+
+    if (shouldKeepCompleted(existing?.status, status)) {
+      response.json(
+        successResponse(
+          {
+            chapterId,
+            courseId: chapter.courseId,
+            status: 'completed',
+            updatedAt: existing.updatedAt,
+            ...(existing.completedAt ? { completedAt: existing.completedAt } : {}),
+          },
+          'OK',
+        ),
+      );
+      return;
+    }
+
     const data = {
       userId: request.auth.userId,
       chapterId,
@@ -240,7 +268,7 @@ learningRouter.patch('/chapters/:chapterId', async (request, response, next) => 
       ...(status === 'completed' ? { completedAt: now } : {}),
     };
 
-    if (!existing.exists) {
+    if (!existing) {
       data.createdAt = now;
     }
 
@@ -263,4 +291,4 @@ learningRouter.patch('/chapters/:chapterId', async (request, response, next) => 
   }
 });
 
-module.exports = { buildLearningOverview, learningRouter };
+module.exports = { buildLearningOverview, learningRouter, shouldKeepCompleted };
