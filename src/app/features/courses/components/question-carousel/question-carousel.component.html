@@ -1,0 +1,75 @@
+<div class="q-carousel" [class.q-carousel--single]="total() <= 1">
+  <div class="q-carousel__viewport">
+    @for (question of questions(); track question.id; let i = $index) {
+      <article
+        class="q-carousel__slide"
+        [class.is-active]="i === activeIndex()"
+        [attr.aria-hidden]="i === activeIndex() ? null : 'true'"
+      >
+        <div class="q-msg q-msg--question">
+          <div class="q-msg__avatar">
+            @if (authorAvatar(question); as avatar) {
+              <img [src]="avatar" [alt]="authorName(question)" />
+            } @else {
+              <span aria-hidden="true">{{ initials(authorName(question)) }}</span>
+            }
+          </div>
+          <div class="q-msg__bubble">
+            <header>
+              <strong>{{ authorName(question) }}</strong>
+              @if (question.createdAt) {
+                <time [attr.datetime]="question.createdAt">
+                  {{ question.createdAt | date: "dd 'de' MMM 'de' yyyy" }}
+                </time>
+              }
+            </header>
+            <p>{{ question.question }}</p>
+          </div>
+        </div>
+
+        <div class="q-msg q-msg--answer">
+          <div class="q-msg__avatar q-msg__avatar--tutor">
+            @if (instructor.avatarUrl) {
+              <img [src]="instructor.avatarUrl" [alt]="instructor.name" />
+            } @else {
+              <span aria-hidden="true">{{ initials(instructor.name) }}</span>
+            }
+          </div>
+          <div class="q-msg__bubble q-msg__bubble--answer">
+            <header>
+              <strong>{{ instructor.name }}</strong>
+              @if (question.answeredAt) {
+                <time [attr.datetime]="question.answeredAt">
+                  {{ question.answeredAt | date: "dd 'de' MMM 'de' yyyy" }}
+                </time>
+              }
+            </header>
+            <p>{{ question.answer }}</p>
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+
+  @if (total() > 1) {
+    <div class="q-carousel__nav">
+      <button type="button" class="q-carousel__arrow" (click)="prev()" aria-label="Dúvida anterior">‹</button>
+
+      <div class="q-carousel__dots" role="tablist" aria-label="Dúvidas deste minicurso">
+        @for (question of questions(); track question.id; let i = $index) {
+          <button
+            type="button"
+            class="q-carousel__dot"
+            role="tab"
+            [class.is-active]="i === activeIndex()"
+            [attr.aria-selected]="i === activeIndex()"
+            [attr.aria-label]="'Ver dúvida ' + (i + 1) + ' de ' + total()"
+            (click)="goTo(i)"
+          ></button>
+        }
+      </div>
+
+      <button type="button" class="q-carousel__arrow" (click)="next()" aria-label="Próxima dúvida">›</button>
+    </div>
+  }
+</div>

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Meta, Title } from '@angular/platform-browser';
@@ -8,6 +7,7 @@ import { catchError, map, of } from 'rxjs';
 import { toApiError } from '../../../../core/models/api-error.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { QuestionCarouselComponent } from '../../components/question-carousel/question-carousel.component';
 import { CourseQuestionGroup } from '../../models/course-question.model';
 import { CourseQuestionService } from '../../services/course-question.service';
 
@@ -23,7 +23,7 @@ interface FeaturedQuestionsState {
 @Component({
   selector: 'app-featured-questions',
   standalone: true,
-  imports: [DatePipe, RouterLink, EmptyStateComponent, LoadingSpinnerComponent],
+  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, QuestionCarouselComponent],
   templateUrl: './featured-questions.component.html',
   styleUrl: './featured-questions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

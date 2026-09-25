@@ -86,6 +86,17 @@ function serializeQuestion(question, includePrivate = false) {
   };
 }
 
+/*
+ * Versao publica e segura do autor: so nome e foto, nunca e-mail ou
+ * outros dados privados. Usada na pagina publica de duvidas em destaque.
+ */
+function serializePublicAuthor(question) {
+  const name = question.author?.name || question.authorName || '';
+  const avatarUrl = question.author?.avatarUrl || null;
+  if (!name && !avatarUrl) return null;
+  return { name, avatarUrl };
+}
+
 async function findPublishedCourse(database, courseId) {
   const snapshot = await database.collection('courses').doc(courseId).get();
   const course = fromFirestoreDoc(snapshot);
@@ -136,7 +147,10 @@ function buildFeaturedQuestionGroups(questions, courses) {
       questions: [],
     };
 
-    group.questions.push(serializeQuestion(question));
+    group.questions.push({
+      ...serializeQuestion(question),
+      author: serializePublicAuthor(question),
+    });
     groupsByCourse.set(course._id, group);
   }
 
@@ -211,7 +225,13 @@ publicQuestionRouter.get('/featured', async (_request, response, next) => {
     ]);
     const questions = questionsSnapshot.docs.map(fromFirestoreDoc);
     const courses = coursesSnapshot.docs.map(fromFirestoreDoc);
-    const groups = buildFeaturedQuestionGroups(questions, courses);
+
+    const eligible = questions.filter(
+      (question) => question && question.published && question.featured && question.answer,
+    );
+    await attachAuthorProfiles(eligible);
+
+    const groups = buildFeaturedQuestionGroups(eligible, courses);
 
     response.json(successResponse(groups, 'OK'));
   } catch (error) {
@@ -312,5 +332,6 @@ module.exports = {
   courseQuestionRouter,
   publicQuestionRouter,
   requiredText,
+  serializePublicAuthor,
   serializeQuestion,
 };

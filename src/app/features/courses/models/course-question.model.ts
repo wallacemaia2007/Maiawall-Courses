@@ -1,13 +1,13 @@
 import { CourseCategory } from './course.model';
 
 export interface CourseQuestionAuthor {
-  id: string | null;
+  id?: string | null;
   name: string;
-  email: string;
+  email?: string;
   avatarUrl: string | null;
   createdAt?: string;
   lastLoginAt?: string;
-  questionsCount: number;
+  questionsCount?: number;
 }
 
 export interface CourseQuestion {

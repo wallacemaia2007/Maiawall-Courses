@@ -149,6 +149,7 @@ test('buildFeaturedQuestionGroups groups only starred public questions by course
       published: true,
       featured: true,
       answeredAt: '2026-02-01T00:00:00.000Z',
+      author: { name: 'Bia', avatarUrl: 'https://img/bia.png', email: 'bia@example.com' },
     },
     {
       _id: 'apis-sem-estrela',
@@ -212,5 +213,24 @@ test('buildFeaturedQuestionGroups groups only starred public questions by course
     'apis-antiga',
   ]);
   assert.equal(groups[0].questions[0].authorEmail, undefined);
-  assert.equal(groups[0].questions[0].author, undefined);
+  // Autor publico: so nome e foto, nunca o e-mail.
+  assert.deepEqual(groups[0].questions[0].author, {
+    name: 'Bia',
+    avatarUrl: 'https://img/bia.png',
+  });
+  // Sem conta vinculada: cai para o nome informado no formulario, sem foto.
+  assert.deepEqual(groups[0].questions[1].author, { name: 'Ana', avatarUrl: null });
+});
+
+test('serializePublicAuthor exposes only name and avatar, never e-mail', () => {
+  const { serializePublicAuthor } = require('../src/routes/question.routes');
+
+  const withAccount = serializePublicAuthor({
+    authorName: 'Ana',
+    author: { name: 'Ana', email: 'ana@example.com', avatarUrl: 'https://img/ana.png' },
+  });
+  assert.deepEqual(withAccount, { name: 'Ana', avatarUrl: 'https://img/ana.png' });
+
+  const withoutAvatar = serializePublicAuthor({ authorName: 'Sem Foto', author: null });
+  assert.deepEqual(withoutAvatar, { name: 'Sem Foto', avatarUrl: null });
 });
