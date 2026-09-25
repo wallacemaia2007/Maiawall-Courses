@@ -1,6 +1,49 @@
-<div class="admin-layout">
-  <app-admin-sidebar />
-  <main class="admin-layout__content">
-    <router-outlet />
-  </main>
+<div
+  class="admin-layout"
+  [class.sidebar-is-collapsed]="sidebarCollapsed()"
+  [class.drawer-is-open]="drawerOpen()"
+  [attr.data-theme]="mode()"
+>
+  <app-admin-sidebar
+    [collapsed]="sidebarCollapsed()"
+    [drawerOpen]="drawerOpen()"
+    [darkTheme]="darkTheme()"
+    [navItems]="navItems"
+    (toggleCollapsed)="toggleSidebar()"
+    (toggleTheme)="toggleTheme()"
+  />
+
+  @if (drawerOpen()) {
+    <button
+      type="button"
+      class="drawer-backdrop"
+      aria-label="Fechar menu"
+      (click)="closeDrawer()"
+    ></button>
+  }
+
+  <div class="admin-layout__main">
+    <header class="admin-layout__header">
+      <button
+        type="button"
+        class="mobile-menu-button"
+        aria-label="Abrir menu"
+        [attr.aria-expanded]="drawerOpen()"
+        (click)="openDrawer()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+
+      <div>
+        <p class="mobile-brand">Maiawall Cursos</p>
+        <h1>{{ getPageTitle() }}</h1>
+      </div>
+    </header>
+
+    <main class="admin-layout__content">
+      <router-outlet />
+    </main>
+  </div>
 </div>

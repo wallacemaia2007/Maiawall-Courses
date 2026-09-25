@@ -1,18 +1,138 @@
 .admin-layout {
-  display: grid;
-  grid-template-columns: var(--admin-sidebar-width, 240px) minmax(0, 1fr);
+  display: flex;
   min-height: 100vh;
+  color: var(--color-text-primary);
   background: var(--color-bg-secondary);
 }
 
+.admin-layout__main {
+  width: 100%;
+  min-width: 0;
+  padding-left: 272px;
+  transition: padding-left 220ms ease;
+}
+
+.sidebar-is-collapsed .admin-layout__main {
+  padding-left: 72px;
+}
+
+.admin-layout__header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 74px;
+  padding: 0 32px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    inset 0 -1px 0 var(--color-border),
+    0 12px 28px rgba(var(--color-primary-rgb), 0.04);
+}
+
+[data-theme='dark'] .admin-layout__header {
+  background: rgba(15, 17, 22, 0.96);
+}
+
+.admin-layout__header::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary) 0 132px,
+      rgba(var(--color-primary-rgb), 0.28) 132px 34%,
+      transparent 72%
+    ),
+    linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.16), rgba(var(--color-primary-rgb), 0.04));
+  content: '';
+  pointer-events: none;
+}
+
+.admin-layout__header h1 {
+  margin: 0;
+  font: 650 clamp(1.1rem, 2vw, 1.35rem) / 1.1 var(--font-display);
+}
+
+.mobile-brand {
+  display: none;
+  margin: 0 0 2px;
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+}
+
+.mobile-menu-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.mobile-menu-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
 .admin-layout__content {
+  width: 100%;
   min-width: 0;
   padding: clamp(1rem, 3vw, 2rem);
 }
 
+.drawer-backdrop {
+  display: none;
+}
+
 @media (max-width: 860px) {
-  .admin-layout {
-    grid-template-columns: minmax(0, 1fr);
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: block;
+    border: 0;
+    background: rgba(0, 0, 0, 0.58);
+  }
+
+  .drawer-backdrop:active {
+    transform: none;
+  }
+
+  .admin-layout__main,
+  .sidebar-is-collapsed .admin-layout__main {
+    padding-left: 0;
+  }
+
+  .admin-layout__header {
+    min-height: 68px;
+    padding: 0 16px;
+  }
+
+  .admin-layout__header h1 {
+    display: none;
+  }
+
+  .mobile-brand,
+  .mobile-menu-button {
+    display: flex;
+  }
+
+  .admin-layout__content {
+    padding: 22px 16px 32px;
   }
 }
 

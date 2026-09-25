@@ -1,22 +1,164 @@
-<aside class="admin-sidebar">
-  <a class="admin-sidebar__brand" [routerLink]="'/admin/dashboard'">
-    <strong>{{ brandTitle() }}</strong>
-    <span>{{ brandSubtitle() }}</span>
-  </a>
-  <nav class="admin-sidebar__nav" aria-label="Navegação do painel">
-    @for (item of navItems(); track item.route) {
-      <a
-        class="admin-sidebar__item"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: false }"
-        [routerLink]="item.route"
-      >
-        {{ item.label }}
-      </a>
-    }
-  </nav>
-  <div class="admin-sidebar__footer">
-    <a class="admin-sidebar__cta" routerLink="/">Ir para o site</a>
-    <button class="admin-sidebar__item " type="button" (click)="logout()">Sair</button>
+<aside
+  class="dashboard-sidebar"
+  [class.is-collapsed]="collapsed()"
+  [class.is-drawer-open]="drawerOpen()"
+  [class.has-scroll-below]="hasScrollBelow()"
+  aria-label="Navegação principal"
+>
+  <div class="sidebar-top">
+    <a class="sidebar-brand" [routerLink]="brandRoute()" aria-label="Ir para o dashboard">
+      <span class="brand-mark">MW</span>
+      <span class="brand-copy">
+        <strong>{{ brandTitle() }}</strong>
+        <small>{{ brandSubtitle() }}</small>
+      </span>
+    </a>
+
+    <button
+      type="button"
+      class="collapse-button"
+      [attr.aria-label]="collapsed() ? 'Expandir sidebar' : 'Recolher sidebar'"
+      [attr.aria-expanded]="!collapsed()"
+      (click)="toggleCollapsed.emit()"
+    >
+      <svg class="collapse-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline points="9 6 15 12 9 18" />
+      </svg>
+    </button>
   </div>
+
+  <div #sidebarScroll class="sidebar-scroll" (scroll)="updateScrollHint()">
+    <nav class="sidebar-nav">
+      @for (item of navItems(); track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/admin/dashboard' }"
+          class="sidebar-link"
+          [attr.title]="collapsed() ? item.label : null"
+          [attr.aria-label]="item.label"
+        >
+          <span class="sidebar-icon" aria-hidden="true">
+            @switch (item.icon) {
+              @case ('dashboard') {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+              }
+              @case ('leads') {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3Z" />
+                </svg>
+              }
+              @case ('courses') {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+                </svg>
+              }
+              @case ('access') {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <circle cx="7.5" cy="15.5" r="5.5" />
+                  <path d="m21 2-9.6 9.6" />
+                  <path d="m15.5 7.5 3 3L22 7l-3-3" />
+                </svg>
+              }
+              @case ('students') {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <path d="m2 10 10-5 10 5-10 5-10-5Z" />
+                  <path d="M6 12.5v3c2.5 2.5 9.5 2.5 12 0v-3" />
+                  <path d="M22 10v6" />
+                </svg>
+              }
+              @case ('questions') {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                  <path d="M12 17h.01" />
+                </svg>
+              }
+              @default {
+                <svg class="stroke-icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
+              }
+            }
+          </span>
+          <span class="link-label">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <button
+        type="button"
+        class="sidebar-link theme-button"
+        [attr.title]="collapsed() ? 'Alternar tema' : null"
+        [attr.aria-label]="darkTheme() ? 'Ativar modo claro' : 'Ativar modo escuro'"
+        (click)="toggleTheme.emit()"
+      >
+        <span class="sidebar-icon" aria-hidden="true">
+          @if (darkTheme()) {
+            <svg class="theme-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          } @else {
+            <svg class="theme-icon" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+            </svg>
+          }
+        </span>
+        <span class="link-label">{{ darkTheme() ? 'Modo Claro' : 'Modo Escuro' }}</span>
+      </button>
+
+      <a
+        [routerLink]="siteRoute()"
+        class="sidebar-link"
+        [attr.title]="collapsed() ? 'Ir para o site' : null"
+        aria-label="Ir para o site"
+      >
+        <span class="sidebar-icon" aria-hidden="true">
+          <svg class="stroke-icon" viewBox="0 0 24 24">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <path d="M15 3h6v6" />
+            <path d="m10 14 11-11" />
+          </svg>
+        </span>
+        <span class="link-label">Ir para o site</span>
+      </a>
+
+      <button
+        type="button"
+        class="sidebar-link logout-button"
+        [attr.title]="collapsed() ? 'Sair' : null"
+        aria-label="Sair"
+        (click)="logout()"
+      >
+        <span class="sidebar-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M10 17v-3H3v-4h7V7l5 5-5 5Zm3 3v-2h5V6h-5V4h7v16h-7Z" />
+          </svg>
+        </span>
+        <span class="link-label">Sair</span>
+      </button>
+    </div>
+  </div>
+
+  <span class="sidebar-scroll-hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </span>
 </aside>

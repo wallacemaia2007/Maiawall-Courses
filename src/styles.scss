@@ -73,6 +73,42 @@
   --public-navbar-height: 64px;
 }
 
+/* Tema escuro — sobrescreve apenas a paleta base; a UI adota pelos tokens. */
+/* O atributo data-theme é aplicado apenas no nó do painel admin
+   (admin-layout), então o tema escuro não vaza para o site público. */
+[data-theme='dark'] {
+  --color-primary-soft: #3a1d24;
+  --color-primary-border: #6e3341;
+
+  --color-success: #64b47f;
+  --color-success-bg: #16311f;
+
+  --color-info: #7fa8dd;
+  --color-info-bg: #17263d;
+
+  --color-warning: #d8a85c;
+  --color-warning-bg: #32270f;
+
+  --color-danger: #e47a6f;
+  --color-danger-bg: #3a1715;
+
+  --color-neutral: #b8b4aa;
+  --color-neutral-bg: #2a2b2f;
+
+  --color-text-primary: #f1efe9;
+  --color-text-secondary: #b7b2a5;
+  --color-text-muted: #8b867c;
+
+  --color-bg-primary: #181a1e;
+  --color-bg-secondary: #0f1114;
+  --color-bg-tertiary: #222428;
+
+  --color-border: #2c2e33;
+  --color-border-light: #212328;
+  --color-surface-elevated: #1e2025;
+  --color-shadow-rgb: 0, 0, 0;
+}
+
 html {
   scroll-behavior: smooth;
 }
