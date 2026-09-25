@@ -1,0 +1,60 @@
+<app-modal
+  eyebrow="Autor da dúvida"
+  title="Perfil do aluno"
+  closeLabel="Fechar perfil"
+  [isOpen]="isOpen()"
+  (closed)="closed.emit()"
+>
+  @if (author(); as author) {
+    <div class="question-author-profile">
+      <div class="question-author-profile__head">
+        <span class="question-author-profile__avatar" aria-hidden="true">
+          @if (author.avatarUrl) {
+            <img [src]="author.avatarUrl" alt="" referrerpolicy="no-referrer" />
+          } @else {
+            {{ initials(author) }}
+          }
+        </span>
+        <span>
+          <span class="adm-cell-main">{{ author.name }}</span>
+          <a class="adm-cell-sub" [href]="emailHref(author)">{{ author.email }}</a>
+        </span>
+      </div>
+
+      <dl class="question-author-profile__meta">
+        <div>
+          <dt>Ingressou em</dt>
+          <dd>
+            @if (author.createdAt) {
+              {{ author.createdAt | date: "dd/MM/yyyy" }}
+            } @else {
+              <span class="adm-cell-sub">sem registro</span>
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Último login</dt>
+          <dd>
+            @if (author.lastLoginAt) {
+              {{ author.lastLoginAt | date: "dd/MM/yyyy 'às' HH:mm" }}
+            } @else {
+              <span class="adm-cell-sub">sem registro</span>
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Dúvidas enviadas</dt>
+          <dd>{{ author.questionsCount }}</dd>
+        </div>
+      </dl>
+
+      @if (!author.id) {
+        <p class="question-author-profile__note adm-cell-sub">
+          Esta pergunta é de uma conta antiga e o perfil original não foi encontrado.
+        </p>
+      }
+    </div>
+  } @else {
+    <p class="adm-cell-sub">Dados do autor indisponíveis.</p>
+  }
+</app-modal>

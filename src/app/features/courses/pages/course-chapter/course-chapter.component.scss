@@ -78,18 +78,6 @@
   scrollbar-width: thin;
 }
 
-.course-chapter-page__completion-note {
-  display: inline-block;
-  margin: 0 0 1.2rem;
-  padding: 0.45rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--color-success) 25%, transparent);
-  border-radius: var(--radius-sm);
-  background: var(--color-success-bg);
-  color: var(--color-success);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
 .lesson-list {
   display: block;
   max-width: 760px;

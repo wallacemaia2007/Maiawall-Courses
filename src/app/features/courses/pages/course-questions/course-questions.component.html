@@ -1,0 +1,55 @@
+<section class="course-questions">
+  <div class="mw-container">
+    @if (state(); as state) {
+      @if (state.loading) {
+        <div class="course-questions__center">
+          <app-loading-spinner />
+        </div>
+      } @else if (state.errorMessage) {
+        <div class="course-questions__center course-questions__error">
+          <h1>Ops!</h1>
+          <p>{{ state.errorMessage }}</p>
+          <a class="mw-btn mw-btn--primary" routerLink="/cursos">Ver todos os cursos</a>
+        </div>
+      } @else {
+        @if (state.course; as course) {
+          <header class="course-questions__hero">
+            <a class="course-questions__back" [routerLink]="['/cursos', course.slug]">
+              ← Voltar para o curso
+            </a>
+            <p class="course-questions__eyebrow">Dúvidas frequentes</p>
+            <h1>{{ course.title }}</h1>
+            <p class="course-questions__lead">
+              As respostas mais procuradas por outros alunos deste minicurso.
+            </p>
+          </header>
+
+          @if (state.questions.length === 0) {
+            <div class="course-questions__empty">
+              <h2>Nenhuma pergunta frequente por aqui ainda</h2>
+              <p>As dúvidas destacadas pelos professores aparecerão nesta página.</p>
+              <a class="mw-btn mw-btn--primary" [routerLink]="['/cursos', course.slug]">
+                Conhecer o curso
+              </a>
+            </div>
+          } @else {
+            <div class="course-questions__list">
+              @for (question of state.questions; track question.id) {
+                <article class="course-questions__card">
+                  <h2>{{ question.question }}</h2>
+                  <p class="course-questions__answer">{{ question.answer }}</p>
+                  <footer class="course-questions__meta">
+                    <span class="course-questions__author">{{ question.authorName }}</span>
+                    <span class="course-questions__date">
+                      {{ question.answeredAt | date: "dd 'de' MMMM 'de' yyyy" }}
+                    </span>
+                  </footer>
+                </article>
+              }
+            </div>
+          }
+        }
+      }
+    }
+  </div>
+</section>

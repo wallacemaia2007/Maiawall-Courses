@@ -2,6 +2,7 @@ const express = require('express');
 
 const { fromFirestoreDoc, getDatabase } = require('../config/database');
 const { AppError } = require('../middleware/error-handler');
+const { UserRepository } = require('../repositories/user.repository');
 const { successResponse } = require('../utils/api-response');
 
 const courseQuestionRouter = express.Router();
@@ -25,6 +26,47 @@ function timestampOf(value) {
   return Number.isNaN(date.getTime()) ? 0 : date.getTime();
 }
 
+function lastLoginOf(user) {
+  return user.lastLoginAt || user.refreshTokenUpdatedAt || null;
+}
+
+const EMPTY_AUTHOR = { id: null, name: '', email: '', avatarUrl: null, createdAt: null, lastLoginAt: null, questionsCount: 0 };
+
+function buildAuthorProfile(question, usersById, questionCounts) {
+  const user = question.userId ? usersById.get(question.userId) : null;
+
+  if (!user) {
+    return {
+      ...EMPTY_AUTHOR,
+      name: question.authorName || '',
+      email: question.authorEmail || '',
+    };
+  }
+
+  return {
+    id: user._id,
+    name: user.name || user.email,
+    email: user.email,
+    avatarUrl: user.avatarUrl || null,
+    createdAt: user.createdAt,
+    lastLoginAt: lastLoginOf(user),
+    questionsCount: questionCounts.get(user._id) || 0,
+  };
+}
+
+/*
+ * Só perguntas respondidas e publicadas podem ser destacadas (estrela) e
+ * aparecer na página pública de "dúvidas mais frequentes" do curso.
+ */
+function assertCanFeature(question) {
+  if (!question.answer) {
+    throw new AppError(409, 'QUESTION_NOT_ANSWERED', 'Responda a duvida antes de destaca-la');
+  }
+  if (!question.published) {
+    throw new AppError(409, 'QUESTION_NOT_PUBLISHED', 'Publique a duvida antes de destaca-la');
+  }
+}
+
 function serializeQuestion(question, includePrivate = false) {
   return {
     id: question._id,
@@ -34,9 +76,12 @@ function serializeQuestion(question, includePrivate = false) {
     question: question.question,
     answer: question.answer || '',
     published: Boolean(question.published),
+    featured: Boolean(question.featured),
     createdAt: question.createdAt,
     answeredAt: question.answeredAt,
-    ...(includePrivate ? { authorEmail: question.authorEmail } : {}),
+    ...(includePrivate
+      ? { authorEmail: question.authorEmail, author: question.author }
+      : {}),
   };
 }
 
@@ -47,6 +92,25 @@ async function findPublishedCourse(database, courseId) {
     throw new AppError(404, 'COURSE_NOT_FOUND', 'Curso nao encontrado');
   }
   return course;
+}
+
+async function attachAuthorProfiles(questions) {
+  const userIds = [...new Set(questions.map((item) => item.userId).filter(Boolean))];
+  const users = (await Promise.all(userIds.map((id) => UserRepository.findById(id))))
+    .filter(Boolean);
+  const usersById = new Map(users.map((user) => [user._id, user]));
+  const questionCounts = new Map();
+  for (const question of questions) {
+    if (question.userId) {
+      questionCounts.set(question.userId, (questionCounts.get(question.userId) || 0) + 1);
+    }
+  }
+
+  for (const question of questions) {
+    question.author = buildAuthorProfile(question, usersById, questionCounts);
+  }
+
+  return questions;
 }
 
 courseQuestionRouter.get('/:courseId/questions', async (request, response, next) => {
@@ -87,6 +151,7 @@ courseQuestionRouter.post('/:courseId/questions', async (request, response, next
       question: requiredText(request.body?.question, 'duvida', 10, 1000),
       answer: '',
       published: false,
+      featured: false,
       createdAt: now,
       updatedAt: now,
     };
@@ -106,10 +171,11 @@ adminQuestionRouter.get('/questions', async (_request, response, next) => {
     const snapshot = await database.collection('courseQuestions').get();
     const questions = snapshot.docs
       .map(fromFirestoreDoc)
-      .sort((a, b) => timestampOf(b.createdAt) - timestampOf(a.createdAt))
-      .map((item) => serializeQuestion(item, true));
+      .sort((a, b) => timestampOf(b.createdAt) - timestampOf(a.createdAt));
 
-    response.json(successResponse(questions, 'OK'));
+    await attachAuthorProfiles(questions);
+
+    response.json(successResponse(questions.map((item) => serializeQuestion(item, true)), 'OK'));
   } catch (error) {
     next(error);
   }
@@ -127,17 +193,57 @@ adminQuestionRouter.patch('/questions/:questionId', async (request, response, ne
 
     const answer = requiredText(request.body?.answer, 'resposta', 2, 2000);
     const now = new Date();
+    const published = request.body?.published === true;
     const update = {
       answer,
-      published: request.body?.published === true,
+      published,
       answeredAt: now,
       answeredById: request.auth.userId,
       updatedAt: now,
+      // Sem publicacao, a duvida deixa de poder aparecer como destaque.
+      ...(published ? {} : { featured: false }),
     };
     await reference.set(update, { merge: true });
 
+    const updated = { ...current, ...update };
+    if (current.userId) {
+      await attachAuthorProfiles([updated]);
+    }
+
     response.json(
-      successResponse(serializeQuestion({ ...current, ...update }, true), 'Resposta salva'),
+      successResponse(serializeQuestion(updated, true), 'Resposta salva'),
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminQuestionRouter.patch('/questions/:questionId/featured', async (request, response, next) => {
+  try {
+    const database = await getDatabase();
+    const reference = database.collection('courseQuestions').doc(request.params.questionId);
+    const snapshot = await reference.get();
+    const current = fromFirestoreDoc(snapshot);
+    if (!current) {
+      throw new AppError(404, 'QUESTION_NOT_FOUND', 'Duvida nao encontrada');
+    }
+
+    const featured = request.body?.featured === true;
+    if (featured) {
+      assertCanFeature(current);
+    }
+
+    const now = new Date();
+    const update = { featured, updatedAt: now };
+    await reference.set(update, { merge: true });
+
+    const updated = { ...current, ...update };
+    if (current.userId) {
+      await attachAuthorProfiles([updated]);
+    }
+
+    response.json(
+      successResponse(serializeQuestion(updated, true), featured ? 'Duvida destacada' : 'Destaque removido'),
     );
   } catch (error) {
     next(error);
@@ -145,7 +251,9 @@ adminQuestionRouter.patch('/questions/:questionId', async (request, response, ne
 });
 
 module.exports = {
+  assertCanFeature,
   adminQuestionRouter,
+  buildAuthorProfile,
   courseQuestionRouter,
   requiredText,
   serializeQuestion,

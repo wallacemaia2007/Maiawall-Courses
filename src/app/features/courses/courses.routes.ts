@@ -6,6 +6,7 @@ import { Routes } from '@angular/router';
  *   /cursos
  *   /cursos/:slug
  *   /cursos/:slug/capitulo/:chapterSlug
+ *   /cursos/:slug/duvidas
  */
 export const COURSES_ROUTES: Routes = [
   {
@@ -14,10 +15,22 @@ export const COURSES_ROUTES: Routes = [
       import('./pages/course-list/course-list.component').then((m) => m.CourseListComponent),
   },
   {
+    path: 'duvidas',
+    redirectTo: '/cursos',
+    pathMatch: 'full',
+  },
+  {
     path: ':slug',
     loadComponent: () =>
       import('./pages/course-details/course-details.component').then(
         (m) => m.CourseDetailsComponent,
+      ),
+  },
+  {
+    path: ':slug/duvidas',
+    loadComponent: () =>
+      import('./pages/course-questions/course-questions.component').then(
+        (m) => m.CourseQuestionsComponent,
       ),
   },
   {

@@ -5,11 +5,31 @@
       <p>Perguntas que os alunos deixaram nos minicursos.</p>
     </div>
     <div class="adm-chips" role="group" aria-label="Filtrar dúvidas">
-      <button class="adm-chip" type="button" [class.is-active]="filter() === 'todas'" (click)="filter.set('todas')">
+      <button
+        class="adm-chip"
+        type="button"
+        [class.is-active]="filter() === 'todas'"
+        (click)="filter.set('todas')"
+      >
         Todas ({{ questions().length }})
       </button>
-      <button class="adm-chip" type="button" [class.is-active]="filter() === 'pendentes'" (click)="filter.set('pendentes')">
+      <button
+        class="adm-chip"
+        type="button"
+        [class.is-active]="filter() === 'pendentes'"
+        [class.is-warning]="filter() === 'pendentes'"
+        (click)="filter.set('pendentes')"
+      >
         Sem resposta ({{ pendingCount() }})
+      </button>
+      <button
+        class="adm-chip"
+        type="button"
+        [class.is-active]="filter() === 'respondidas'"
+        [class.is-success]="filter() === 'respondidas'"
+        (click)="filter.set('respondidas')"
+      >
+        Respondidas ({{ answeredCount() }})
       </button>
     </div>
   </header>
@@ -26,46 +46,138 @@
       <p>Quando alguém perguntar em um minicurso, a mensagem aparecerá aqui.</p>
     </section>
   } @else if (visibleQuestions().length === 0) {
-    <p class="adm-empty">Nenhuma dúvida sem resposta.</p>
+    <p class="adm-empty">
+      {{ filter() === 'respondidas' ? 'Nenhuma dúvida respondida ainda.' : 'Nenhuma dúvida sem resposta.' }}
+    </p>
   } @else {
     <div class="question-admin__list">
       @for (item of visibleQuestions(); track item.id) {
-        <article [class.is-published]="publication()[item.id]">
-          <header>
-            <div>
-              <small>{{ item.courseTitle }}</small>
-              <h2>{{ item.question }}</h2>
+        <article
+          class="question-admin__card"
+          [class.is-pending]="!item.answer"
+          [class.is-answered]="item.answer"
+          [class.is-featured]="item.featured"
+        >
+          <button
+            class="question-admin__toggle"
+            type="button"
+            [attr.aria-expanded]="!isCollapsed(item)"
+            (click)="toggleCollapsed(item)"
+          >
+            <span class="question-admin__status" [class.is-success]="item.answer">
+              {{ item.answer ? 'Respondida' : 'Aguardando' }}
+            </span>
+            <span class="question-admin__course">{{ item.courseTitle }}</span>
+            <span class="question-admin__question">{{ item.question }}</span>
+            <span class="question-admin__date">{{ item.createdAt | date:'dd/MM/yyyy' }}</span>
+            <span class="question-admin__chevron" aria-hidden="true">▾</span>
+          </button>
+
+          @if (!isCollapsed(item)) {
+            <div class="question-admin__body">
+              <div class="question-admin__author">
+                <button
+                  class="adm-avatar question-admin__avatar"
+                  type="button"
+                  [attr.aria-label]="'Ver perfil de ' + authoredBy(item).name"
+                  title="Ver perfil do autor"
+                  (click)="openProfile(item)"
+                >
+                  @if (authoredBy(item).avatarUrl) {
+                    <img [src]="authoredBy(item).avatarUrl" alt="" referrerpolicy="no-referrer" />
+                  } @else {
+                    {{ initials(authoredBy(item)) }}
+                  }
+                </button>
+                <span>
+                  <span class="adm-cell-main">{{ authoredBy(item).name }}</span>
+                  @if (authoredBy(item).email) {
+                    <span class="adm-cell-sub">{{ authoredBy(item).email }}</span>
+                  }
+                </span>
+                @if (item.answeredAt) {
+                  <span class="question-admin__meta-date">
+                    Respondida em {{ item.answeredAt | date: "dd/MM/yyyy 'às' HH:mm" }}
+                  </span>
+                }
+              </div>
+
+              <div class="question-admin__section">
+                <span class="question-admin__label">Resposta atual</span>
+                @if (item.answer) {
+                  <p class="question-admin__current-answer">{{ item.answer }}</p>
+                } @else {
+                  <p class="question-admin__current-answer is-empty">Ainda sem resposta.</p>
+                }
+              </div>
+
+              <div class="question-admin__section">
+                <label class="question-admin__label" [for]="'answer-' + item.id">Sua resposta</label>
+                <textarea
+                  [id]="'answer-' + item.id"
+                  rows="5"
+                  maxlength="2000"
+                  [formControl]="answerControl(item)"
+                  placeholder="Responda de forma clara e útil para outros alunos."
+                ></textarea>
+              </div>
+
+              <footer class="question-admin__footer">
+                <span class="question-admin__checks">
+                  <label class="question-admin__publish">
+                    <input
+                      type="checkbox"
+                      [checked]="item.published"
+                      (change)="setPublished(item.id, $event)"
+                    />
+                    <span>Publicar no FAQ público</span>
+                  </label>
+
+                  <button
+                    class="question-admin__star"
+                    type="button"
+                    [class.is-active]="item.featured"
+                    [disabled]="!canStar(item) || starringId() !== null"
+                    [title]="
+                      canStar(item)
+                        ? (item.featured ? 'Remover das dúvidas frequentes' : 'Destacar como dúvida frequente')
+                        : 'Responda e publique a pergunta para poder destacá-la'
+                    "
+                    (click)="toggleStar(item)"
+                  >
+                    <span class="question-admin__star-icon" [class.is-active]="item.featured" aria-hidden="true">
+                      {{ item.featured ? '★' : '☆' }}
+                    </span>
+                    {{ starringId() === item.id ? 'Salvando...' : (item.featured ? 'Destacada' : 'Destacar') }}
+                  </button>
+                </span>
+
+                <button
+                  class="mw-btn mw-btn--primary"
+                  type="button"
+                  [disabled]="answerControl(item).invalid || savingId() !== null"
+                  (click)="save(item)"
+                >
+                  {{ savingId() === item.id ? 'Salvando...' : 'Salvar resposta' }}
+                </button>
+              </footer>
+
+              @if (savedId() === item.id) {
+                <p class="question-admin__saved" role="status">
+                  Resposta salva{{ item.published ? ' e publicada no FAQ.' : ' sem publicação.' }}
+                </p>
+              }
             </div>
-            <span>{{ item.createdAt | date:'dd/MM/yyyy, HH:mm' }}</span>
-          </header>
-          <p class="question-admin__author">
-            Pergunta de <strong>{{ item.authorName }}</strong>
-            @if (item.authorEmail) { <span>· {{ item.authorEmail }}</span> }
-          </p>
-
-          <label [for]="'answer-' + item.id">Sua resposta</label>
-          <textarea [id]="'answer-' + item.id" rows="5" maxlength="2000"
-            [formControl]="answerControl(item)"
-            placeholder="Responda de forma clara e útil para outros alunos."></textarea>
-
-          <footer>
-            <label class="question-admin__publish">
-              <input type="checkbox" [checked]="publication()[item.id]"
-                (change)="setPublished(item.id, $event)" />
-              <span>Adicionar esta pergunta ao FAQ público</span>
-            </label>
-            <button class="mw-btn mw-btn--primary" type="button" (click)="save(item)"
-              [disabled]="answerControl(item).invalid || savingId() !== null">
-              {{ savingId() === item.id ? 'Salvando...' : 'Salvar resposta' }}
-            </button>
-          </footer>
-          @if (savedId() === item.id) {
-            <p class="question-admin__saved" role="status">
-              Resposta salva{{ publication()[item.id] ? ' e publicada no FAQ.' : ' sem publicação.' }}
-            </p>
           }
         </article>
       }
     </div>
   }
-  </section>
+
+  @if (profileAuthor(); as author) {
+    <app-admin-user-profile-modal
+      [author]="author"
+      (closed)="profileAuthor.set(null)"
+    />
+  }
+</section>

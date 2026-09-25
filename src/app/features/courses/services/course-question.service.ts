@@ -33,11 +33,26 @@ export class CourseQuestionService {
       .pipe(map(unwrapApiData));
   }
 
+  listFeatured(courseId: string): Observable<CourseQuestion[]> {
+    return this.listPublished(courseId).pipe(
+      map((questions) => questions.filter((question) => question.featured)),
+    );
+  }
+
   answer(questionId: string, payload: CourseQuestionAnswerPayload): Observable<CourseQuestion> {
     return this.http
       .patch<ApiResponse<CourseQuestion>>(
         this.apiUrl(`${QUESTION_ENDPOINTS.admin}/${questionId}`),
         payload,
+      )
+      .pipe(map(unwrapApiData));
+  }
+
+  toggleFeatured(questionId: string, featured: boolean): Observable<CourseQuestion> {
+    return this.http
+      .patch<ApiResponse<CourseQuestion>>(
+        this.apiUrl(QUESTION_ENDPOINTS.adminFeatured(questionId)),
+        { featured },
       )
       .pipe(map(unwrapApiData));
   }

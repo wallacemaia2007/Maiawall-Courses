@@ -1,108 +1,88 @@
 <section class="course-chapter-page">
   @if (state().loading) {
-    <div class="course-chapter-page__status">
-      <app-loading-spinner label="Carregando aula publica" size="lg" />
-    </div>
+  <div class="course-chapter-page__status">
+    <app-loading-spinner label="Carregando aula publica" size="lg" />
+  </div>
   } @else if (state().errorMessage) {
-    <div class="mw-container course-chapter-page__empty">
-      <app-empty-state
-        title="Aula nao encontrada"
-        [message]="state().errorMessage"
-      >
+  <div class="mw-container course-chapter-page__empty">
+    <app-empty-state title="Aula nao encontrada" [message]="state().errorMessage">
+      <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
+        Voltar ao curso
+      </a>
+    </app-empty-state>
+  </div>
+  } @else {
+  @if (chapter(); as chapter) {
+  <header class="course-chapter-page__hero">
+    <div class="mw-container">
+      <a class="course-chapter-page__back" [routerLink]="['/cursos', state().courseSlug]">
+        <span aria-hidden="true">←</span> Voltar ao curso
+      </a>
+      <p class="course-chapter-page__eyebrow">
+        Capitulo {{ chapter.order }}
+      </p>
+      <h1>{{ chapter.title }}</h1>
+      @if (chapter.description) {
+      <p>{{ chapter.description }}</p>
+      }
+    </div>
+  </header>
+
+  <div class="mw-container course-chapter-page__body">
+    <div class="course-chapter-page__main">
+      @if (lessons().length > 0) {
+      <div class="lesson-list">
+        @for (lesson of lessons(); track trackLesson($index, lesson)) {
+        <app-article [title]="lesson.title" [order]="lesson.order" [kind]="lesson.type" [content]="lesson.content"
+          [image]="lesson.image" [attachments]="lesson.attachments" />
+        }
+      </div>
+      } @else {
+      <app-empty-state title="Aulas em preparacao" message="Este capitulo ainda nao possui aulas disponiveis.">
         <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
           Voltar ao curso
         </a>
       </app-empty-state>
-    </div>
-  } @else {
-    @if (chapter(); as chapter) {
-      <header class="course-chapter-page__hero">
-        <div class="mw-container">
-          <a class="course-chapter-page__back" [routerLink]="['/cursos', state().courseSlug]">
-            <span aria-hidden="true">←</span> Voltar ao curso
-          </a>
-          <p class="course-chapter-page__eyebrow">
-            Capitulo {{ chapter.order }}
-          </p>
-          <h1>{{ chapter.title }}</h1>
-          @if (chapter.description) {
-            <p>{{ chapter.description }}</p>
-          }
-        </div>
-      </header>
-
-      <div class="mw-container course-chapter-page__body">
-      <div class="course-chapter-page__main">
-      @if (lessons().length > 0) {
-        @if (completionStatus() === 'completed') {
-          <p class="course-chapter-page__completion-note">Capitulo concluido</p>
-        }
-        <div class="lesson-list">
-          @for (lesson of lessons(); track trackLesson($index, lesson)) {
-            <app-article
-              [title]="lesson.title"
-              [order]="lesson.order"
-              [kind]="lesson.type"
-              [content]="lesson.content"
-              [image]="lesson.image"
-              [attachments]="lesson.attachments"
-            />
-          }
-        </div>
-      } @else {
-        <app-empty-state
-          title="Aulas em preparacao"
-          message="Este capitulo ainda nao possui aulas disponiveis."
-        >
-          <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
-            Voltar ao curso
-          </a>
-        </app-empty-state>
       }
 
       @if (previousChapter(); as previous) {
-        <nav class="course-chapter-page__pager" aria-label="Navegacao entre capitulos">
-          <a class="course-chapter-page__pager-link course-chapter-page__pager-link--prev" [routerLink]="['/cursos', state().courseSlug, 'capitulo', previous.slug]">
-            <span aria-hidden="true">←</span> Capitulo anterior
-          </a>
-          @if (nextChapter(); as next) {
-            <a class="course-chapter-page__pager-link course-chapter-page__pager-link--next" [routerLink]="['/cursos', state().courseSlug, 'capitulo', next.slug]">
-              Proximo capitulo <span aria-hidden="true">→</span>
-            </a>
-          }
-        </nav>
-      } @else {
+      <nav class="course-chapter-page__pager" aria-label="Navegacao entre capitulos">
+        <a class="course-chapter-page__pager-link course-chapter-page__pager-link--prev"
+          [routerLink]="['/cursos', state().courseSlug, 'capitulo', previous.slug]">
+          <span aria-hidden="true">←</span> Capitulo anterior
+        </a>
         @if (nextChapter(); as next) {
-          <nav class="course-chapter-page__pager" aria-label="Navegacao entre capitulos">
-            <a class="course-chapter-page__pager-link course-chapter-page__pager-link--next" [routerLink]="['/cursos', state().courseSlug, 'capitulo', next.slug]">
-              Proximo capitulo <span aria-hidden="true">→</span>
-            </a>
-          </nav>
+        <a class="course-chapter-page__pager-link course-chapter-page__pager-link--next"
+          [routerLink]="['/cursos', state().courseSlug, 'capitulo', next.slug]">
+          Proximo capitulo <span aria-hidden="true">→</span>
+        </a>
         }
+      </nav>
+      } @else {
+      @if (nextChapter(); as next) {
+      <nav class="course-chapter-page__pager" aria-label="Navegacao entre capitulos">
+        <a class="course-chapter-page__pager-link course-chapter-page__pager-link--next"
+          [routerLink]="['/cursos', state().courseSlug, 'capitulo', next.slug]">
+          Proximo capitulo <span aria-hidden="true">→</span>
+        </a>
+      </nav>
       }
-      </div>
+      }
+    </div>
 
-      @if (state().courseChapters.length > 0) {
-        <aside class="course-chapter-page__side">
-          <app-course-summary
-            [courseTitle]="state().courseTitle"
-            [chapters]="state().courseChapters"
-            [activeChapterId]="chapter.id"
-            [completedChapterIds]="completedChapterIds()"
-            [linkFor]="chapterLink"
-          />
-        </aside>
-      }
-      </div>
-    } @else {
-      <div class="mw-container course-chapter-page__empty">
-        <app-empty-state
-          title="Aula indisponivel"
-          message="Nao encontramos esse capitulo no catalogo publico."
-        >
-          <a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver catalogo</a>
-        </app-empty-state>
-      </div>
+    @if (state().courseChapters.length > 0) {
+    <aside class="course-chapter-page__side">
+      <app-course-summary [courseTitle]="state().courseTitle" [chapters]="state().courseChapters"
+        [activeChapterId]="chapter.id" [completedChapterIds]="completedChapterIds()" [linkFor]="chapterLink" />
+    </aside>
     }
+  </div>
+  } @else {
+  <div class="mw-container course-chapter-page__empty">
+    <app-empty-state title="Aula indisponivel" message="Nao encontramos esse capitulo no catalogo publico.">
+      <a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver catalogo</a>
+    </app-empty-state>
+  </div>
+  }
   }
 </section>
