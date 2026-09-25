@@ -10,4 +10,7 @@ export interface PublicNavLink {
   fragment?: string;
 }
 
-export const PUBLIC_NAV_LINKS: PublicNavLink[] = [{ label: 'Cursos', route: '/cursos' }];
+export const PUBLIC_NAV_LINKS: PublicNavLink[] = [
+  { label: 'Cursos', route: '/cursos' },
+  { label: 'Dúvidas', route: '/duvidas' },
+];

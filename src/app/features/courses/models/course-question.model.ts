@@ -1,3 +1,5 @@
+import { CourseCategory } from './course.model';
+
 export interface CourseQuestionAuthor {
   id: string | null;
   name: string;
@@ -21,6 +23,18 @@ export interface CourseQuestion {
   featured: boolean;
   createdAt: string;
   answeredAt?: string;
+}
+
+export interface CourseQuestionCourse {
+  id: string;
+  title: string;
+  slug: string;
+  category: CourseCategory | null;
+}
+
+export interface CourseQuestionGroup {
+  course: CourseQuestionCourse;
+  questions: CourseQuestion[];
 }
 
 export interface CourseQuestionCreatePayload {

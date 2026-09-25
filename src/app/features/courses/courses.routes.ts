@@ -16,7 +16,7 @@ export const COURSES_ROUTES: Routes = [
   },
   {
     path: 'duvidas',
-    redirectTo: '/cursos',
+    redirectTo: '/duvidas',
     pathMatch: 'full',
   },
   {

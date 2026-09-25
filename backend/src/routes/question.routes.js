@@ -6,6 +6,7 @@ const { UserRepository } = require('../repositories/user.repository');
 const { successResponse } = require('../utils/api-response');
 
 const courseQuestionRouter = express.Router();
+const publicQuestionRouter = express.Router();
 const adminQuestionRouter = express.Router();
 
 function requiredText(value, field, minLength, maxLength) {
@@ -113,6 +114,42 @@ async function attachAuthorProfiles(questions) {
   return questions;
 }
 
+function buildFeaturedQuestionGroups(questions, courses) {
+  const publishedCoursesById = new Map(
+    courses.filter((course) => course && course.published).map((course) => [course._id, course]),
+  );
+  const groupsByCourse = new Map();
+
+  for (const question of questions) {
+    if (!question || !question.published || !question.featured || !question.answer) continue;
+
+    const course = publishedCoursesById.get(question.courseId);
+    if (!course) continue;
+
+    const group = groupsByCourse.get(course._id) || {
+      course: {
+        id: course._id,
+        title: course.title || question.courseTitle || course.slug || course._id,
+        slug: course.slug || course._id,
+        category: course.category || null,
+      },
+      questions: [],
+    };
+
+    group.questions.push(serializeQuestion(question));
+    groupsByCourse.set(course._id, group);
+  }
+
+  return [...groupsByCourse.values()]
+    .map((group) => ({
+      ...group,
+      questions: group.questions.sort(
+        (first, second) => timestampOf(second.answeredAt) - timestampOf(first.answeredAt),
+      ),
+    }))
+    .sort((first, second) => first.course.title.localeCompare(second.course.title, 'pt-BR'));
+}
+
 courseQuestionRouter.get('/:courseId/questions', async (request, response, next) => {
   try {
     const database = await getDatabase();
@@ -160,6 +197,23 @@ courseQuestionRouter.post('/:courseId/questions', async (request, response, next
     response.status(201).json(
       successResponse(serializeQuestion({ ...question, _id: reference.id }), 'Duvida enviada'),
     );
+  } catch (error) {
+    next(error);
+  }
+});
+
+publicQuestionRouter.get('/featured', async (_request, response, next) => {
+  try {
+    const database = await getDatabase();
+    const [questionsSnapshot, coursesSnapshot] = await Promise.all([
+      database.collection('courseQuestions').get(),
+      database.collection('courses').get(),
+    ]);
+    const questions = questionsSnapshot.docs.map(fromFirestoreDoc);
+    const courses = coursesSnapshot.docs.map(fromFirestoreDoc);
+    const groups = buildFeaturedQuestionGroups(questions, courses);
+
+    response.json(successResponse(groups, 'OK'));
   } catch (error) {
     next(error);
   }
@@ -254,7 +308,9 @@ module.exports = {
   assertCanFeature,
   adminQuestionRouter,
   buildAuthorProfile,
+  buildFeaturedQuestionGroups,
   courseQuestionRouter,
+  publicQuestionRouter,
   requiredText,
   serializeQuestion,
 };

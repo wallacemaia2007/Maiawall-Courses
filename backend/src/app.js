@@ -9,7 +9,11 @@ const { authRouter } = require('./routes/auth.routes');
 const { oauthRouter } = require('./routes/oauth.routes');
 const { catalogRouter } = require('./routes/catalog.routes');
 const { learningRouter } = require('./routes/learning.routes');
-const { adminQuestionRouter, courseQuestionRouter } = require('./routes/question.routes');
+const {
+  adminQuestionRouter,
+  courseQuestionRouter,
+  publicQuestionRouter,
+} = require('./routes/question.routes');
 const { userRouter } = require('./routes/user.routes');
 const { requireAdmin, requireAuth, optionalAuth } = require('./middleware/auth');
 const { errorHandler, notFoundHandler } = require('./middleware/error-handler');
@@ -40,6 +44,7 @@ function createApp() {
   app.use('/api/users', requireAuth, userRouter);
   app.use('/api/courses', optionalAuth, courseQuestionRouter);
   app.use('/api/courses', optionalAuth, catalogRouter);
+  app.use('/api/questions', optionalAuth, publicQuestionRouter);
   app.use('/api/learning', requireAuth, learningRouter);
   app.use('/api/admin', requireAuth, requireAdmin, adminQuestionRouter, adminRouter);
   app.use(notFoundHandler);

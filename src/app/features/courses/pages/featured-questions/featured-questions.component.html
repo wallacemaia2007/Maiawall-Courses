@@ -1,0 +1,87 @@
+<section class="featured-questions-page">
+  <div class="featured-questions-page__hero">
+    <div class="mw-container featured-questions-page__hero-inner">
+      <p class="featured-questions-page__eyebrow">Biblioteca de respostas</p>
+      <h1>Dúvidas que viraram respostas.</h1>
+      <p>
+        Reunimos as perguntas destacadas pelos professores, organizadas por minicurso para facilitar
+        sua próxima consulta.
+      </p>
+    </div>
+  </div>
+
+  <div class="mw-container featured-questions-page__content">
+    @if (state().loading) {
+      <div class="featured-questions-page__status">
+        <app-loading-spinner label="Carregando dúvidas" size="lg" />
+      </div>
+    } @else if (state().errorMessage) {
+      <app-empty-state
+        title="Não foi possível carregar as dúvidas"
+        [message]="state().errorMessage"
+      >
+        <a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver minicursos</a>
+      </app-empty-state>
+    } @else if (state().groups.length === 0) {
+      <app-empty-state
+        title="Nenhuma dúvida destacada ainda"
+        message="As perguntas escolhidas no painel administrativo aparecerão aqui."
+      >
+        <a class="mw-btn mw-btn--outline" routerLink="/cursos">Conhecer os minicursos</a>
+      </app-empty-state>
+    } @else {
+      <div class="featured-questions-page__summary" aria-live="polite">
+        <strong>{{ totalQuestions() }}</strong>
+        <span>
+          {{ totalQuestions() === 1 ? 'dúvida destacada' : 'dúvidas destacadas' }}
+          em {{ state().groups.length }}
+          {{ state().groups.length === 1 ? 'minicurso' : 'minicursos' }}
+        </span>
+      </div>
+
+      <div class="featured-questions-page__groups">
+        @for (group of state().groups; track group.course.id) {
+          <section
+            class="featured-questions-page__group"
+            [attr.data-course-tone]="courseTone(group.course.category)"
+          >
+            <header class="featured-questions-page__group-header">
+              <div>
+                <p>Dúvidas do minicurso</p>
+                <h2>{{ group.course.title }}</h2>
+                <span>
+                  {{
+                    group.questions.length === 1
+                      ? '1 resposta destacada'
+                      : group.questions.length + ' respostas destacadas'
+                  }}
+                </span>
+              </div>
+              <a [routerLink]="['/cursos', group.course.slug]">Conhecer minicurso →</a>
+            </header>
+
+            <div class="featured-questions-page__list">
+              @for (question of group.questions; track question.id) {
+                <article class="featured-questions-page__card">
+                  <h3>{{ question.question }}</h3>
+                  <div class="featured-questions-page__answer">
+                    <span>Resposta</span>
+                    <p>{{ question.answer }}</p>
+                  </div>
+                  <footer>
+                    <span>Por {{ question.authorName }}</span>
+                    @if (question.answeredAt) {
+                      <time [attr.datetime]="question.answeredAt">
+                        {{ question.answeredAt | date: "dd 'de' MMMM 'de' yyyy" }}
+                      </time>
+                    }
+                  </footer>
+                </article>
+              }
+            </div>
+          </section>
+        }
+      </div>
+    }
+  </div>
+</section>

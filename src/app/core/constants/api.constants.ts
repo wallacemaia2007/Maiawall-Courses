@@ -81,6 +81,7 @@ export const ATTACHMENT_ENDPOINTS = {
 
 export const QUESTION_ENDPOINTS = {
   byCourse: (courseId: string) => `/courses/${courseId}/questions`,
+  featured: '/questions/featured',
   admin: '/admin/questions',
   adminFeatured: (questionId: string) => `/admin/questions/${questionId}/featured`,
 } as const;

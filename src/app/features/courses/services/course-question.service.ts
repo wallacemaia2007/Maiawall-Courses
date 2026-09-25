@@ -9,6 +9,7 @@ import {
   CourseQuestion,
   CourseQuestionAnswerPayload,
   CourseQuestionCreatePayload,
+  CourseQuestionGroup,
 } from '../models/course-question.model';
 
 @Injectable({ providedIn: 'root' })
@@ -37,6 +38,12 @@ export class CourseQuestionService {
     return this.listPublished(courseId).pipe(
       map((questions) => questions.filter((question) => question.featured)),
     );
+  }
+
+  listFeaturedGroups(): Observable<CourseQuestionGroup[]> {
+    return this.http
+      .get<ApiResponse<CourseQuestionGroup[]>>(this.apiUrl(QUESTION_ENDPOINTS.featured))
+      .pipe(map(unwrapApiData));
   }
 
   answer(questionId: string, payload: CourseQuestionAnswerPayload): Observable<CourseQuestion> {

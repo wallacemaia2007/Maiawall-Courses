@@ -37,6 +37,13 @@ export const routes: Routes = [
           import('./features/courses/courses.routes').then((m) => m.COURSES_ROUTES),
       },
       {
+        path: 'duvidas',
+        loadComponent: () =>
+          import('./features/courses/pages/featured-questions/featured-questions.component').then(
+            (m) => m.FeaturedQuestionsComponent,
+          ),
+      },
+      {
         path: 'perfil',
         canActivate: [authGuard],
         loadComponent: () =>
