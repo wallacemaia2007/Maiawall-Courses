@@ -90,7 +90,7 @@ test('verified google account listed in ADMIN_EMAILS is not a student', () => {
   assert.equal(list.length, 0);
 });
 
-test('dashboard aggregates students, courses, questions and leads', () => {
+test('dashboard aggregates students, courses, questions, leads and top courses', () => {
   const dashboard = buildAdminDashboard({
     now: NOW,
     adminEmails: ADMIN_EMAILS,
@@ -103,6 +103,7 @@ test('dashboard aggregates students, courses, questions and leads', () => {
       { _id: 'c1', title: 'A', published: true },
       { _id: 'c2', title: 'B', published: false },
     ],
+    chapters: [{ courseId: 'c1' }, { courseId: 'c1' }],
     progress: [
       { userId: 'a', courseId: 'c1', chapterId: 'x', status: 'completed' },
       { userId: 'b', courseId: 'c1', chapterId: 'x', status: 'in-progress' },
@@ -121,7 +122,9 @@ test('dashboard aggregates students, courses, questions and leads', () => {
   assert.deepEqual(dashboard.courses, { total: 2, published: 1 });
   assert.deepEqual(dashboard.learning, { completedChapters: 1, learners: 2 });
   assert.deepEqual(dashboard.questions, { total: 2, pending: 1 });
-  assert.deepEqual(dashboard.leads, { total: 2, new: 1, last30Days: 1 });
+  assert.deepEqual(dashboard.leads, { total: 2, new: 1, converted: 1, last30Days: 1 });
+  assert.deepEqual(dashboard.topCourses.map((course) => course.id), ['c1', 'c2']);
+  assert.equal(dashboard.topCourses[0].learners, 2);
   assert.deepEqual(dashboard.pendingQuestions.map((question) => question.id), ['q1']);
   assert.equal(dashboard.recentStudents[0].id, 'a');
 });
@@ -247,6 +250,19 @@ test('admin endpoints reject anonymous visitors and non-admin students', async (
   assert.equal((await api('/students', { as: 'student' })).status, 403);
   assert.equal((await api('/leads', { as: 'student' })).status, 403);
   assert.equal((await api('/leads', { as: 'student', method: 'POST', body: '{}' })).status, 403);
+  assert.equal((await api('/analytics')).status, 401);
+  assert.equal((await api('/analytics', { as: 'student' })).status, 403);
+});
+
+test('GET /analytics returns configured: false when GA4 is not set up', async () => {
+  const response = await api('/analytics', { as: 'boss' });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.data.configured, false);
+  assert.equal(body.data.error, null);
+  assert.deepEqual(body.data.sessionsTrend, []);
+  assert.deepEqual(body.data.topSources, []);
+  assert.deepEqual(body.data.topPages, []);
 });
 
 test('GET /access lists the current admins', async () => {

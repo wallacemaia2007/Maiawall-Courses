@@ -65,9 +65,11 @@ guards de rota.
 Usuarios administradores acessam o painel em `/admin`, com as paginas:
 
 - `/admin/dashboard`: metricas da plataforma (alunos, cursos, progresso,
-  duvidas sem resposta e leads).
+  duvidas sem resposta, leads e cursos mais engajados), alem de uma secao
+  com a visao geral do Google Analytics (GA4), quando configurado.
 - `/admin/leads`: leads registrados manualmente a partir do analytics (origem,
-  meio, campanha, status), com resumo e filtro por status.
+  meio, campanha, status), com resumo, filtro por status e a visao de trafego
+  do site (GA4) como referencia ao cadastrar um lead.
 - `/admin/cursos`: todos os cursos, publicados ou em rascunho.
 - `/admin/acessos`: quem pode entrar no painel. Concede acesso por e-mail a uma
   conta ja existente e com e-mail verificado; acessos vindos de `ADMIN_EMAILS`
@@ -76,9 +78,18 @@ Usuarios administradores acessam o painel em `/admin`, com as paginas:
 - `/admin/duvidas`: duvidas enviadas nos minicursos, para responder e publicar
   no FAQ.
 
-Os dados vem de `GET /api/admin/{dashboard,courses,students,access,leads}`,
-todos protegidos por `requireAuth` + `requireAdmin`. O ultimo login e gravado em
+Os dados vem de
+`GET /api/admin/{dashboard,analytics,courses,students,access,leads}`, todos
+protegidos por `requireAuth` + `requireAdmin`. O ultimo login e gravado em
 `users.lastLoginAt` (login, cadastro e OAuth; renovar o token nao conta).
+
+`GET /api/admin/analytics` traz a visao geral do Google Analytics (GA4):
+usuarios ativos agora, sessoes e usuarios dos ultimos 30 dias, a tendencia de
+sessoes dos ultimos 14 dias e as principais origens/paginas. E opcional — sem
+`GA4_PROPERTY_ID` no backend, a rota responde `{ configured: false }` e o
+painel esconde essa secao; se a consulta ao GA4 falhar, responde
+`{ configured: true, error: "..." }` sem derrubar o dashboard. A resposta e
+cacheada em memoria por 5 minutos para nao estourar a cota da API do GA4.
 
 ## Stack
 
@@ -194,6 +205,20 @@ JWT_REFRESH_SECRET=troque-este-outro-segredo
 O arquivo de credenciais tambem pode ser substituido por
 `FIREBASE_SERVICE_ACCOUNT`. Para usar o emulador, defina
 `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080`.
+
+Para ativar a secao de analytics do painel admin (opcional), adicione:
+
+```env
+GA4_PROPERTY_ID=123456789
+GA4_SERVICE_ACCOUNT={"type":"service_account", ...}
+```
+
+`GA4_PROPERTY_ID` e o ID numerico da propriedade GA4 (Administrador > Detalhes
+da propriedade no Google Analytics). `GA4_SERVICE_ACCOUNT` e opcional: sem ele,
+o backend usa `GOOGLE_APPLICATION_CREDENTIALS` (Application Default
+Credentials) — funciona reaproveitando a mesma service account do Firebase,
+desde que ela tenha acesso de leitor na propriedade GA4 (Administrador >
+Acesso a propriedade, no Google Analytics).
 
 ### Iniciar o ambiente
 

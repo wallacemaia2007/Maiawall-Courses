@@ -88,6 +88,7 @@ export const QUESTION_ENDPOINTS = {
 
 export const ADMIN_ENDPOINTS = {
   dashboard: '/admin/dashboard',
+  analytics: '/admin/analytics',
   courses: '/admin/courses',
   students: '/admin/students',
   access: '/admin/access',

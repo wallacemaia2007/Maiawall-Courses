@@ -29,6 +29,16 @@
     </div>
   </div>
 
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <h2>Tráfego do site (Google Analytics)</h2>
+    </div>
+    <p class="adm-cell-sub" style="margin: -0.5rem 0 1rem">
+      Use estas origens e páginas como referência para preencher a origem e o meio de um lead novo.
+    </p>
+    <app-admin-analytics-panel [data]="analytics()" [loading]="analyticsLoading()" />
+  </section>
+
   <section class="adm-panel" id="lead-form">
     <h2>{{ editingId() ? 'Editar lead' : 'Novo lead' }}</h2>
     <div class="adm-form">

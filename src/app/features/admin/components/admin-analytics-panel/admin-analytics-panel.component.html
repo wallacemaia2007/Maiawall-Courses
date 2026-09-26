@@ -1,0 +1,79 @@
+@if (loading()) {
+  <p class="adm-status">Carregando analytics...</p>
+} @else {
+@if (data(); as a) {
+  @if (!a.configured) {
+    <p class="adm-analytics-empty">
+      Conecte o Google Analytics (GA4) para ver sessões, origens e páginas mais acessadas aqui.
+      Configure <code>GA4_PROPERTY_ID</code> (e, se necessário, <code>GA4_SERVICE_ACCOUNT</code>) no
+      backend para ativar esta seção.
+    </p>
+  } @else if (a.error) {
+    <p class="adm-error" role="alert">Não foi possível consultar o Google Analytics: {{ a.error }}</p>
+  } @else {
+    <div class="adm-cards">
+      <div class="adm-card">
+        <span class="adm-card__label">Ativos agora</span>
+        <span class="adm-card__value">{{ a.activeUsersNow }}</span>
+        <span class="adm-card__hint">usuários no site neste momento</span>
+      </div>
+      <div class="adm-card">
+        <span class="adm-card__label">Sessões</span>
+        <span class="adm-card__value">{{ a.sessionsLast30Days }}</span>
+        <span class="adm-card__hint">últimos 30 dias</span>
+      </div>
+      <div class="adm-card">
+        <span class="adm-card__label">Usuários</span>
+        <span class="adm-card__value">{{ a.usersLast30Days }}</span>
+        <span class="adm-card__hint">últimos 30 dias</span>
+      </div>
+    </div>
+
+    @if (a.sessionsTrend.length > 0) {
+      <div class="adm-trend" role="img" aria-label="Sessões por dia nos últimos 14 dias">
+        @for (point of a.sessionsTrend; track point.date) {
+          <div
+            class="adm-trend__bar"
+            [style.height.%]="barHeight(point.sessions)"
+            [title]="point.sessions + ' sessões em ' + shortDate(point.date)"
+          ></div>
+        }
+      </div>
+    }
+
+    <div class="adm-grid-2">
+      <section class="adm-panel">
+        <h2>Origens de tráfego</h2>
+        @if (a.topSources.length === 0) {
+          <p class="adm-cell-sub">Sem dados no período.</p>
+        } @else {
+          <ul class="adm-list">
+            @for (item of a.topSources; track item.source + item.medium) {
+              <li>
+                <span class="adm-cell-main">{{ item.source }}</span>
+                <span class="adm-cell-sub">{{ item.medium }} · {{ item.sessions }} sessões</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="adm-panel">
+        <h2>Páginas mais acessadas</h2>
+        @if (a.topPages.length === 0) {
+          <p class="adm-cell-sub">Sem dados no período.</p>
+        } @else {
+          <ul class="adm-list">
+            @for (item of a.topPages; track item.path) {
+              <li>
+                <span class="adm-cell-main">{{ item.path }}</span>
+                <span class="adm-cell-sub">{{ item.views }} visualizações</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+  }
+}
+}

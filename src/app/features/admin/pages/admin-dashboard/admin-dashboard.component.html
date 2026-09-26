@@ -40,7 +40,9 @@
       <a class="adm-card" routerLink="/admin/leads">
         <span class="adm-card__label">Leads</span>
         <span class="adm-card__value">{{ d.leads.total }}</span>
-        <span class="adm-card__hint">{{ d.leads.new }} novos · {{ d.leads.last30Days }} em 30 dias</span>
+        <span class="adm-card__hint">
+          {{ d.leads.new }} novos · {{ d.leads.converted }} convertidos ({{ leadsConversionRate(d.leads) }}%)
+        </span>
       </a>
     </div>
 
@@ -94,7 +96,35 @@
           </ul>
         }
       </section>
+
+      <section class="adm-panel">
+        <div class="adm-panel__head">
+          <h2>Cursos mais engajados</h2>
+          <a class="adm-link" routerLink="/admin/cursos">Ver todos</a>
+        </div>
+        @if (d.topCourses.length === 0) {
+          <p class="adm-cell-sub">Nenhum curso com alunos ainda.</p>
+        } @else {
+          <ul class="adm-list">
+            @for (course of d.topCourses; track course.id) {
+              <li>
+                <span class="adm-cell-main">{{ course.title }}</span>
+                <span class="adm-cell-sub">
+                  {{ course.learners }} aluno(s) · {{ course.completedChapters }} capítulo(s) concluído(s)
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
     </div>
   }
   }
+
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <h2>Analytics</h2>
+    </div>
+    <app-admin-analytics-panel [data]="analytics()" [loading]="analyticsLoading()" />
+  </section>
 </section>

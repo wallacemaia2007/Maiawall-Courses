@@ -7,6 +7,7 @@ import { ADMIN_ENDPOINTS } from '../../../core/constants/api.constants';
 import { ApiResponse, unwrapApiData } from '../../../core/models/api-response.model';
 import {
   AdminAccessEntry,
+  AdminAnalytics,
   AdminCourse,
   AdminDashboard,
   AdminStudent,
@@ -20,6 +21,10 @@ export class AdminService {
 
   dashboard(): Observable<AdminDashboard> {
     return this.get<AdminDashboard>(ADMIN_ENDPOINTS.dashboard);
+  }
+
+  analytics(): Observable<AdminAnalytics> {
+    return this.get<AdminAnalytics>(ADMIN_ENDPOINTS.analytics);
   }
 
   courses(): Observable<AdminCourse[]> {

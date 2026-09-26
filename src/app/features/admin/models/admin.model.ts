@@ -3,9 +3,50 @@ export interface AdminDashboard {
   courses: { total: number; published: number };
   learning: { completedChapters: number; learners: number };
   questions: { total: number; pending: number };
-  leads: { total: number; new: number; last30Days: number };
+  leads: { total: number; new: number; converted: number; last30Days: number };
+  topCourses: AdminDashboardCourse[];
   recentStudents: AdminStudent[];
   pendingQuestions: AdminPendingQuestion[];
+}
+
+export interface AdminDashboardCourse {
+  id: string;
+  title: string;
+  learners: number;
+  completedChapters: number;
+}
+
+/** Ponto da tendência de sessões (GA4) — um por dia, últimos 14 dias. */
+export interface AdminAnalyticsTrendPoint {
+  date: string;
+  sessions: number;
+}
+
+export interface AdminAnalyticsSource {
+  source: string;
+  medium: string;
+  sessions: number;
+}
+
+export interface AdminAnalyticsPage {
+  path: string;
+  views: number;
+}
+
+/**
+ * Visão geral do Google Analytics (GA4) para o painel admin.
+ * `configured: false` quando o GA4 não está configurado no servidor;
+ * `error` preenchido quando está configurado mas a consulta falhou.
+ */
+export interface AdminAnalytics {
+  configured: boolean;
+  error: string | null;
+  activeUsersNow: number | null;
+  sessionsLast30Days: number | null;
+  usersLast30Days: number | null;
+  sessionsTrend: AdminAnalyticsTrendPoint[];
+  topSources: AdminAnalyticsSource[];
+  topPages: AdminAnalyticsPage[];
 }
 
 export interface AdminPendingQuestion {

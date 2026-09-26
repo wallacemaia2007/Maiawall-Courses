@@ -4,7 +4,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { toApiError } from '../../../../core/models/api-error.model';
 import { ConfirmDeleteModalComponent } from '../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component';
-import { LEAD_STATUSES, Lead, LeadPayload, LeadStatus } from '../../models/admin.model';
+import { AdminAnalyticsPanelComponent } from '../../components/admin-analytics-panel/admin-analytics-panel.component';
+import { AdminAnalytics, LEAD_STATUSES, Lead, LeadPayload, LeadStatus } from '../../models/admin.model';
 import { AdminService } from '../../services/admin.service';
 
 type StatusFilter = 'todos' | LeadStatus;
@@ -32,7 +33,7 @@ function fromDateInput(value: string): string {
 @Component({
   selector: 'app-admin-lead-list',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule, ConfirmDeleteModalComponent],
+  imports: [DatePipe, ReactiveFormsModule, ConfirmDeleteModalComponent, AdminAnalyticsPanelComponent],
   templateUrl: './admin-lead-list.component.html',
   styleUrl: './admin-lead-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,6 +77,9 @@ export class AdminLeadListComponent {
   protected readonly toDelete = signal<Lead | null>(null);
   protected readonly filter = signal<StatusFilter>('todos');
 
+  protected readonly analytics = signal<AdminAnalytics | null>(null);
+  protected readonly analyticsLoading = signal(true);
+
   protected readonly filtered = computed(() => {
     const filter = this.filter();
     return filter === 'todos' ? this.leads() : this.leads().filter((lead) => lead.status === filter);
@@ -118,6 +122,17 @@ export class AdminLeadListComponent {
       error: (error: unknown) => {
         this.errorMessage.set(toApiError(error).message);
         this.loading.set(false);
+      },
+    });
+
+    this.adminService.analytics().subscribe({
+      next: (analytics) => {
+        this.analytics.set(analytics);
+        this.analyticsLoading.set(false);
+      },
+      error: () => {
+        // Analytics é complementar: uma falha aqui não deve travar a página de leads.
+        this.analyticsLoading.set(false);
       },
     });
   }

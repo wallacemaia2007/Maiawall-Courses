@@ -52,6 +52,12 @@ const env = {
   adminEmails: commaSeparated(
     process.env.ADMIN_EMAILS || 'wallacemaia2007@gmail.com',
   ),
+  // GA4: opcional. Sem GA4_PROPERTY_ID, o painel mostra o dashboard sem a
+  // secao de analytics (ver backend/src/services/analytics.service.js).
+  ga4PropertyId: process.env.GA4_PROPERTY_ID || '',
+  // JSON da service account com acesso de leitura na propriedade GA4. Se
+  // vazio, usa GOOGLE_APPLICATION_CREDENTIALS (Application Default Credentials).
+  ga4ServiceAccountJson: process.env.GA4_SERVICE_ACCOUNT || '',
 };
 
 module.exports = { env };

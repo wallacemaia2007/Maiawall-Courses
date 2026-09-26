@@ -4,6 +4,7 @@ const { env } = require('../config/env');
 const { fromFirestoreDoc, getDatabase } = require('../config/database');
 const { AppError } = require('../middleware/error-handler');
 const { UserRepository } = require('../repositories/user.repository');
+const { getAnalyticsOverview } = require('../services/analytics.service');
 const { successResponse } = require('../utils/api-response');
 
 const adminRouter = express.Router();
@@ -124,7 +125,30 @@ function buildAdminCourses({ courses, chapters, progress }) {
     .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 }
 
-function buildAdminDashboard({ users, courses, progress, questions, leads, now = new Date(), adminEmails = env.adminEmails }) {
+/* Cursos com mais alunos com progresso iniciado, para o painel de engajamento. */
+function topCoursesOf({ courses, chapters, progress }, limit = 3) {
+  return buildAdminCourses({ courses, chapters, progress })
+    .slice()
+    .sort((a, b) => b.learners - a.learners)
+    .slice(0, limit)
+    .map((course) => ({
+      id: course.id,
+      title: course.title,
+      learners: course.learners,
+      completedChapters: course.completedChapters,
+    }));
+}
+
+function buildAdminDashboard({
+  users,
+  courses,
+  chapters = [],
+  progress,
+  questions,
+  leads,
+  now = new Date(),
+  adminEmails = env.adminEmails,
+}) {
   const students = buildStudents({ users, progress, adminEmails });
   const pendingQuestions = questions
     .filter((question) => !question.answer)
@@ -152,8 +176,10 @@ function buildAdminDashboard({ users, courses, progress, questions, leads, now =
     leads: {
       total: leads.length,
       new: leads.filter((lead) => (lead.status || 'novo') === 'novo').length,
+      converted: leads.filter((lead) => lead.status === 'convertido').length,
       last30Days: leads.filter((lead) => isWithinDays(lead.capturedAt || lead.createdAt, 30, now)).length,
     },
+    topCourses: topCoursesOf({ courses, chapters, progress }),
     recentStudents: students.slice(0, 5),
     pendingQuestions: pendingQuestions.slice(0, 5).map((question) => ({
       id: question._id,
@@ -311,17 +337,34 @@ async function readCollection(database, name) {
 adminRouter.get('/dashboard', async (_request, response, next) => {
   try {
     const database = await getDatabase();
-    const [users, courses, progress, questions, leads] = await Promise.all([
+    const [users, courses, chapters, progress, questions, leads] = await Promise.all([
       UserRepository.listAll(),
       readCollection(database, 'courses'),
+      readCollection(database, 'chapters'),
       readCollection(database, 'chapterProgress'),
       readCollection(database, 'courseQuestions'),
       readCollection(database, 'leads'),
     ]);
 
     response.json(
-      successResponse(buildAdminDashboard({ users, courses, progress, questions, leads }), 'OK'),
+      successResponse(
+        buildAdminDashboard({ users, courses, chapters, progress, questions, leads }),
+        'OK',
+      ),
     );
+  } catch (error) {
+    next(error);
+  }
+});
+
+/*
+ * Visao geral do GA4 (sessoes, origens, paginas). Opcional: sem
+ * GA4_PROPERTY_ID configurado no servidor, devolve { configured: false }
+ * em vez de erro, para o painel esconder a secao de analytics.
+ */
+adminRouter.get('/analytics', async (_request, response, next) => {
+  try {
+    response.json(successResponse(await getAnalyticsOverview(), 'OK'));
   } catch (error) {
     next(error);
   }
