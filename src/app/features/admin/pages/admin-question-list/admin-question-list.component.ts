@@ -9,6 +9,8 @@ import { AdminUserProfileModalComponent } from '../../components/admin-user-prof
 
 type QuestionFilter = 'todas' | 'pendentes' | 'respondidas';
 
+const DEFAULT_COLLAPSED = true;
+
 @Component({
   selector: 'app-admin-question-list',
   standalone: true,
@@ -68,13 +70,13 @@ export class AdminQuestionListComponent implements OnInit {
   }
 
   protected isCollapsed(question: CourseQuestion): boolean {
-    return this.collapsed()[question.id] ?? false;
+    return this.collapsed()[question.id] ?? DEFAULT_COLLAPSED;
   }
 
   protected toggleCollapsed(question: CourseQuestion): void {
     this.collapsed.update((current) => ({
       ...current,
-      [question.id]: !(current[question.id] ?? false),
+      [question.id]: !(current[question.id] ?? DEFAULT_COLLAPSED),
     }));
   }
 
