@@ -6,47 +6,63 @@
         [class.is-active]="i === activeIndex()"
         [attr.aria-hidden]="i === activeIndex() ? null : 'true'"
       >
-        <div class="q-msg q-msg--question">
-          <div class="q-msg__avatar">
+        <button
+          type="button"
+          class="q-card"
+          [class.is-open]="isRevealed(question)"
+          [attr.aria-expanded]="isRevealed(question)"
+          [attr.aria-controls]="'q-answer-' + question.id"
+          (click)="toggleReveal(question)"
+        >
+          <span class="q-card__avatar">
             @if (authorAvatar(question); as avatar) {
               <img [src]="avatar" [alt]="authorName(question)" />
             } @else {
               <span aria-hidden="true">{{ initials(authorName(question)) }}</span>
             }
-          </div>
-          <div class="q-msg__bubble">
-            <header>
+          </span>
+
+          <span class="q-card__content">
+            <span class="q-card__head">
               <strong>{{ authorName(question) }}</strong>
               @if (question.createdAt) {
                 <time [attr.datetime]="question.createdAt">
                   {{ question.createdAt | date: "dd 'de' MMM 'de' yyyy" }}
                 </time>
               }
-            </header>
-            <p>{{ question.question }}</p>
-          </div>
-        </div>
+            </span>
+            <span class="q-card__question">{{ question.question }}</span>
+          </span>
 
-        <div class="q-msg q-msg--answer">
-          <div class="q-msg__avatar q-msg__avatar--tutor">
-            @if (instructor.avatarUrl) {
-              <img [src]="instructor.avatarUrl" [alt]="instructor.name" />
-            } @else {
-              <span aria-hidden="true">{{ initials(instructor.name) }}</span>
-            }
+          <svg class="q-card__chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+        </button>
+
+        @if (isRevealed(question)) {
+          <div class="q-answer" [id]="'q-answer-' + question.id">
+            <div class="q-msg q-msg--answer">
+              <div class="q-msg__avatar q-msg__avatar--tutor">
+                @if (instructor.avatarUrl) {
+                  <img [src]="instructor.avatarUrl" [alt]="instructor.name" />
+                } @else {
+                  <span aria-hidden="true">{{ initials(instructor.name) }}</span>
+                }
+              </div>
+              <div class="q-msg__bubble q-msg__bubble--answer">
+                <header>
+                  <strong>{{ instructor.name }}</strong>
+                  @if (question.answeredAt) {
+                    <time [attr.datetime]="question.answeredAt">
+                      {{ question.answeredAt | date: "dd 'de' MMM 'de' yyyy" }}
+                    </time>
+                  }
+                </header>
+                <p>{{ question.answer }}</p>
+              </div>
+            </div>
           </div>
-          <div class="q-msg__bubble q-msg__bubble--answer">
-            <header>
-              <strong>{{ instructor.name }}</strong>
-              @if (question.answeredAt) {
-                <time [attr.datetime]="question.answeredAt">
-                  {{ question.answeredAt | date: "dd 'de' MMM 'de' yyyy" }}
-                </time>
-              }
-            </header>
-            <p>{{ question.answer }}</p>
-          </div>
-        </div>
+        }
       </article>
     }
   </div>

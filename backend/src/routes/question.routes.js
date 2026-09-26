@@ -31,6 +31,14 @@ function lastLoginOf(user) {
   return user.lastLoginAt || user.refreshTokenUpdatedAt || null;
 }
 
+/*
+ * "Outras dúvidas": perguntas que não pertencem a um minicurso específico.
+ * O id é reservado (não é o id de um curso real) e aparece como opção no
+ * formulário de dúvida do site inteiro.
+ */
+const GENERAL_COURSE_ID = 'outras-duvidas';
+const GENERAL_COURSE_TITLE = 'Outras dúvidas';
+
 const EMPTY_AUTHOR = { id: null, name: '', email: '', avatarUrl: null, createdAt: null, lastLoginAt: null, questionsCount: 0 };
 
 function buildAuthorProfile(question, usersById, questionCounts) {
@@ -134,34 +142,42 @@ function buildFeaturedQuestionGroups(questions, courses) {
   for (const question of questions) {
     if (!question || !question.published || !question.featured || !question.answer) continue;
 
-    const course = publishedCoursesById.get(question.courseId);
+    const published = publishedCoursesById.get(question.courseId);
+    /* Perguntas gerais não têm curso publicado: viram um grupo próprio. */
+    const course = published
+      ? {
+          id: published._id,
+          title: published.title || question.courseTitle || published.slug || published._id,
+          slug: published.slug || published._id,
+          category: published.category || null,
+        }
+      : question.courseId === GENERAL_COURSE_ID
+        ? { id: GENERAL_COURSE_ID, title: GENERAL_COURSE_TITLE, slug: '', category: null }
+        : null;
     if (!course) continue;
 
-    const group = groupsByCourse.get(course._id) || {
-      course: {
-        id: course._id,
-        title: course.title || question.courseTitle || course.slug || course._id,
-        slug: course.slug || course._id,
-        category: course.category || null,
-      },
-      questions: [],
-    };
-
+    const group = groupsByCourse.get(course.id) || { course, questions: [] };
     group.questions.push({
       ...serializeQuestion(question),
       author: serializePublicAuthor(question),
     });
-    groupsByCourse.set(course._id, group);
+    groupsByCourse.set(course.id, group);
   }
 
-  return [...groupsByCourse.values()]
-    .map((group) => ({
-      ...group,
-      questions: group.questions.sort(
-        (first, second) => timestampOf(second.answeredAt) - timestampOf(first.answeredAt),
-      ),
-    }))
-    .sort((first, second) => first.course.title.localeCompare(second.course.title, 'pt-BR'));
+  const ordered = [...groupsByCourse.values()].map((group) => ({
+    ...group,
+    questions: group.questions.sort(
+      (first, second) => timestampOf(second.answeredAt) - timestampOf(first.answeredAt),
+    ),
+  }));
+
+  return ordered
+    .sort((first, second) => first.course.title.localeCompare(second.course.title, 'pt-BR'))
+    .sort((first, second) => {
+      const firstIsGeneral = first.course.id === GENERAL_COURSE_ID ? 1 : 0;
+      const secondIsGeneral = second.course.id === GENERAL_COURSE_ID ? 1 : 0;
+      return firstIsGeneral - secondIsGeneral;
+    });
 }
 
 courseQuestionRouter.get('/:courseId/questions', async (request, response, next) => {
@@ -191,11 +207,13 @@ courseQuestionRouter.post('/:courseId/questions', async (request, response, next
     }
 
     const database = await getDatabase();
-    const course = await findPublishedCourse(database, request.params.courseId);
+    const requestedId = String(request.params.courseId || '');
+    /* "Outras dúvidas" não é um curso: aceita o id reservado sem lookup. */
+    const course = requestedId === GENERAL_COURSE_ID ? null : await findPublishedCourse(database, requestedId);
     const now = new Date();
     const question = {
-      courseId: course._id,
-      courseTitle: course.title,
+      courseId: course ? course._id : GENERAL_COURSE_ID,
+      courseTitle: course ? course.title : GENERAL_COURSE_TITLE,
       userId: request.auth.userId,
       authorName: requiredText(request.body?.authorName, 'nome', 2, 80),
       authorEmail: request.auth.user.email,
@@ -330,6 +348,8 @@ module.exports = {
   buildAuthorProfile,
   buildFeaturedQuestionGroups,
   courseQuestionRouter,
+  GENERAL_COURSE_ID,
+  GENERAL_COURSE_TITLE,
   publicQuestionRouter,
   requiredText,
   serializePublicAuthor,

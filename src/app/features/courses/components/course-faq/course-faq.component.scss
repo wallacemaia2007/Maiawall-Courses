@@ -3,7 +3,7 @@
 .course-faq { padding-block: clamp(4rem, 8vw, 7rem); background: var(--color-bg-primary); }
 .course-faq__inner { max-width: 980px; }
 .course-faq__heading { display: grid; grid-template-columns: 1fr auto; gap: .5rem 2rem; margin-bottom: 2rem; }
-.course-faq__heading > p, .course-faq__eyebrow { grid-column: 1 / -1; margin: 0; color: var(--color-primary); font-size: .75rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.course-faq__heading > p { grid-column: 1 / -1; margin: 0; color: var(--color-primary); font-size: .75rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
 .course-faq__heading h2 { margin: 0; font: 700 clamp(2rem, 5vw, 3.5rem)/1 var(--font-display); letter-spacing: -.04em; }
 .course-faq__heading > span { max-width: 34ch; color: var(--color-text-secondary); line-height: 1.6; }
 .course-faq__more { grid-column: 1 / -1; justify-self: start; margin-top: .25rem; color: var(--color-primary); font-weight: 800; text-decoration: none; font-size: .9rem; }
@@ -17,23 +17,9 @@
 .course-faq__answer small { display: block; margin-bottom: .45rem; color: var(--color-primary); font-weight: 700; }
 .course-faq__answer p { margin: 0; }
 .course-faq__community { background: linear-gradient(90deg, var(--color-primary-soft), transparent 60%); }
-.course-faq__ask { display: grid; grid-template-columns: minmax(0, .8fr) minmax(360px, 1.2fr); gap: clamp(2rem, 6vw, 5rem); margin-top: 4rem; padding: clamp(1.5rem, 4vw, 3rem); border: 1px solid var(--color-border); background: var(--color-bg-secondary); }
-.course-faq__ask h3 { margin: .65rem 0 1rem; font: 700 clamp(1.7rem, 4vw, 2.6rem)/1.05 var(--font-display); letter-spacing: -.035em; }
-.course-faq__ask > div > p:last-child, .course-faq__login p { color: var(--color-text-secondary); line-height: 1.65; }
-.course-faq form { display: grid; gap: .55rem; }
-.course-faq label { margin-top: .45rem; font-size: .82rem; font-weight: 800; }
-.course-faq input, .course-faq textarea { width: 100%; padding: .85rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: #fff; color: var(--color-text-primary); font: inherit; box-sizing: border-box; }
-.course-faq textarea { resize: vertical; }
-.course-faq input:focus, .course-faq textarea:focus { outline: 3px solid rgba(37, 99, 235, .2); border-color: var(--color-focus-ring); }
-.course-faq__form-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.course-faq__form-footer small { color: var(--color-text-muted); }
-.course-faq__success { color: var(--color-success); font-weight: 700; }
-.course-faq__error { color: var(--color-danger); }
-.course-faq__login { align-self: center; }
-.course-faq__login .mw-btn { margin-top: 1rem; }
+.course-faq__ask { margin-top: 4rem; }
 
 @media (max-width: 720px) {
-  .course-faq__heading, .course-faq__ask { grid-template-columns: 1fr; }
+  .course-faq__heading { grid-template-columns: 1fr; }
   .course-faq__heading > span { max-width: none; }
-  .course-faq__ask { min-width: 0; }
 }

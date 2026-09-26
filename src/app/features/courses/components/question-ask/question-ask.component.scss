@@ -1,0 +1,118 @@
+:host {
+  display: block;
+}
+
+.question-ask {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.75rem, 5vw, 3.5rem);
+  padding: clamp(1.4rem, 3.5vw, 2.5rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-secondary);
+}
+
+.question-ask__eyebrow {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.question-ask__heading {
+  margin: 0.6rem 0 0.75rem;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.question-ask__copy p:last-child {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.question-ask form {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.question-ask label {
+  margin-top: 0.5rem;
+  color: var(--color-text-primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.question-ask input,
+.question-ask select,
+.question-ask textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.question-ask textarea {
+  resize: vertical;
+}
+
+.question-ask input:focus,
+.question-ask select:focus,
+.question-ask textarea:focus {
+  outline: 3px solid rgba(37, 99, 235, 0.2);
+  border-color: var(--color-focus-ring);
+}
+
+.question-ask__form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.question-ask__form-footer small {
+  color: var(--color-text-muted);
+}
+
+.question-ask__success {
+  margin: 0;
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.question-ask__error {
+  color: var(--color-danger);
+}
+
+.question-ask__login {
+  align-self: center;
+}
+
+.question-ask__login p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+.question-ask__login .mw-btn {
+  margin-top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .question-ask {
+    grid-template-columns: 1fr;
+  }
+}

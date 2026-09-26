@@ -5,11 +5,10 @@ import { COURSE_INSTRUCTOR } from '../../../../core/constants/instructor.data';
 import { CourseQuestion } from '../../models/course-question.model';
 
 /*
- * Carrossel de duvidas de um minicurso: cada slide mostra a pergunta do
- * aluno (foto, nome e data) seguida da resposta do instrutor, no formato
- * de mensagens — semelhante ao FAQ do curso, porem com identidade de quem
- * perguntou. Com uma unica duvida, os controles de navegacao somem e o
- * card fica estatico.
+ * Carrossel de duvidas de um minicurso: cada slide traz um card compacto
+ * com a pergunta do aluno (foto, nome e data) que, ao ser clicado, revela
+ * a resposta do instrutor no formato de mensagem. Com uma unica duvida, os
+ * controles de navegacao somem e o card fica estatico.
  */
 @Component({
   selector: 'app-question-carousel',
@@ -25,6 +24,7 @@ export class QuestionCarouselComponent {
   protected readonly instructor = COURSE_INSTRUCTOR;
   protected readonly activeIndex = signal(0);
   protected readonly total = computed(() => this.questions().length);
+  private readonly revealedIds = signal<ReadonlySet<string>>(new Set());
 
   constructor() {
     effect(() => {
@@ -33,6 +33,18 @@ export class QuestionCarouselComponent {
         this.activeIndex.set(0);
       }
     });
+  }
+
+  protected isRevealed(question: CourseQuestion): boolean {
+    return this.revealedIds().has(question.id);
+  }
+
+  protected toggleReveal(question: CourseQuestion): void {
+    const revealed = new Set(this.revealedIds());
+    if (!revealed.delete(question.id)) {
+      revealed.add(question.id);
+    }
+    this.revealedIds.set(revealed);
   }
 
   protected next(): void {

@@ -11,6 +11,8 @@
   </div>
 
   <div class="mw-container featured-questions-page__content">
+    <app-question-ask class="featured-questions-page__ask" [courses]="courses()" />
+
     @if (state().loading) {
       <div class="featured-questions-page__status">
         <app-loading-spinner label="Carregando dúvidas" size="lg" />
@@ -50,7 +52,7 @@
               <div class="course-mini-hero__copy">
                 <p class="course-mini-hero__eyebrow">
                   <span></span>
-                  Dúvidas do minicurso
+                  {{ group.course.slug ? 'Dúvidas do minicurso' : 'Dúvidas do site' }}
                 </p>
                 <h2>{{ group.course.title }}</h2>
                 <span class="course-mini-hero__count">
@@ -61,9 +63,11 @@
                   }}
                 </span>
               </div>
-              <a class="course-mini-hero__cta" [routerLink]="['/cursos', group.course.slug]">
-                Conhecer minicurso →
-              </a>
+              @if (group.course.slug) {
+                <a class="course-mini-hero__cta" [routerLink]="['/cursos', group.course.slug]">
+                  Conhecer minicurso →
+                </a>
+              }
             </header>
 
             <div class="course-mini-hero__panel">

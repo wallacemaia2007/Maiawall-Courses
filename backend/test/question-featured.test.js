@@ -5,6 +5,8 @@ const {
   assertCanFeature,
   buildAuthorProfile,
   buildFeaturedQuestionGroups,
+  GENERAL_COURSE_ID,
+  GENERAL_COURSE_TITLE,
   serializeQuestion,
 } = require('../src/routes/question.routes');
 
@@ -233,4 +235,58 @@ test('serializePublicAuthor exposes only name and avatar, never e-mail', () => {
 
   const withoutAvatar = serializePublicAuthor({ authorName: 'Sem Foto', author: null });
   assert.deepEqual(withoutAvatar, { name: 'Sem Foto', avatarUrl: null });
+});
+
+test('buildFeaturedQuestionGroups keeps general questions in their own group at the end', () => {
+  const courses = [
+    {
+      _id: 'apis',
+      slug: 'apis-metodos-http-e-json',
+      title: 'APIs e Métodos HTTP',
+      category: 'backend',
+      published: true,
+    },
+  ];
+  const questions = [
+    {
+      _id: 'apis-destaque',
+      courseId: 'apis',
+      courseTitle: 'APIs',
+      authorName: 'Ana',
+      question: 'Dúvida de API',
+      answer: 'Resposta de API',
+      published: true,
+      featured: true,
+    },
+    {
+      _id: 'geral-destaque',
+      courseId: GENERAL_COURSE_ID,
+      courseTitle: GENERAL_COURSE_TITLE,
+      authorName: 'Bia',
+      question: 'Dúvida sobre a plataforma',
+      answer: 'Resposta geral',
+      published: true,
+      featured: true,
+    },
+    {
+      _id: 'geral-sem-estrela',
+      courseId: GENERAL_COURSE_ID,
+      courseTitle: GENERAL_COURSE_TITLE,
+      authorName: 'Cid',
+      question: 'Dúvida geral pendente',
+      answer: 'Resposta escondida',
+      published: true,
+      featured: false,
+    },
+  ];
+
+  const groups = buildFeaturedQuestionGroups(questions, courses);
+
+  assert.deepEqual(groups.map((group) => group.course.id), ['apis', GENERAL_COURSE_ID]);
+  const general = groups[1];
+  assert.equal(general.course.title, GENERAL_COURSE_TITLE);
+  // Sem curso para ligar: o slug fica vazio e a página esconde o CTA.
+  assert.equal(general.course.slug, '');
+  assert.equal(general.course.category, null);
+  assert.deepEqual(general.questions.map((question) => question.id), ['geral-destaque']);
 });

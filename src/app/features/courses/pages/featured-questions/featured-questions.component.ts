@@ -7,8 +7,10 @@ import { catchError, map, of } from 'rxjs';
 import { toApiError } from '../../../../core/models/api-error.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { QuestionAskComponent } from '../../components/question-ask/question-ask.component';
 import { QuestionCarouselComponent } from '../../components/question-carousel/question-carousel.component';
 import { CourseQuestionGroup } from '../../models/course-question.model';
+import { CourseService } from '../../services/course.service';
 import { CourseQuestionService } from '../../services/course-question.service';
 
 const PAGE_TITLE = 'Dúvidas frequentes | Maiawall Cursos';
@@ -23,7 +25,13 @@ interface FeaturedQuestionsState {
 @Component({
   selector: 'app-featured-questions',
   standalone: true,
-  imports: [RouterLink, EmptyStateComponent, LoadingSpinnerComponent, QuestionCarouselComponent],
+  imports: [
+    RouterLink,
+    EmptyStateComponent,
+    LoadingSpinnerComponent,
+    QuestionAskComponent,
+    QuestionCarouselComponent,
+  ],
   templateUrl: './featured-questions.component.html',
   styleUrl: './featured-questions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +39,18 @@ interface FeaturedQuestionsState {
 export class FeaturedQuestionsComponent implements OnInit {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
+  private readonly courseService = inject(CourseService);
   private readonly questionService = inject(CourseQuestionService);
+
+  /* Lista de opcoes do campo "envie sua duvida" — a pagina junta varios
+   * minicursos, entao o aluno precisa escolher em qual perguntar. */
+  protected readonly courses = toSignal(
+    this.courseService.list({ size: 100 }).pipe(
+      map((page) => page.content),
+      catchError(() => of([])),
+    ),
+    { initialValue: [] },
+  );
 
   protected readonly state = toSignal(
     this.questionService.listFeaturedGroups().pipe(
