@@ -55,6 +55,7 @@
               }
             ],
             "styles": [
+              "node_modules/lenis/dist/lenis.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -129,6 +130,7 @@
               }
             ],
             "styles": [
+              "node_modules/lenis/dist/lenis.css",
               "src/styles.scss"
             ],
             "scripts": []

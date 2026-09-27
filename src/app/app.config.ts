@@ -13,9 +13,13 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
+      /*
+       * Scroll fica a cargo do Lenis (SmoothScrollService). Restauração nativa
+       * do router conflita com o scroll suavizado — reset/sincronização na navegação.
+       */
       withInMemoryScrolling({
-        anchorScrolling: 'enabled',
-        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'disabled',
+        scrollPositionRestoration: 'disabled',
       }),
     ),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
