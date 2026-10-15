@@ -1,6 +1,11 @@
 const express = require('express');
 
 const { fromFirestoreDoc, getDatabase } = require('../config/database');
+const {
+  getFirstCodeLessonContent,
+  getLessonSummaries,
+  hasCourseChapter,
+} = require('../content/course-content');
 const { AppError } = require('../middleware/error-handler');
 const { successResponse } = require('../utils/api-response');
 
@@ -10,21 +15,57 @@ function toId(value) {
   return value ? value.toString() : '';
 }
 
-function serializeLesson(lesson) {
-  return {
-    id: toId(lesson._id), chapterId: toId(lesson.chapterId), title: lesson.title,
-    type: lesson.type, content: lesson.content, isPublic: Boolean(lesson.isPublic),
-    attachments: lesson.attachments || [], image: lesson.image || null, order: lesson.order,
-  };
+/*
+ * Capítulos órfãos (no Firestore mas não no catálogo) são avisados uma única
+ * vez por processo: esta rota é chamada a cada visita ao curso e o aviso se
+ * repetir a cada request esconderia o problema real nos logs da função.
+ */
+const warnedMissingChapters = new Set();
+
+function warnMissingChapter(courseSlug, chapterSlug) {
+  const key = `${courseSlug}:${chapterSlug}`;
+  if (warnedMissingChapters.has(key)) return;
+  warnedMissingChapters.add(key);
+
+  console.warn(
+    `[catalog] Capítulo "${key}" está no Firestore mas não existe no catálogo de seed — ` +
+      'as aulas não serão exibidas. Confira o JSON em backend/src/seed/ e rode o seed de novo.',
+  );
 }
 
-function serializeChapter(chapter, lessons = []) {
-  const sortedLessons = [...lessons].sort((a, b) => a.order - b.order);
+/*
+ * `lessons` traz só o resumo (título/tipo/ordem) de cada aula, vindo do
+ * catálogo em memória (ver ../content/course-content.js) — o corpo completo
+ * (content/imagem/anexos) não passa mais pela API: o frontend busca isso
+ * direto do asset estático gerado em public/assets/courses/content/<slug>.json.
+ * Isso é o que elimina a leitura da coleção `lessons` do Firestore (a mais
+ * pesada e mais repetida) a cada troca de capítulo.
+ */
+function serializeChapter(chapter, courseSlug) {
+  /*
+   * O Firestore guarda o metadado do capítulo e o catálogo de seed guarda o
+   * conteúdo: se um capítulo for criado/renomeado no Firestore sem espelhar no
+   * JSON de `backend/src/seed/`, a lista de aulas volta vazia e o leitor cai no
+   * empty state sem nenhuma pista do motivo. Avisa no log da function.
+   */
+  if (!hasCourseChapter(courseSlug, chapter.slug)) {
+    warnMissingChapter(courseSlug, chapter.slug);
+  }
+
+  const lessons = getLessonSummaries(courseSlug, chapter.slug);
+
   return {
     id: toId(chapter._id), courseId: toId(chapter.courseId), title: chapter.title,
     slug: chapter.slug, description: chapter.description, order: chapter.order,
     isPublic: Boolean(chapter.isPublic), requiresLogin: Boolean(chapter.requiresLogin),
-    lessons: sortedLessons.map(serializeLesson),
+    /*
+     * A contagem vem do catálogo, e não do campo `lessonCount` gravado pelo
+     * seed: assim um Firestore ainda não migrado (ou editado à mão) nunca
+     * anuncia 0 aulas para um capítulo que as tem. O campo continua sendo
+     * gravado no seed porque descreve o documento para o admin/analytics.
+     */
+    lessonCount: lessons.length,
+    lessons,
   };
 }
 
@@ -94,40 +135,11 @@ async function getChaptersByCourse(database, courseId) {
   return snapshot.docs.map(fromFirestoreDoc).sort((a, b) => a.order - b.order);
 }
 
-async function getLessonsByCourse(database, courseId) {
-  const snapshot = await database.collection('lessons').where('courseId', '==', courseId).get();
-  return snapshot.docs
-    .map(fromFirestoreDoc)
-    .sort((a, b) => a.order - b.order);
-}
-
-function groupLessonsByChapter(lessons) {
-  const lessonsByChapter = new Map();
-
-  for (const lesson of lessons) {
-    const key = toId(lesson.chapterId);
-    const entries = lessonsByChapter.get(key) || [];
-    entries.push(lesson);
-    lessonsByChapter.set(key, entries);
-  }
-
-  return lessonsByChapter;
-}
-
 async function getChaptersForCourses(database, courseIds) {
   if (courseIds.length === 0) return [];
   const snapshots = await Promise.all(
     courseIds.map((courseId) =>
       database.collection('chapters').where('courseId', '==', courseId).get()),
-  );
-  return snapshots.flatMap((snapshot) => snapshot.docs.map(fromFirestoreDoc));
-}
-
-async function getLessonsForChapters(database, chapterIds) {
-  if (chapterIds.length === 0) return [];
-  const snapshots = await Promise.all(
-    chapterIds.map((chapterId) =>
-      database.collection('lessons').where('chapterId', '==', chapterId).get()),
   );
   return snapshots.flatMap((snapshot) => snapshot.docs.map(fromFirestoreDoc));
 }
@@ -178,26 +190,18 @@ async function enrichWithPreview(database, content) {
     entries.sort((a, b) => a.order - b.order);
   }
 
-  const firstChapters = [...chaptersByCourse.values()].map((list) => list[0]).filter(Boolean);
-  const lessons = await getLessonsForChapters(
-    database,
-    firstChapters.map((chapter) => chapter._id),
-  );
-  const lessonsByChapter = groupLessonsByChapter(lessons);
-
   for (const course of content) {
     const courseChapters = chaptersByCourse.get(course.id) || [];
     course.previewChapters = courseChapters.slice(0, 3).map((chapter) => ({ title: chapter.title }));
 
     const firstChapter = courseChapters[0];
-    const codeLesson = (firstChapter ? lessonsByChapter.get(firstChapter._id) || [] : [])
-      .find((lesson) => lesson.type === 'code'
-        && typeof lesson.content === 'string'
-        && lesson.content.trim().length > 0);
+    const codeContent = firstChapter
+      ? getFirstCodeLessonContent(course.slug, firstChapter.slug)
+      : null;
 
-    if (codeLesson) {
+    if (codeContent) {
       course.previewSnippet = {
-        code: extractFirstCode(codeLesson.content)
+        code: extractFirstCode(codeContent)
           .split('\n')
           .slice(0, MAX_SNIPPET_LINES)
           .map((line) => line.trimEnd())
@@ -243,12 +247,10 @@ catalogRouter.get('/slug/:slug', async (request, response, next) => {
     const database = await getDatabase();
     const course = await getPublishedCourse(database, request.params.slug);
     const chapters = await getChaptersByCourse(database, course._id);
-    const lessons = await getLessonsByCourse(database, course._id);
-    const lessonsByChapter = groupLessonsByChapter(lessons);
 
     response.json(successResponse(serializeCourse(
       course,
-      chapters.map((chapter) => serializeChapter(chapter, lessonsByChapter.get(chapter._id) || [])),
+      chapters.map((chapter) => serializeChapter(chapter, course.slug)),
     ), 'OK'));
   } catch (error) { next(error); }
 });
@@ -264,12 +266,10 @@ catalogRouter.get('/:id', async (request, response, next) => {
     }
 
     const chapters = await getChaptersByCourse(database, course._id);
-    const lessons = await getLessonsByCourse(database, course._id);
-    const lessonsByChapter = groupLessonsByChapter(lessons);
 
     response.json(successResponse(serializeCourse(
       course,
-      chapters.map((chapter) => serializeChapter(chapter, lessonsByChapter.get(chapter._id) || [])),
+      chapters.map((chapter) => serializeChapter(chapter, course.slug)),
     ), 'OK'));
   } catch (error) { next(error); }
 });
@@ -284,12 +284,8 @@ catalogRouter.get('/:courseSlug/capitulos/:chapterSlug', async (request, respons
       throw new AppError(404, 'CHAPTER_NOT_FOUND', 'Capitulo nao encontrado');
     }
 
-    const chapterData = fromFirestoreDoc(chapter);
-    const lessons = (await getLessonsByCourse(database, course._id))
-      .filter((lesson) => lesson.chapterId === chapterData._id);
-
-    response.json(successResponse(serializeChapter(chapterData, lessons), 'OK'));
+    response.json(successResponse(serializeChapter(fromFirestoreDoc(chapter), course.slug), 'OK'));
   } catch (error) { next(error); }
 });
 
-module.exports = { buildCourseFaq, catalogRouter };
+module.exports = { buildCourseFaq, catalogRouter, serializeChapter, serializeCourse };

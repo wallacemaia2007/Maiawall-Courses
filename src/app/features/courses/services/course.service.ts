@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, shareReplay, throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { COURSE_ENDPOINTS } from '../../../core/constants/api.constants';
@@ -19,6 +19,16 @@ import {
 })
 export class CourseService {
   private readonly http = inject(HttpClient);
+  /*
+   * Sem conteúdo pesado de aula anexado (ver serializeChapter no backend), o
+   * detalhe do curso já é leve — cachear por slug faz a navegação entre
+   * capítulos de um mesmo curso (course-chapter.component) não repetir essa
+   * chamada a cada troca de capítulo.
+   *
+   * O cache é por sessão e não expira: para ver metadado novo (capítulo
+   * publicado, título trocado) é preciso recarregar a página.
+   */
+  private readonly bySlugCache = new Map<string, Observable<CourseDetail | null>>();
 
   list(params?: { page?: number; size?: number; keyword?: string }): Observable<Page<CourseSummary>> {
     const httpParams = new HttpParams()
@@ -36,9 +46,24 @@ export class CourseService {
   }
 
   getBySlug(slug: string): Observable<CourseDetail | null> {
-    return this.http
+    const cached = this.bySlugCache.get(slug);
+    if (cached) return cached;
+
+    const request$ = this.http
       .get<ApiResponse<CourseDetail>>(this.apiUrl(`${COURSE_ENDPOINTS.detail}/slug/${slug}`))
-      .pipe(map(unwrapApiData));
+      .pipe(
+        map(unwrapApiData),
+        // Falha (rede instável, cold start) não pode ficar cacheada: sem isso a
+        // próxima visita ao curso reprocessa o erro em vez de tentar de novo.
+        catchError((error: unknown) => {
+          this.bySlugCache.delete(slug);
+          return throwError(() => error);
+        }),
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
+
+    this.bySlugCache.set(slug, request$);
+    return request$;
   }
 
   getFeatured(limit = 3): Observable<CourseSummary[]> {

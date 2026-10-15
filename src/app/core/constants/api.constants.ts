@@ -42,6 +42,20 @@ export const CHAPTER_ENDPOINTS = {
   public: '/chapters/slug',
 } as const;
 
+/*
+ * ATENÇÃO — lições NÃO passam pela API. O corpo das aulas (texto, código,
+ * imagens, anexos) é servido como asset estático em
+ * `/assets/courses/content/<slug-do-curso>.json`, gerado de
+ * `backend/src/seed/` pelo script `npm run content:build` e lido pelo
+ * `CourseContentService`. O backend só devolve o metadado do capítulo e o
+ * resumo das aulas (título/tipo/ordem) para navegação e SEO.
+ *
+ * Estes dois placeholders continuam aqui porque o bloco acima é um registro
+ * do contrato futuro, mas NÃO devem ser usados para montar um service de
+ * capítulo/aula: um endpoint de conteúdo reintroduziria a leitura da coleção
+ * `lessons` do Firestore a cada troca de capítulo, que é exatamente o que a
+ * arquitetura de asset estático elimina.
+ */
 export const LESSON_ENDPOINTS = {
   detail: '/lessons',
 } as const;

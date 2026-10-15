@@ -1,0 +1,6 @@
+# Normaliza o fim de linha no repositório (LF) e força LF também no working
+# tree. Sem isso, `core.autocrlf=true` (padrão no Windows) deixa o índice em LF
+# e o working tree em CRLF, e qualquer arquivo editado por outra ferramenta
+# passa a gerar o aviso "LF will be replaced by CRLF" no `git diff`/`git add`.
+# Alinha com o Prettier, cujo `endOfLine` padrão é "lf".
+* text=auto eol=lf

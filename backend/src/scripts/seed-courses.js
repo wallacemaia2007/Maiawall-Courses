@@ -22,6 +22,20 @@ function validateCatalog(catalog) {
       throw new Error('Cada curso precisa de slug, title e chapters no JSON do seed.');
     }
 
+    /*
+     * Mesma exigência do build dos assets estáticos (isPublishable): o campo
+     * `published` precisa ser um booleano explícito. Se aqui o ausente valesse
+     * "publicado" e lá valesse "não publicado" (ou vice-versa), um curso
+     * despublicado continuaria com o JSON servido em produção.
+     */
+    if (typeof course.published !== 'boolean') {
+      throw new Error(
+        `O curso "${course.slug}" precisa de "published": true ou false no JSON do seed. ` +
+          'O asset do conteúdo é público e não passa pela API, então campo ausente não pode ' +
+          'ser assumido como publicado.',
+      );
+    }
+
     for (const chapter of course.chapters) {
       if (!chapter.slug || !chapter.title || !Array.isArray(chapter.lessons)) {
         throw new Error(`O capítulo do curso ${course.slug} está incompleto no JSON do seed.`);
@@ -30,6 +44,13 @@ function validateCatalog(catalog) {
   }
 }
 
+/*
+ * `lessons` entra na limpeza porque versões anteriores deste seed gravavam o
+ * corpo das aulas no Firestore. Hoje o conteúdo vive só nos JSONs de
+ * `backend/src/seed/` e nos assets estáticos gerados a partir deles
+ * (scripts/build-course-content-assets.js) — o Firestore guarda só o metadado
+ * (curso/capítulo) e o progresso de cada aluno.
+ */
 async function clearSeededDocs(database) {
   for (const collection of ['lessons', 'chapters', 'courses']) {
     const snapshot = await database
@@ -67,30 +88,21 @@ async function seedCourses(database, catalog = courseCatalog, now = new Date()) 
       const chapter = {
         ...chapterFields,
         courseId: sourceCourse.slug,
+        lessonCount: sourceLessons.length,
         seedSource: SEED_SOURCE,
         createdAt: now,
         updatedAt: now,
       };
       await database.collection('chapters').doc(chapterDocId).set(chapter);
       chapterCount += 1;
-
-      await Promise.all(
-        sourceLessons.map((lesson, index) => database
-          .collection('lessons')
-          .doc(`${chapterDocId}:${index}`)
-          .set({
-            ...lesson,
-            chapterId: chapterDocId,
-            courseId: sourceCourse.slug,
-            seedSource: SEED_SOURCE,
-            createdAt: now,
-            updatedAt: now,
-          })),
-      );
       lessonCount += sourceLessons.length;
     }
   }
 
+  /*
+   * `lessons` aqui é só a contagem que o log mostra: as aulas não são gravadas
+   * no Firestore, e sim servidas como asset estático gerado do mesmo catálogo.
+   */
   return { courses: catalog.courses.length, chapters: chapterCount, lessons: lessonCount };
 }
 
@@ -98,7 +110,10 @@ async function main() {
   assertSeedEnvironment();
   const database = await connectDatabase();
   const result = await seedCourses(database);
-  console.log(`Seed local concluído: ${result.courses} cursos, ${result.chapters} capítulos e ${result.lessons} aulas.`);
+  console.log(
+    `Seed local concluído: ${result.courses} cursos, ${result.chapters} capítulos ` +
+      `e ${result.lessons} aulas (servidas como asset estático, não gravadas no Firestore).`,
+  );
 }
 
 if (require.main === module) {

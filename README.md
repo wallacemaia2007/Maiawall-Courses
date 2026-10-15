@@ -248,12 +248,87 @@ npm --prefix backend run dev
 | `npm run lint` | Executa o ESLint |
 | `npm run format` | Formata os arquivos com Prettier |
 | `npm --prefix backend test` | Executa os testes da API |
-| `npm --prefix backend run seed:courses` | Recria o catalogo local no Firestore |
+| `npm --prefix backend run seed:courses` | Recria cursos/capitulos (metadado) no Firestore |
+| `npm run content:build` | Gera o conteudo estatico das aulas em `public/assets/courses/content/` |
 | `npm run kill:ports` | Libera as portas locais no Windows |
 
 O seed usa os JSONs de `backend/src/seed/` (um arquivo por curso, combinados
 pelo `course-catalog.js`) como fonte do catalogo e recria as
-colecoes de cursos, capitulos e aulas sem alterar os usuarios.
+colecoes `courses`/`chapters` no Firestore (metadado: titulo, slug, ordem e a
+contagem de aulas) sem alterar os usuarios. A colecao `lessons` nao e mais
+escrita: o corpo das aulas vive so nos JSONs e nos assets estaticos. O seed
+continua apagando os documentos antigos de `lessons` marcados com
+`seedSource = local-course-catalog`, entao ** rode o seed uma vez apos aplicar
+essa mudanca** para limpar o que sobrou de versoes anteriores (ate la, o
+Firestore ainda guarda o corpo das aulas, que nao e mais lido por ninguem —
+so ocupa espaco e e cobrado como leitura). A API nao depende dessa limpeza:
+ela ja deriva a contagem de aulas do catalogo de seed, e nao do documento.
+
+### Conteudo dos cursos (aulas)
+
+O corpo de cada aula (texto, codigo, imagens) **nao fica no Firestore** — fica
+em `public/assets/courses/content/<slug-do-curso>.json`, um arquivo por curso,
+gerado a partir dos mesmos JSONs de `backend/src/seed/`. O frontend busca
+esse arquivo direto, como um asset estatico (nunca passa pela API nem pelo
+Firestore), e mantem em cache por curso: trocar de capitulo dentro do mesmo
+curso nao dispara nenhuma chamada de rede.
+
+O arquivo tambem carrega o **outline** do curso (titulo + titulo, ordem,
+descricao e slug de cada capitulo). Com isso a pagina do capitulo monta a tela
+inteira a partir do asset — hero, sumario, prev/next e o texto das aulas — e
+**nao existe nenhuma chamada a API no caminho da leitura**. O que vem do
+backend (progresso do aluno) entra por cima depois, sem segurar a renderizacao.
+
+O fluxo fica:
+
+| Momento | O que acontece | Vai onde |
+| --- | --- | --- |
+| Abre o capitulo | Baixa 1 asset estatico (curso inteiro, cacheado) | CDN/hosting |
+| chapter abre | `PATCH /api/learning/chapters/:id` → `in-progress` | Firestore |
+| Leu ate o fim | `PATCH /api/learning/chapters/:id` → `completed` | Firestore |
+| Destaque do sumario | `GET /api/learning/courses/:id/progress` | Firestore |
+
+As tres chamadas do backend sao assincronas e podem falhar sem afetar a
+leitura. O Firestore guarda so o metadado (curso/capitulo) e o progresso; o
+corpo das aulas e os ponteiros de imagem/anexo sao arquivos estaticos.
+
+O Firestore fica assim dividido:
+
+| Onde | O que guarda |
+| --- | --- |
+| `backend/src/seed/*.json` | Fonte da verdade: metadado **e** corpo das aulas |
+| `public/assets/courses/content/` | Corpo + outline como asset estatico (gerado) |
+| `courses` / `chapters` (Firestore) | So o metadado, para listagem, SEO e progresso |
+| `chapterProgress` (Firestore) | Quem leu o que |
+
+`npm run content:build` gera esses arquivos; ele roda sozinho antes de
+`npm start`/`npm run build` (hooks `prestart`/`prebuild`), entao normalmente
+nao precisa rodar a mao — so depois de editar um JSON em `backend/src/seed/`
+e quiser conferir o resultado localmente antes de subir.
+
+**Publicacao do asset:** como o JSON e servido publicamente e nao passa pela
+API, o unico controle e o proprio build. O campo `published` precisa ser um
+booleano explicito em todo curso do catalogo:
+
+- `published: true` — gera o asset;
+- `published: false` — nao gera, e o JSON anterior (se houver) e apagado do
+  diretorio, para um curso despublicado parar de ser baixavel por URL;
+- ausente ou invalido — **o build falha** com mensagem indicando o curso. O
+  campo ausente nao pode ser assumido como publicado (vazaria o conteudo de um
+  curso fora do catalogo) nem como privado (o capitulo sumiria do ar sem
+  nenhum aviso).
+
+O seed valida a mesma regra, entao os dois lados nunca discordam sobre o que e
+publico. Os arquivos gerados sao versionados no git de proposito: um build que
+nao passe pelo `npm run build` (ex.: `ng build` direto) continuaria servindo o
+conteudo.
+
+> Ao criar ou renomear um capitulo, altere **os dois lados**: o JSON em
+> `backend/src/seed/` (conteudo) e o Firestore (metadado, via seed). A API avisa
+> no log (uma vez por processo) quando um capitulo do Firestore nao existe no
+> catalogo; nesse caso a tela do leitor mostra "Aulas nao disponiveis" — o que
+> ela **nao** mostra e "em preparacao", para nao sugerir que o capitulo esta
+> sendo escrito. A correcao e rodar `npm run content:build` e o seed.
 
 ## Documentacao
 

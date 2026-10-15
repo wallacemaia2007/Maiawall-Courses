@@ -3,6 +3,13 @@
   <div class="course-chapter-page__status">
     <app-loading-spinner label="Carregando aula publica" size="lg" />
   </div>
+  } @else if (state().courseMissing) {
+  <div class="mw-container course-chapter-page__empty">
+    <app-empty-state title="Minicurso nao encontrado"
+      message="Nao encontramos esse minicurso no catalogo publico.">
+      <a class="mw-btn mw-btn--outline" routerLink="/cursos">Ver catalogo</a>
+    </app-empty-state>
+  </div>
   } @else if (state().errorMessage) {
   <div class="mw-container course-chapter-page__empty">
     <app-empty-state title="Aula nao encontrada" [message]="state().errorMessage">
@@ -30,7 +37,26 @@
 
   <div class="mw-container course-chapter-page__body">
     <div class="course-chapter-page__main">
-      @if (lessons().length > 0) {
+      @if (state().contentStatus === 'error') {
+      <app-empty-state title="Nao conseguimos carregar as aulas"
+        message="O conteudo deste capitulo nao baixou. Verifique a conexao e tente de novo.">
+        <div class="course-chapter-page__actions">
+          <button type="button" class="mw-btn mw-btn--outline" (click)="retryContent()">
+            Tentar de novo
+          </button>
+          <a class="mw-btn" [routerLink]="['/cursos', state().courseSlug]">
+            Voltar ao curso
+          </a>
+        </div>
+      </app-empty-state>
+      } @else if (state().contentStatus === 'unavailable') {
+      <app-empty-state title="Aulas nao disponiveis"
+        message="Este capitulo ainda nao foi publicado. Volte em breve ou escolha outro capitulo ao lado.">
+        <a class="mw-btn mw-btn--outline" [routerLink]="['/cursos', state().courseSlug]">
+          Voltar ao curso
+        </a>
+      </app-empty-state>
+      } @else if (lessons().length > 0) {
       <div class="lesson-list">
         @for (lesson of lessons(); track trackLesson($index, lesson)) {
         <app-article [title]="lesson.title" [order]="lesson.order" [kind]="lesson.type" [content]="lesson.content"

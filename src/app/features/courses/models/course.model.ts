@@ -115,6 +115,10 @@ export interface Chapter {
   order: number;
   isPublic?: boolean;
   requiresLogin?: boolean;
+  /* Contagem de aulas que o backend calcula a partir do catálogo de seed
+   * (ver serializeChapter), por isso continua válida mesmo antes de o seed
+   * regravar o documento. */
+  lessonCount?: number;
   lessons: Lesson[];
 }
 
@@ -127,6 +131,8 @@ export interface ChapterSummary {
   lessonCount: number;
 }
 
+/* `content` só vem preenchido pelo asset estático (ver CourseContentService);
+ * a lista de aulas que a API devolve no capítulo traz só o resumo. */
 export interface Lesson {
   id: string;
   chapterId: string;
@@ -139,15 +145,51 @@ export interface Lesson {
   order: number;
 }
 
-export interface ChapterDetail extends Chapter {
-  exercises: ExerciseSummary[];
-  materials?: Attachment[];
+/* ---------- Conteúdo estático (public/assets/courses/content/<slug>.json) ---------- */
+
+/*
+ * Corpo de uma aula tal como vem do asset estático — sem `id`/`chapterId`
+ * (o front recalcula, ver CourseContentService) e sem `order` explícito
+ * quando ausente (usa a posição no array).
+ */
+export interface CourseContentLesson {
+  title: string;
+  type: LessonType;
+  content?: string;
+  isPublic?: boolean;
+  attachments?: Attachment[];
+  image?: LessonImage;
+  order?: number;
 }
 
-export interface ExerciseSummary {
-  id: string;
-  chapterId: string;
+/*
+ * Um capítulo no asset: o metadado (o que a API entregava) junto do corpo das
+ * aulas. A página do capítulo monta a tela inteira daqui — título, ordem,
+ * sumário e texto — para não depender de nenhuma chamada à API antes de
+ * mostrar o conteúdo.
+ */
+export interface CourseContentChapter {
   title: string;
+  description?: string;
+  order?: number;
+  isPublic?: boolean;
+  requiresLogin?: boolean;
+  lessons: CourseContentLesson[];
+}
+
+/* Um arquivo por curso: cabeçalho + capítulos indexados pelo slug. */
+export interface CourseContent {
+  course: { slug: string; title: string };
+  chapters: Record<string, CourseContentChapter>;
+}
+
+/*
+ * O mesmo `chapters` do asset já convertido para `Chapter` (id/courseId
+ * recalculados, aulas omitidas) — é o que a sidebar e o prev/next consomem.
+ */
+export interface CourseOutline {
+  title: string;
+  chapters: Chapter[];
 }
 
 /* ---------- Payloads ---------- */
@@ -165,27 +207,6 @@ export interface CourseCreatePayload {
 }
 
 export type CourseUpdatePayload = Partial<CourseCreatePayload>;
-
-export interface ChapterCreatePayload {
-  courseId: string;
-  title: string;
-  slug: string;
-  description?: string;
-  order: number;
-}
-
-export type ChapterUpdatePayload = Partial<ChapterCreatePayload>;
-
-export interface LessonCreatePayload {
-  chapterId: string;
-  title: string;
-  type: LessonType;
-  content?: string;
-  durationMinutes?: number;
-  order: number;
-}
-
-export type LessonUpdatePayload = Partial<LessonCreatePayload>;
 
 /* ---------- Helpers ---------- */
 

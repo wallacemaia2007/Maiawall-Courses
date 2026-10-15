@@ -41,7 +41,8 @@ async function main() {
   const result = await seedCourses(database, courseCatalog);
 
   console.log(
-    `Seed de producao concluido: ${result.courses} cursos, ${result.chapters} capitulos e ${result.lessons} aulas.`,
+    `Seed de producao concluido: ${result.courses} cursos, ${result.chapters} capitulos e ` +
+      `${result.lessons} aulas (asset estatico, gerado por "npm run content:build").`,
   );
 }
 
