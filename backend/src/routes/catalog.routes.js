@@ -57,7 +57,6 @@ function serializeChapter(chapter, courseSlug) {
   return {
     id: toId(chapter._id), courseId: toId(chapter.courseId), title: chapter.title,
     slug: chapter.slug, description: chapter.description, order: chapter.order,
-    isPublic: Boolean(chapter.isPublic), requiresLogin: Boolean(chapter.requiresLogin),
     /*
      * A contagem vem do catálogo, e não do campo `lessonCount` gravado pelo
      * seed: assim um Firestore ainda não migrado (ou editado à mão) nunca

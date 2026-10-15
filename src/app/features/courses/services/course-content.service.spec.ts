@@ -21,8 +21,6 @@ const CONTENT_PAYLOAD = {
       title: 'Fundamentos da comunicacao web',
       description: 'Como o navegador conversa com o servidor',
       order: 1,
-      isPublic: true,
-      requiresLogin: false,
       lessons: [
         { title: 'Aula 1', type: 'article', content: '<p>1</p>', order: 1 },
         { title: 'Aula 2', type: 'code', content: '```js\nconsole.log(1)\n```', order: 2 },

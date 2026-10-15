@@ -22,9 +22,10 @@ test('buildCourseContent agrupa as aulas por capítulo e traz o outline do curso
         title: 'Capítulo 1',
         description: 'Primeiro capítulo',
         order: 1,
-        requiresLogin: true,
+        isPublic: true,
+        requiresLogin: false,
         lessons: [
-          { title: 'Aula 1', type: 'article', content: '<p>Oi</p>', order: 1 },
+          { title: 'Aula 1', type: 'article', content: '<p>Oi</p>', isPublic: true, order: 1 },
           { title: 'Aula 2', type: 'code', content: 'console.log(1)', isPublic: true, order: 2 },
         ],
       },
@@ -44,13 +45,14 @@ test('buildCourseContent agrupa as aulas por capítulo e traz o outline do curso
     title: 'Capítulo 1',
     description: 'Primeiro capítulo',
     order: 1,
-    isPublic: false,
-    requiresLogin: true,
   });
 
+  assert.equal('isPublic' in content.chapters['capitulo-1'], false);
+  assert.equal('requiresLogin' in content.chapters['capitulo-1'], false);
   assert.equal(lessons.length, 2);
   assert.equal(lessons[1].type, 'code');
   assert.equal(lessons[0].content, '<p>Oi</p>');
+  assert.equal('isPublic' in lessons[0], false);
 });
 
 test('buildCourseContent usa a posição do capítulo quando o order não vem no JSON', () => {
@@ -65,6 +67,22 @@ test('buildCourseContent usa a posição do capítulo quando o order não vem no
 
   assert.equal(content.chapters.a.order, 1);
   assert.equal(content.chapters.b.order, 2);
+});
+
+test('buildCourseContent rejeita conteúdo restrito porque assets estáticos são públicos', () => {
+  const restrictedContent = [
+    { chapters: [{ slug: 'capitulo', requiresLogin: true, lessons: [] }] },
+    { chapters: [{ slug: 'capitulo', isPublic: false, lessons: [] }] },
+    { chapters: [{ slug: 'capitulo', lessons: [{ title: 'Aula', requiresLogin: true }] }] },
+    { chapters: [{ slug: 'capitulo', lessons: [{ title: 'Aula', isPublic: false }] }] },
+  ];
+
+  for (const course of restrictedContent) {
+    assert.throws(
+      () => buildCourseContent(course),
+      /assets estaticos sao publicos; conteudo restrito exigiria servir pela API/,
+    );
+  }
 });
 
 test('buildCourseContentAssets escreve um JSON por curso do catálogo', () => {
@@ -157,6 +175,32 @@ test('buildCourseContentAssets aborta sem tocar no disco se um curso não declar
   fs.rmSync(outputDir, { recursive: true, force: true });
 });
 
+test('buildCourseContentAssets falha por conteúdo restrito antes de alterar o diretório', () => {
+  const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'course-content-'));
+  fs.writeFileSync(path.join(outputDir, 'curso-antigo.json'), '{"chapters":{}}');
+
+  assert.throws(
+    () =>
+      buildCourseContentAssets(
+        {
+          courses: [
+            { slug: 'ok', published: true, chapters: [] },
+            {
+              slug: 'restrito',
+              published: true,
+              chapters: [{ slug: 'privado', requiresLogin: true, lessons: [] }],
+            },
+          ],
+        },
+        outputDir,
+      ),
+    /assets estaticos sao publicos; conteudo restrito exigiria servir pela API/,
+  );
+
+  assert.deepEqual(fs.readdirSync(outputDir), ['curso-antigo.json']);
+  fs.rmSync(outputDir, { recursive: true, force: true });
+});
+
 test('buildCourseContentAssets apaga o JSON de curso que saiu do catálogo', () => {
   const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'course-content-'));
   fs.writeFileSync(path.join(outputDir, 'curso-antigo.json'), '{"chapters":{}}');
@@ -201,9 +245,12 @@ test('o asset gerado bate com o catálogo e com o resumo publicado pela API', ()
 
       assert.equal(generated.order, chapter.order ?? index + 1, `${course.slug}/${chapter.slug}: ordem`);
       assert.equal(generated.title, chapter.title);
+      assert.equal('isPublic' in generated, false);
+      assert.equal('requiresLogin' in generated, false);
       assert.equal(generated.lessons.length, source.length, `${course.slug}/${chapter.slug}: nº de aulas`);
 
       generated.lessons.forEach((lesson, lessonIndex) => {
+        assert.equal('isPublic' in lesson, false);
         assert.equal(lesson.title, source[lessonIndex].title);
         assert.equal(lesson.type, source[lessonIndex].type);
         assert.equal(lesson.content, source[lessonIndex].content);

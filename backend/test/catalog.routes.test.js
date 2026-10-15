@@ -21,12 +21,14 @@ function fakeChapter(overrides = {}) {
 }
 
 test('serializeChapter anexa o resumo das aulas (sem o corpo) a partir do catálogo em memória', () => {
-  const chapter = serializeChapter(fakeChapter(), COURSE_SLUG);
+  const chapter = serializeChapter(fakeChapter({ isPublic: false, requiresLogin: true }), COURSE_SLUG);
 
   assert.equal(chapter.id, `${COURSE_SLUG}:${CHAPTER_SLUG}`);
   assert.equal(chapter.slug, CHAPTER_SLUG);
   assert.equal(chapter.lessons.length, 3);
   chapter.lessons.forEach((lesson) => assert.equal('content' in lesson, false));
+  assert.equal('isPublic' in chapter, false);
+  assert.equal('requiresLogin' in chapter, false);
 });
 
 test('serializeChapter devolve lista de aulas vazia para um capítulo fora do catálogo (curso ainda sem conteúdo estático)', () => {

@@ -113,8 +113,6 @@ export interface Chapter {
   slug: string;
   description?: string;
   order: number;
-  isPublic?: boolean;
-  requiresLogin?: boolean;
   /* Contagem de aulas que o backend calcula a partir do catálogo de seed
    * (ver serializeChapter), por isso continua válida mesmo antes de o seed
    * regravar o documento. */
@@ -139,7 +137,6 @@ export interface Lesson {
   title: string;
   type: LessonType;
   content?: string;
-  isPublic?: boolean;
   attachments?: Attachment[];
   image?: LessonImage;
   order: number;
@@ -156,7 +153,6 @@ export interface CourseContentLesson {
   title: string;
   type: LessonType;
   content?: string;
-  isPublic?: boolean;
   attachments?: Attachment[];
   image?: LessonImage;
   order?: number;
@@ -172,8 +168,6 @@ export interface CourseContentChapter {
   title: string;
   description?: string;
   order?: number;
-  isPublic?: boolean;
-  requiresLogin?: boolean;
   lessons: CourseContentLesson[];
 }
 

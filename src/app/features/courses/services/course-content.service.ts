@@ -116,8 +116,6 @@ export class CourseContentService {
       slug: chapterSlug,
       description: chapter.description,
       order: chapter.order ?? index + 1,
-      isPublic: chapter.isPublic,
-      requiresLogin: chapter.requiresLogin,
       lessonCount: chapter.lessons?.length ?? 0,
       lessons: [],
     };
@@ -130,7 +128,6 @@ export class CourseContentService {
       title: lesson.title,
       type: lesson.type,
       content: lesson.content,
-      isPublic: lesson.isPublic,
       attachments: lesson.attachments,
       image: lesson.image,
       order: lesson.order ?? index + 1,

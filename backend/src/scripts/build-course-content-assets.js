@@ -39,7 +39,44 @@ const OUTPUT_DIR = path.join(__dirname, '../../../public/assets/courses/content'
  * bater com o índice usado aqui, que é o mesmo esquema do seed
  * (backend/src/scripts/seed-courses.js: `${chapterDocId}:${index}`).
  */
+function assertPublicContent(course) {
+  const courseSlug = course.slug || '(sem slug)';
+
+  for (const chapter of course.chapters || []) {
+    const chapterPath = `${courseSlug}/${chapter.slug || '(sem slug)'}`;
+    if (chapter.requiresLogin === true) {
+      throw new Error(
+        `O capitulo "${chapterPath}" define "requiresLogin: true"; assets estaticos sao publicos; ` +
+          'conteudo restrito exigiria servir pela API.',
+      );
+    }
+    if (chapter.isPublic === false) {
+      throw new Error(
+        `O capitulo "${chapterPath}" define "isPublic: false"; assets estaticos sao publicos; ` +
+          'conteudo restrito exigiria servir pela API.',
+      );
+    }
+
+    for (const lesson of chapter.lessons || []) {
+      const lessonPath = `${chapterPath}/${lesson.title || '(sem titulo)'}`;
+      if (lesson.requiresLogin === true) {
+        throw new Error(
+          `A aula "${lessonPath}" define "requiresLogin: true"; assets estaticos sao publicos; ` +
+            'conteudo restrito exigiria servir pela API.',
+        );
+      }
+      if (lesson.isPublic === false) {
+        throw new Error(
+          `A aula "${lessonPath}" define "isPublic: false"; assets estaticos sao publicos; ` +
+            'conteudo restrito exigiria servir pela API.',
+        );
+      }
+    }
+  }
+}
+
 function buildCourseContent(course) {
+  assertPublicContent(course);
   const chapters = {};
 
   for (const [chapterIndex, chapter] of (course.chapters || []).entries()) {
@@ -48,13 +85,10 @@ function buildCourseContent(course) {
       description: chapter.description,
       // Mesmo contrato das aulas: sem `order` explícito, vale a posição.
       order: chapter.order ?? chapterIndex + 1,
-      isPublic: Boolean(chapter.isPublic),
-      requiresLogin: Boolean(chapter.requiresLogin),
       lessons: (chapter.lessons || []).map((lesson) => ({
         title: lesson.title,
         type: lesson.type,
         content: lesson.content,
-        isPublic: Boolean(lesson.isPublic),
         attachments: lesson.attachments || [],
         image: lesson.image || null,
         order: lesson.order,
@@ -98,6 +132,7 @@ function buildCourseContentAssets(catalog = courseCatalog, outputDir = OUTPUT_DI
   const publishable = [];
   const skipped = [];
   for (const course of catalog.courses) {
+    assertPublicContent(course);
     if (isPublishable(course)) {
       publishable.push(course);
     } else {

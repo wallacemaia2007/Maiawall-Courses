@@ -273,6 +273,11 @@ esse arquivo direto, como um asset estatico (nunca passa pela API nem pelo
 Firestore), e mantem em cache por curso: trocar de capitulo dentro do mesmo
 curso nao dispara nenhuma chamada de rede.
 
+Todo conteudo publicado e **publico por design**: qualquer pessoa pode baixar o
+JSON estatico pela URL, sem passar por autenticacao. O login serve apenas para
+salvar progresso e enviar duvidas; conteudo restrito exigiria ser servido pela
+API com verificacao de acesso.
+
 O arquivo tambem carrega o **outline** do curso (titulo + titulo, ordem,
 descricao e slug de cada capitulo). Com isso a pagina do capitulo monta a tela
 inteira a partir do asset — hero, sumario, prev/next e o texto das aulas — e
