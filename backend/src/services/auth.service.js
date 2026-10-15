@@ -74,8 +74,8 @@ async function createSession(user, { recordLogin = true } = {}) {
     user: safeUser,
     tokens: {
       accessToken,
-      refreshToken,
     },
+    refreshToken,
   };
 }
 
@@ -214,33 +214,46 @@ const AuthService = {
     };
   },
 
-  async refreshSession(payload) {
-    validateRequiredString(payload.refreshToken, 'refreshToken');
+  async refreshSession(refreshToken) {
+    validateRequiredString(refreshToken, 'refreshToken');
 
     let tokenPayload;
 
     try {
-      tokenPayload = verifyRefreshToken(payload.refreshToken);
+      tokenPayload = verifyRefreshToken(refreshToken);
     } catch (_error) {
       throw new AppError(401, 'UNAUTHORIZED', 'Refresh token invalido');
     }
 
     const user = await UserRepository.findById(tokenPayload.sub);
 
-    if (!user || user.refreshTokenHash !== hashToken(payload.refreshToken)) {
+    if (!user) {
       throw new AppError(401, 'UNAUTHORIZED', 'Refresh token invalido');
+    }
+
+    if (!user.refreshTokenHash) {
+      throw new AppError(401, 'UNAUTHORIZED', 'Refresh token invalido');
+    }
+
+    if (user.refreshTokenHash !== hashToken(refreshToken)) {
+      await UserRepository.clearRefreshToken(user._id.toString());
+      throw new AppError(
+        401,
+        'REFRESH_TOKEN_REUSED',
+        'Refresh token reutilizado; sessao invalidada',
+      );
     }
 
     return createSession(user, { recordLogin: false });
   },
 
-  async logout(payload = {}) {
-    if (!payload.refreshToken) {
+  async logout(refreshToken) {
+    if (!refreshToken) {
       return;
     }
 
     try {
-      const tokenPayload = verifyRefreshToken(payload.refreshToken);
+      const tokenPayload = verifyRefreshToken(refreshToken);
       await UserRepository.clearRefreshToken(tokenPayload.sub);
     } catch (_error) {
       // Logout e idempotente: token ausente, expirado ou invalido termina como sucesso.

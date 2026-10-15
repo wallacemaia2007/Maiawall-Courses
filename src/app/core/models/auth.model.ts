@@ -32,7 +32,6 @@ export interface OAuthTicketExchange {
 
 export interface AuthTokens {
   accessToken: string;
-  refreshToken?: string;
 }
 
 export interface AuthSession {
@@ -40,7 +39,7 @@ export interface AuthSession {
   tokens: AuthTokens;
 }
 
-export const AUTH_STORAGE_KEYS = {
+export const LEGACY_AUTH_STORAGE_KEYS = {
   accessToken: 'maiawall_access_token',
   refreshToken: 'maiawall_refresh_token',
 } as const;

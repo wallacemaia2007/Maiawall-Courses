@@ -82,7 +82,8 @@ test('signup creates a student session with access and refresh tokens', async ()
   assert.equal(session.user.email, 'wallace@example.com');
   assert.equal(session.user.role, 'STUDENT');
   assert.ok(session.tokens.accessToken);
-  assert.ok(session.tokens.refreshToken);
+  assert.ok(session.refreshToken);
+  assert.equal(session.tokens.refreshToken, undefined);
 });
 
 test('signup ignores a client attempt to create an admin account', async () => {
@@ -127,13 +128,29 @@ test('refresh rotates stored refresh token', async () => {
     password: 'StrongPass123',
   });
 
-  const secondSession = await AuthService.refreshSession({
-    refreshToken: firstSession.tokens.refreshToken,
-  });
+  const secondSession = await AuthService.refreshSession(firstSession.refreshToken);
 
   assert.ok(secondSession.tokens.accessToken);
-  assert.ok(secondSession.tokens.refreshToken);
-  assert.notEqual(secondSession.tokens.refreshToken, firstSession.tokens.refreshToken);
+  assert.ok(secondSession.refreshToken);
+  assert.notEqual(secondSession.refreshToken, firstSession.refreshToken);
+});
+
+test('reusing a rotated refresh token invalidates the current session', async () => {
+  const firstSession = await AuthService.signup({
+    name: 'Wallace',
+    email: 'wallace@example.com',
+    password: 'StrongPass123',
+  });
+  const rotatedSession = await AuthService.refreshSession(firstSession.refreshToken);
+
+  await assert.rejects(
+    () => AuthService.refreshSession(firstSession.refreshToken),
+    (error) => error.code === 'REFRESH_TOKEN_REUSED' && error.statusCode === 401,
+  );
+  await assert.rejects(
+    () => AuthService.refreshSession(rotatedSession.refreshToken),
+    (error) => error.code === 'UNAUTHORIZED' && error.statusCode === 401,
+  );
 });
 
 test('OAuth creates a verified student account and reuses the provider identity', async () => {
@@ -205,7 +222,7 @@ test('OAuth ticket is single-use and exchanges into a session', async () => {
 
   assert.equal(session.user.email, 'ticket@example.com');
   assert.ok(session.tokens.accessToken);
-  assert.ok(session.tokens.refreshToken);
+  assert.ok(session.refreshToken);
   assert.equal(storedUser.oauthTicketHash, null);
 
   await assert.rejects(() => AuthService.exchangeOAuthTicket(ticket), /expirado/);

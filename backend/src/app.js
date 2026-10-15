@@ -29,7 +29,7 @@ function createApp() {
   app.use(
     cors({
       origin: env.frontendOrigin,
-      credentials: false,
+      credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization'],
       methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     }),

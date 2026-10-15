@@ -7,9 +7,9 @@ import { AuthStateService } from '../auth/auth-state.service';
 
 /*
  * Protege áreas autenticadas (ex.: /app).
- * - Sem token local, bloqueia direto para /login.
- * - Com token, valida a sessão contra o backend, cobrindo sessão expirada
- *   antes de renderizar o layout. Erros (ex.: 401) são tratados aqui.
+ * - O bootstrap tenta restaurar a sessao pelo cookie httpOnly.
+ * - Com access token em memoria, valida a sessao contra o backend; erros
+ *   (ex.: refresh expirado) sao tratados aqui.
  */
 export const authGuard: CanActivateFn = (_route, state) => {
   const authState = inject(AuthStateService);

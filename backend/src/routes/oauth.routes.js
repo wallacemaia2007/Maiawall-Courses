@@ -5,7 +5,7 @@ const { env } = require('../config/env');
 const { OAuthService, OAUTH_PROVIDERS } = require('../services/oauth.service');
 const { AuthService } = require('../services/auth.service');
 const { AppError } = require('../middleware/error-handler');
-const { successResponse } = require('../utils/api-response');
+const { sendSession } = require('../utils/auth-session-cookie');
 
 const OAUTH_STATE_COOKIE = 'mw_oauth_state';
 const OAUTH_STATE_TTL_MS = 5 * 60 * 1000;
@@ -88,7 +88,7 @@ oauthRouter.get('/:provider/callback', async (request, response) => {
 oauthRouter.post('/exchange', async (request, response, next) => {
   try {
     const session = await AuthService.exchangeOAuthTicket(request.body?.ticket);
-    response.json(successResponse(session, 'OK'));
+    return sendSession(response, session);
   } catch (error) {
     next(error);
   }

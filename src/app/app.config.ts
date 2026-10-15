@@ -24,17 +24,14 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     /*
-     * Reidrata a sessão a partir do access token salvo ANTES do app renderizar.
-     * Sem isso, o AuthStateService só é populado quando um guard (authGuard/
-     * guestGuard) roda — ou seja, em rotas públicas (/, /sobre, /cursos) um
-     * F5 nunca valida o token salvo e a UI mostra "deslogado" até o usuário
-     * cair numa rota protegida, que aí sim dispara getSession() e "conserta"
-     * o estado. Isso é o que causa o efeito de alternar a cada reload.
+     * Reidrata a sessao pelo cookie httpOnly antes do app renderizar.
+     * O backend rotaciona o refresh token e devolve um access token efemero;
+     * o AuthStateService o mantem apenas em memoria.
      */
     provideAppInitializer(() => {
       const authService = inject(AuthService);
 
-      return firstValueFrom(authService.getSession().pipe(catchError(() => of(null))));
+      return firstValueFrom(authService.refreshSession().pipe(catchError(() => of(null))));
     }),
   ],
 };

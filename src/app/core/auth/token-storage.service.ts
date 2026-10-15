@@ -1,34 +1,41 @@
 import { Injectable } from '@angular/core';
 
-import { AUTH_STORAGE_KEYS, AuthTokens } from '../models/auth.model';
+import { LEGACY_AUTH_STORAGE_KEYS, AuthTokens } from '../models/auth.model';
 
 /*
- * Isolamento do armazenamento dos tokens de sessão.
- * Permite trocar o meio (localStorage, sessionStorage, cookie, in-memory)
- * sem impactar AuthService/AuthStateService.
+ * O access token existe apenas enquanto o app esta aberto. O refresh token
+ * permanece no cookie httpOnly e nao pode ser lido pelo JavaScript.
  */
 @Injectable({
   providedIn: 'root',
 })
 export class TokenStorageService {
-  getAccessToken(): string | null {
-    return localStorage.getItem(AUTH_STORAGE_KEYS.accessToken);
+  private accessToken: string | null = null;
+
+  constructor() {
+    this.clearLegacyStorage();
   }
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem(AUTH_STORAGE_KEYS.refreshToken);
+  getAccessToken(): string | null {
+    return this.accessToken;
   }
 
   setTokens(tokens: AuthTokens): void {
-    localStorage.setItem(AUTH_STORAGE_KEYS.accessToken, tokens.accessToken);
-
-    if (tokens.refreshToken) {
-      localStorage.setItem(AUTH_STORAGE_KEYS.refreshToken, tokens.refreshToken);
-    }
+    this.accessToken = tokens.accessToken;
+    this.clearLegacyStorage();
   }
 
   clear(): void {
-    localStorage.removeItem(AUTH_STORAGE_KEYS.accessToken);
-    localStorage.removeItem(AUTH_STORAGE_KEYS.refreshToken);
+    this.accessToken = null;
+    this.clearLegacyStorage();
+  }
+
+  private clearLegacyStorage(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
+    localStorage.removeItem(LEGACY_AUTH_STORAGE_KEYS.accessToken);
+    localStorage.removeItem(LEGACY_AUTH_STORAGE_KEYS.refreshToken);
   }
 }

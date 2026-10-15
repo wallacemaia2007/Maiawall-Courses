@@ -1,12 +1,12 @@
 import { computed, Injectable, signal } from '@angular/core';
 
-import { AuthSession } from '../models/auth.model';
+import { AuthSession, AuthTokens } from '../models/auth.model';
 import { User, UserRole } from '../models/user.model';
 import { TokenStorageService } from './token-storage.service';
 
 /*
- * Estado de autenticação reativo (Signal).
- * Única fonte de verdade sobre quem está logado no frontend.
+ * Estado de autenticacao reativo (Signal).
+ * Unica fonte de verdade sobre quem esta logado no frontend.
  * AuthService alimenta o estado; guards/interceptors/layouts consomem.
  */
 @Injectable({
@@ -15,33 +15,24 @@ import { TokenStorageService } from './token-storage.service';
 export class AuthStateService {
   private readonly userSignal = signal<User | null>(null);
   private readonly accessTokenSignal = signal<string | null>(null);
-  private readonly refreshTokenSignal = signal<string | null>(null);
 
   readonly user = this.userSignal.asReadonly();
   readonly accessToken = this.accessTokenSignal.asReadonly();
-  readonly refreshToken = this.refreshTokenSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.userSignal() !== null);
 
   constructor(private readonly tokenStorage: TokenStorageService) {
     this.accessTokenSignal.set(this.tokenStorage.getAccessToken());
-    this.refreshTokenSignal.set(this.tokenStorage.getRefreshToken());
   }
 
   setSession(session: AuthSession): void {
     this.tokenStorage.setTokens(session.tokens);
     this.accessTokenSignal.set(session.tokens.accessToken);
-    // /auth/me responde sem refreshToken (ver AuthService.sessionForUser no
-    // backend); se não vier um novo, mantém o que já estava guardado em vez
-    // de zerar — senão toda revalidação de sessão "perde" o refresh token
-    // em memória mesmo ele continuando salvo no localStorage.
-    this.refreshTokenSignal.set(session.tokens.refreshToken ?? this.refreshTokenSignal());
     this.userSignal.set(session.user);
   }
 
-  setTokens(tokens: AuthSession['tokens']): void {
+  setTokens(tokens: AuthTokens): void {
     this.tokenStorage.setTokens(tokens);
     this.accessTokenSignal.set(tokens.accessToken);
-    this.refreshTokenSignal.set(tokens.refreshToken ?? null);
   }
 
   setUser(user: User): void {
@@ -60,7 +51,6 @@ export class AuthStateService {
   clearSession(): void {
     this.tokenStorage.clear();
     this.accessTokenSignal.set(null);
-    this.refreshTokenSignal.set(null);
     this.userSignal.set(null);
   }
 }

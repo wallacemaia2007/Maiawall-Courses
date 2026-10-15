@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, finalize, map, of, shareReplay, tap } from 'rxjs';
+import { Observable, catchError, finalize, map, of, shareReplay, tap, throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { AUTH_ENDPOINTS } from '../constants/api.constants';
@@ -22,6 +22,7 @@ import { AuthStateService } from './auth-state.service';
 })
 export class AuthService {
   private sessionRequest$: Observable<AuthSession | null> | null = null;
+  private refreshRequest$: Observable<AuthSession | null> | null = null;
 
   constructor(
     private readonly http: HttpClient,
@@ -47,10 +48,8 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    const refreshToken = this.authState.refreshToken();
-
     return this.http
-      .post<void>(this.authUrl(AUTH_ENDPOINTS.logout), { refreshToken })
+      .post<ApiResponse<null>>(this.authUrl(AUTH_ENDPOINTS.logout), {}, { withCredentials: true })
       .pipe(
         map(() => void 0),
         tap(() => this.authState.clearSession()),
@@ -58,20 +57,31 @@ export class AuthService {
   }
 
   refreshSession(): Observable<AuthSession | null> {
-    const refreshToken = this.authState.refreshToken();
+    if (!this.refreshRequest$) {
+      this.refreshRequest$ = this.http
+        .post<ApiResponse<AuthSession>>(
+          this.authUrl(AUTH_ENDPOINTS.refreshToken),
+          {},
+          { withCredentials: true },
+        )
+        .pipe(
+          map(unwrapApiData),
+          tap((session) => this.authState.setSession(session)),
+          catchError((error: { status?: number }) => {
+            if (error.status === 401) {
+              this.authState.clearSession();
+            }
 
-    if (!refreshToken) {
-      return of(null);
+            return throwError(() => error);
+          }),
+          finalize(() => {
+            this.refreshRequest$ = null;
+          }),
+          shareReplay({ bufferSize: 1, refCount: false }),
+        );
     }
 
-    return this.http
-      .post<ApiResponse<AuthSession>>(this.authUrl(AUTH_ENDPOINTS.refreshToken), {
-        refreshToken,
-      })
-      .pipe(
-        map(unwrapApiData),
-        tap((session) => this.authState.setSession(session)),
-      );
+    return this.refreshRequest$;
   }
 
   requestPasswordRecovery(email: string): Observable<void> {
@@ -120,7 +130,6 @@ export class AuthService {
         user: this.authState.user()!,
         tokens: {
           accessToken: this.authState.accessToken()!,
-          refreshToken: this.authState.refreshToken() ?? undefined,
         },
       });
     }

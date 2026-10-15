@@ -6,6 +6,11 @@ const { AuthService } = require('../services/auth.service');
 const { OAuthService } = require('../services/oauth.service');
 const { env } = require('../config/env');
 const { successResponse } = require('../utils/api-response');
+const {
+  REFRESH_COOKIE_NAME,
+  clearRefreshCookie,
+  sendSession,
+} = require('../utils/auth-session-cookie');
 
 const authRouter = express.Router();
 const OAUTH_STATE_COOKIE = 'mw_oauth_state';
@@ -75,7 +80,7 @@ authRouter.get('/oauth/github/callback', completeOAuth('github'));
 authRouter.post('/signup', async (request, response, next) => {
   try {
     const session = await AuthService.signup(request.body);
-    response.status(201).json(successResponse(session, 'OK'));
+    return sendSession(response, session, 201);
   } catch (error) {
     next(error);
   }
@@ -84,7 +89,7 @@ authRouter.post('/signup', async (request, response, next) => {
 authRouter.post('/login', async (request, response, next) => {
   try {
     const session = await AuthService.login(request.body);
-    response.json(successResponse(session, 'OK'));
+    return sendSession(response, session);
   } catch (error) {
     next(error);
   }
@@ -101,16 +106,18 @@ authRouter.get('/me', requireAuth, async (request, response, next) => {
 
 authRouter.post('/refresh-token', async (request, response, next) => {
   try {
-    const session = await AuthService.refreshSession(request.body);
-    response.json(successResponse(session, 'OK'));
+    const session = await AuthService.refreshSession(request.cookies?.[REFRESH_COOKIE_NAME]);
+    return sendSession(response, session);
   } catch (error) {
+    clearRefreshCookie(response);
     next(error);
   }
 });
 
 authRouter.post('/logout', async (request, response, next) => {
   try {
-    await AuthService.logout(request.body);
+    await AuthService.logout(request.cookies?.[REFRESH_COOKIE_NAME]);
+    clearRefreshCookie(response);
     response.json(successResponse(null, 'OK'));
   } catch (error) {
     next(error);
