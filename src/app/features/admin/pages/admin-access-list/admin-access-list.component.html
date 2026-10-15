@@ -59,7 +59,15 @@
                 <span class="adm-person">
                   <span class="adm-avatar" aria-hidden="true">
                     @if (admin.avatarUrl) {
-                      <img [src]="admin.avatarUrl" alt="" referrerpolicy="no-referrer" />
+                      <img
+                        [src]="admin.avatarUrl"
+                        alt=""
+                        referrerpolicy="no-referrer"
+                        loading="lazy"
+                        decoding="async"
+                        width="34"
+                        height="34"
+                      />
                     } @else {
                       {{ admin.name.charAt(0).toUpperCase() }}
                     }

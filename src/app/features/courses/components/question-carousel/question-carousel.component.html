@@ -16,7 +16,14 @@
         >
           <span class="q-card__avatar">
             @if (authorAvatar(question); as avatar) {
-              <img [src]="avatar" [alt]="authorName(question)" />
+              <img
+                [src]="avatar"
+                [alt]="authorName(question)"
+                loading="lazy"
+                decoding="async"
+                width="40"
+                height="40"
+              />
             } @else {
               <span aria-hidden="true">{{ initials(authorName(question)) }}</span>
             }
@@ -44,7 +51,14 @@
             <div class="q-msg q-msg--answer">
               <div class="q-msg__avatar q-msg__avatar--tutor">
                 @if (instructor.avatarUrl) {
-                  <img [src]="instructor.avatarUrl" [alt]="instructor.name" />
+                  <img
+                    [src]="instructor.avatarUrl"
+                    [alt]="instructor.name"
+                    loading="lazy"
+                    decoding="async"
+                    width="40"
+                    height="40"
+                  />
                 } @else {
                   <span aria-hidden="true">{{ initials(instructor.name) }}</span>
                 }

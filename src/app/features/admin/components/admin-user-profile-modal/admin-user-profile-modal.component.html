@@ -10,7 +10,15 @@
       <div class="question-author-profile__head">
         <span class="question-author-profile__avatar" aria-hidden="true">
           @if (author.avatarUrl) {
-            <img [src]="author.avatarUrl" alt="" referrerpolicy="no-referrer" />
+            <img
+              [src]="author.avatarUrl"
+              alt=""
+              referrerpolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
+              width="48"
+              height="48"
+            />
           } @else {
             {{ initials(author) }}
           }

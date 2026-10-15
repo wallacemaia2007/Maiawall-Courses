@@ -4,7 +4,7 @@ export const COURSE_INSTRUCTOR: CourseInstructor = {
   id: 'wallace-maia',
   name: 'Wallace Maia',
   bio: 'Full-stack Developer | Angular, Spring Boot, Node.js/Express, NestJS | AWS & Firebase',
-  avatarUrl: '/assets/instructor.png',
+  avatarUrl: '/assets/instructor.webp',
   tagline: 'Wallace Maia',
   bioParagraphs: [
     'Sou full-stack developer sob a marca MaiaWall e escrevo código que vai para produção: Angular (standalone components, signals, reactive forms) no front, e Spring Boot, Node.js/Express e NestJS no back, com AWS e Firebase na infra.',

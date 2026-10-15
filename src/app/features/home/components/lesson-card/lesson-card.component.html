@@ -23,8 +23,11 @@
     <img
       [src]="bannerUrl()"
       [alt]="'Banner do minicurso ' + course().title"
-      loading="eager"
+      [attr.loading]="isLcp() ? 'eager' : 'lazy'"
       decoding="async"
+      [attr.fetchpriority]="isLcp() ? 'high' : null"
+      width="1933"
+      height="813"
       (error)="useFallbackBanner($event)"
     />
   </div>

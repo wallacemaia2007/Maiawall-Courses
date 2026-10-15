@@ -1,6 +1,6 @@
 {
   "slug": "git-para-iniciantes",
-  "bannerUrl": "/assets/banners/ufu.git.png",
+  "bannerUrl": "/assets/banners/ufu.git.webp",
   "title": "Git para Iniciantes",
   "shortDescription": "Aprenda Git e GitHub em um fluxo completo: histórico, commits, branches, remotos, Pull Requests, conflitos e boas práticas.",
   "description": "Minicurso prático de 180 minutos para sair do primeiro git init e chegar a um fluxo de colaboração reproduzível. Você vai construir um repositório, revisar diffs, criar commits claros, trabalhar com branches, sincronizar com um remoto, abrir Pull Requests, resolver conflitos e conhecer recursos do GitHub sem perder o controle do histórico.",
@@ -79,12 +79,7 @@
           "content": "<p>Git é um sistema distribuído de controle de versão utilizado para registrar alterações em arquivos e acompanhar a evolução de projetos. Ele permite criar históricos, comparar versões, recuperar estados anteriores e trabalhar em paralelo com outras pessoas.</p><p>Git é *distribuído*: cada clone possui uma cópia do histórico necessário para trabalhar localmente. Muitas operações de leitura e criação de commits funcionam sem conexão.</p><p>O Git registra snapshots e relações entre commits. Assim, é possível descobrir quem mudou um arquivo, comparar versões e recuperar um estado anterior.</p>",
           "order": 1,
           "isPublic": true,
-          "image": {
-            "url": "/assets/lessons/git-lifecycle.svg",
-            "position": "center",
-            "alt": "Ciclo de trabalho do Git entre arquivos, staging e histórico",
-            "caption": "As alterações passam pelo diretório de trabalho, pela staging area e pelo repositório."
-          },
+          "image": null,
           "attachments": [
             {
               "id": "ref-git-book",
@@ -142,7 +137,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--instalacao-e-configuracao.png",
+            "url": "/assets/courses/git/git-para-iniciantes--instalacao-e-configuracao.webp",
             "position": "center",
             "alt": "Instalação e Configuração",
             "caption": "Ilustração de abertura do capítulo Instalação e Configuração."
@@ -189,7 +184,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--primeiro-repositorio.png",
+            "url": "/assets/courses/git/git-para-iniciantes--primeiro-repositorio.webp",
             "position": "center",
             "alt": "Primeiro Repositório",
             "caption": "Ilustração de abertura do capítulo Primeiro Repositório."
@@ -226,12 +221,7 @@
           "order": 4,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-lifecycle.svg",
-            "position": "center",
-            "alt": "Ciclo de trabalho do Git entre arquivos, staging e histórico",
-            "caption": "As alterações passam pelo diretório de trabalho, pela staging area e pelo repositório."
-          }
+          "image": null
         }
       ]
     },
@@ -250,7 +240,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--staging-e-commits.png",
+            "url": "/assets/courses/git/git-para-iniciantes--staging-e-commits.webp",
             "position": "center",
             "alt": "Staging e Commits",
             "caption": "Ilustração de abertura do capítulo Staging e Commits."
@@ -306,7 +296,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--historico-e-diferencas.png",
+            "url": "/assets/courses/git/git-para-iniciantes--historico-e-diferencas.webp",
             "position": "center",
             "alt": "Histórico e Diferenças",
             "caption": "Ilustração de abertura do capítulo Histórico e Diferenças."
@@ -354,7 +344,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--github-e-repositorios-remotos.png",
+            "url": "/assets/courses/git/git-para-iniciantes--github-e-repositorios-remotos.webp",
             "position": "center",
             "alt": "GitHub e Repositórios Remotos",
             "caption": "Ilustração de abertura do capítulo GitHub e Repositórios Remotos."
@@ -402,7 +392,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/git/git-para-iniciantes--push-pull-e-fetch.png",
+            "url": "/assets/courses/git/git-para-iniciantes--push-pull-e-fetch.webp",
             "position": "center",
             "alt": "Push, Pull e Fetch",
             "caption": "Ilustração de abertura do capítulo Push, Pull e Fetch."
@@ -450,12 +440,7 @@
           "order": 1,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-branches.svg",
-            "position": "center",
-            "alt": "Gráfico de branches main e feature no Git",
-            "caption": "Branches permitem trabalhar em uma linha isolada e depois integrar os commits."
-          }
+          "image": null
         },
         {
           "title": "Listando branches",
@@ -472,12 +457,7 @@
           "order": 3,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-branches.svg",
-            "position": "center",
-            "alt": "Gráfico de branches main e feature no Git",
-            "caption": "Branches permitem trabalhar em uma linha isolada e depois integrar os commits."
-          }
+          "image": null
         },
         {
           "title": "Trocando de branch",
@@ -535,12 +515,7 @@
               "url": "https://docs.github.com/pt"
             }
           ],
-          "image": {
-            "url": "/assets/lessons/git-pr-flow.svg",
-            "position": "center",
-            "alt": "Fluxo de uma Pull Request do branch local ao merge",
-            "caption": "Uma Pull Request combina branch remota, revisão, automação e integração."
-          }
+          "image": null
         },
         {
           "title": "Criando uma Pull Request",
@@ -565,12 +540,7 @@
           "order": 6,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-pr-flow.svg",
-            "position": "center",
-            "alt": "Fluxo de uma Pull Request do branch local ao merge",
-            "caption": "Uma Pull Request combina branch remota, revisão, automação e integração."
-          }
+          "image": null
         }
       ]
     },
@@ -589,12 +559,7 @@
           "order": 1,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-conflict.svg",
-            "position": "center",
-            "alt": "Fluxo visual de identificação e resolução de conflito",
-            "caption": "Um conflito pausa a integração até que uma decisão seja registrada e testada."
-          }
+          "image": null
         },
         {
           "title": "Identificando um conflito",
@@ -611,12 +576,7 @@
           "order": 3,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-conflict.svg",
-            "position": "center",
-            "alt": "Fluxo visual de identificação e resolução de conflito",
-            "caption": "Um conflito pausa a integração até que uma decisão seja registrada e testada."
-          }
+          "image": null
         },
         {
           "title": "Finalizando a resolução",
@@ -874,12 +834,7 @@
           "order": 5,
           "isPublic": true,
           "attachments": [],
-          "image": {
-            "url": "/assets/lessons/git-pr-flow.svg",
-            "position": "center",
-            "alt": "Fluxo de uma Pull Request do branch local ao merge",
-            "caption": "Uma Pull Request combina branch remota, revisão, automação e integração."
-          }
+          "image": null
         },
         {
           "title": "Fluxo diário de um desenvolvedor",

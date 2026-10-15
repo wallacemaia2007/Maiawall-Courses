@@ -84,7 +84,15 @@
                   (click)="openProfile(item)"
                 >
                   @if (authoredBy(item).avatarUrl) {
-                    <img [src]="authoredBy(item).avatarUrl" alt="" referrerpolicy="no-referrer" />
+                    <img
+                      [src]="authoredBy(item).avatarUrl"
+                      alt=""
+                      referrerpolicy="no-referrer"
+                      loading="lazy"
+                      decoding="async"
+                      width="34"
+                      height="34"
+                    />
                   } @else {
                     {{ initials(authoredBy(item)) }}
                   }

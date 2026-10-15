@@ -7,7 +7,11 @@
         [src]="instructor.avatarUrl"
         alt=""
         draggable="false"
+        loading="eager"
+        decoding="async"
         fetchpriority="high"
+        width="800"
+        height="896"
       />
     }
     <div class="sobre-page__bg-scrim" data-sobre-bg-scrim></div>
@@ -40,6 +44,9 @@
                     alt=""
                     aria-hidden="true"
                     loading="lazy"
+                    decoding="async"
+                    width="20"
+                    height="20"
                   />
                 }
                 @case ('linkedin') {
@@ -49,6 +56,9 @@
                     alt=""
                     aria-hidden="true"
                     loading="lazy"
+                    decoding="async"
+                    width="20"
+                    height="20"
                   />
                 }
                 @default {

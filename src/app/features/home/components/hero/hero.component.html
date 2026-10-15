@@ -131,6 +131,7 @@
         [progressPercentage]="resume.progressPercentage"
         [resumeLink]="resumeLink()"
         [status]="resume.status"
+        [isLcp]="true"
       />
       } @else {
       <div class="lesson-skeleton" aria-hidden="true">
@@ -158,7 +159,7 @@
           @for (course of courses; track course.id; let index = $index) {
           <article class="hero-carousel__slide" [class.is-active]="index === activeIndex()"
             [attr.aria-hidden]="index === activeIndex() ? 'false' : 'true'">
-            <app-lesson-card [course]="course" />
+            <app-lesson-card [course]="course" [isLcp]="index === activeIndex()" />
           </article>
           }
         </div>

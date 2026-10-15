@@ -1,6 +1,6 @@
 {
   "slug": "apis-metodos-http-e-json",
-  "bannerUrl": "/assets/banners/ufu.api.png",
+  "bannerUrl": "/assets/banners/ufu.api.webp",
   "title": "APIs, Métodos HTTP e JSON",
   "shortDescription": "Aprenda, em duas horas, a ler e construir requisições HTTP: URLs, métodos, headers, JSON, status codes e DevTools.",
   "description": "Um minicurso introdutório, visual e prático sobre a comunicação entre aplicações Web. A trilha parte do modelo cliente-servidor, desmonta uma requisição e uma resposta HTTP, relaciona métodos ao CRUD, explica URLs, parâmetros, headers, autenticação, JSON, CORS e códigos de status. Ao final, você analisa chamadas reais no DevTools e implementa consultas simples com fetch, entendendo cada parte do contrato de uma API.",
@@ -63,7 +63,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--fundamentos-da-comunicacao-web.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--fundamentos-da-comunicacao-web.webp",
             "position": "center",
             "alt": "Fundamentos da comunicação Web",
             "caption": "Ilustração de abertura do capítulo Fundamentos da comunicação Web."
@@ -108,7 +108,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--protocolo-http-e-mensagens.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--protocolo-http-e-mensagens.webp",
             "position": "center",
             "alt": "Protocolo HTTP e estrutura das mensagens",
             "caption": "Ilustração de apoio do capítulo Protocolo HTTP e estrutura das mensagens."
@@ -160,7 +160,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--urls-endpoints-e-parametros.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--urls-endpoints-e-parametros.webp",
             "position": "center",
             "alt": "URLs, endpoints e parâmetros",
             "caption": "Ilustração de abertura do capítulo URLs, endpoints e parâmetros."
@@ -204,7 +204,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--metodos-http-e-crud.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--metodos-http-e-crud.webp",
             "position": "center",
             "alt": "Métodos HTTP e CRUD",
             "caption": "Ilustração de abertura do capítulo Métodos HTTP e CRUD."
@@ -263,7 +263,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--json-bodies-e-serializacao.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--json-bodies-e-serializacao.webp",
             "position": "center",
             "alt": "JSON, bodies e serialização",
             "caption": "Ilustração de apoio do capítulo JSON, bodies e serialização."
@@ -322,7 +322,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--headers-autenticacao-e-cors.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--headers-autenticacao-e-cors.webp",
             "position": "center",
             "alt": "Headers, autenticação e CORS",
             "caption": "Ilustração de apoio do capítulo Headers, autenticação e CORS."
@@ -374,7 +374,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--status-codes-e-diagnostico.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--status-codes-e-diagnostico.webp",
             "position": "center",
             "alt": "Status codes e diagnóstico",
             "caption": "Ilustração de apoio do capítulo Status codes e diagnóstico."
@@ -426,7 +426,7 @@
           "order": 1,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/apis-metodos-http-e-json--rest-devtools-e-pratica.png",
+            "url": "/assets/courses/api/apis-metodos-http-e-json--rest-devtools-e-pratica.webp",
             "position": "center",
             "alt": "REST, DevTools e prática com fetch",
             "caption": "Ilustração de apoio do capítulo REST, DevTools e prática com fetch."
@@ -446,7 +446,7 @@
           "order": 3,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/devtools-network.png",
+            "url": "/assets/courses/api/devtools-network.webp",
             "position": "center",
             "alt": "Mock da aba Network do DevTools com uma requisição selecionada",
             "caption": "A aba Network permite investigar o que foi enviado e o que voltou."
@@ -474,7 +474,7 @@
           "order": 5,
           "isPublic": true,
           "image": {
-            "url": "/assets/courses/api/api-flow.png",
+            "url": "/assets/courses/api/api-flow.webp",
             "position": "center",
             "alt": "Fluxo entre cliente, API e banco de dados",
             "caption": "O cliente conversa com a API; a API aplica regras e acessa os dados necessários."

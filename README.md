@@ -41,7 +41,7 @@ Adicione aqui uma captura de tela atualizada do hero da pagina inicial:
 Enquanto a captura oficial nao e adicionada, este banner existente pode ser
 usado como referencia visual:
 
-![Banner de referencia](public/assets/banners/ufu.api.png)
+![Banner de referencia](public/assets/banners/ufu.api.webp)
 
 > Para incluir uma nova imagem no README, salve o arquivo em `docs/images/` e
 > atualize o caminho acima. Uma captura do hero em desktop e outra em mobile

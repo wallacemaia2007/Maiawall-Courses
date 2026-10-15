@@ -24,6 +24,7 @@ const MAX_OUTLINE_CHAPTERS = 3;
 })
 export class LessonCardComponent {
   readonly course = input.required<LessonCardCourse>();
+  readonly isLcp = input(false);
   readonly chapters = input<Chapter[]>([]);
   readonly current = input<Chapter | null>(null);
   readonly completedCount = input(0);
@@ -34,7 +35,7 @@ export class LessonCardComponent {
   protected readonly isResume = computed(() => this.progressPercentage() !== null);
   protected readonly isSummary = computed(() => this.progressPercentage() === null);
   protected readonly bannerUrl = computed(
-    () => this.course().bannerUrl || '/assets/banners/ufu.brand.png',
+    () => this.course().bannerUrl || '/assets/banners/ufu.brand.webp',
   );
   protected readonly chapterCount = computed(() => {
     const course = this.course();
@@ -89,7 +90,7 @@ export class LessonCardComponent {
 
   protected useFallbackBanner(event: Event): void {
     const image = event.target as HTMLImageElement;
-    const fallback = '/assets/banners/ufu.brand.png';
+    const fallback = '/assets/banners/ufu.brand.webp';
 
     if (image.src.endsWith(fallback)) return;
     image.src = fallback;

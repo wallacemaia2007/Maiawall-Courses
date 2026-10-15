@@ -245,13 +245,13 @@ export class ProfileComponent {
   }
 
   protected courseImage(item: StartedCourse): string {
-    return item.course.thumbnailUrl || item.course.bannerUrl || '/assets/banners/ufu.brand.png';
+    return item.course.thumbnailUrl || item.course.bannerUrl || '/assets/banners/ufu.brand.webp';
   }
 
   protected replaceBrokenImage(event: Event): void {
     const image = event.target as HTMLImageElement;
-    if (!image.src.endsWith('/assets/banners/ufu.brand.png')) {
-      image.src = '/assets/banners/ufu.brand.png';
+    if (!image.src.endsWith('/assets/banners/ufu.brand.webp')) {
+      image.src = '/assets/banners/ufu.brand.webp';
     }
   }
 

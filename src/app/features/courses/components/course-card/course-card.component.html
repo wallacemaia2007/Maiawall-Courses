@@ -7,8 +7,12 @@
     <div class="course-card__cover">
       <img
         class="course-card__banner"
-        [src]="course().bannerUrl || '/assets/banners/ufu.brand.png'"
+        [src]="course().bannerUrl || '/assets/banners/ufu.brand.webp'"
         [alt]="'Banner do curso ' + course().title"
+        loading="lazy"
+        decoding="async"
+        width="1600"
+        height="900"
       />
     </div>
 

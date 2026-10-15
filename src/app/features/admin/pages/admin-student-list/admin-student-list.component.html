@@ -48,7 +48,15 @@
                 <span class="adm-person">
                   <span class="adm-avatar" aria-hidden="true">
                     @if (student.avatarUrl) {
-                      <img [src]="student.avatarUrl" alt="" referrerpolicy="no-referrer" />
+                      <img
+                        [src]="student.avatarUrl"
+                        alt=""
+                        referrerpolicy="no-referrer"
+                        loading="lazy"
+                        decoding="async"
+                        width="34"
+                        height="34"
+                      />
                     } @else {
                       {{ student.name.charAt(0).toUpperCase() }}
                     }

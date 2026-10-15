@@ -1,6 +1,6 @@
 {
   "slug": "docker-containerizacao-na-pratica",
-  "bannerUrl": "/assets/banners/ufu.docker.png",
+  "bannerUrl": "/assets/banners/ufu.docker.webp",
   "title": "Docker: Conteinerização na Prática",
   "shortDescription": "Aprenda Docker na prática: containers, imagens, Dockerfiles, volumes, redes, Compose, publicação de imagens e troubleshooting com uma API e PostgreSQL.",
   "description": "Minicurso prático para compreender e aplicar conteinerização do primeiro docker run ao projeto final com API, PostgreSQL, persistência, redes e Docker Compose. A trilha combina conceitos, comandos de terminal, Dockerfiles, otimização com multi-stage, gerenciamento de variáveis e secrets, publicação em registry, boas práticas de segurança e diagnóstico de aplicações containerizadas.",
