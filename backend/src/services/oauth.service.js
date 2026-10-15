@@ -15,12 +15,10 @@ const PROVIDER_CONFIG = {
   github: {
     clientId: env.githubClientId,
     clientSecret: env.githubClientSecret,
-    callbackUrl: `${env.oauthCallbackBaseUrl}/api/auth/oauth/github/callback`,
   },
   google: {
     clientId: env.googleClientId,
     clientSecret: env.googleClientSecret,
-    callbackUrl: `${env.oauthCallbackBaseUrl}/api/auth/oauth/google/callback`,
   },
 };
 
@@ -42,6 +40,14 @@ function ensureConfigured(provider) {
   }
 }
 
+function buildCallbackUrl(provider, runtimeEnv = env) {
+  const baseUrl = runtimeEnv.isProduction
+    ? runtimeEnv.frontendOrigin
+    : runtimeEnv.oauthCallbackBaseUrl;
+
+  return new URL(`/api/auth/oauth/${provider}/callback`, baseUrl).toString();
+}
+
 async function readJson(response, errorCode, message) {
   if (!response.ok) {
     throw new AppError(401, errorCode, message);
@@ -50,7 +56,7 @@ async function readJson(response, errorCode, message) {
   return response.json();
 }
 
-function buildAuthorizationUrl(provider, state) {
+function buildAuthorizationUrl(provider, state, runtimeEnv = env) {
   ensureProvider(provider);
   ensureConfigured(provider);
 
@@ -59,7 +65,7 @@ function buildAuthorizationUrl(provider, state) {
   if (provider === 'github') {
     const params = new URLSearchParams({
       client_id: config.clientId,
-      redirect_uri: config.callbackUrl,
+      redirect_uri: buildCallbackUrl(provider, runtimeEnv),
       response_type: 'code',
       scope: 'read:user user:email',
       state,
@@ -70,7 +76,7 @@ function buildAuthorizationUrl(provider, state) {
 
   const params = new URLSearchParams({
     client_id: config.clientId,
-    redirect_uri: config.callbackUrl,
+    redirect_uri: buildCallbackUrl(provider, runtimeEnv),
     response_type: 'code',
     scope: 'openid email profile',
     state,
@@ -98,7 +104,7 @@ async function fetchGithubProfile(code) {
       code,
       client_id: config.clientId,
       client_secret: config.clientSecret,
-      redirect_uri: config.callbackUrl,
+      redirect_uri: buildCallbackUrl('github'),
     }),
   });
   const { access_token: accessToken, error } = await readJson(
@@ -164,7 +170,7 @@ async function fetchGoogleProfile(code) {
       code,
       client_id: config.clientId,
       client_secret: config.clientSecret,
-      redirect_uri: config.callbackUrl,
+      redirect_uri: buildCallbackUrl('google'),
       grant_type: 'authorization_code',
     }),
   });
@@ -204,6 +210,7 @@ async function fetchGoogleProfile(code) {
 module.exports = {
   OAuthService: {
     buildAuthorizationUrl,
+    buildCallbackUrl,
     exchangeCodeForProfile,
   },
   OAUTH_PROVIDERS,
