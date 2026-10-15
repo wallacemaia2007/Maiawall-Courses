@@ -20,6 +20,11 @@
           />
         }
       </div>
+    } @else {
+      <div class="featured-courses__loading" role="status" aria-live="polite">
+        <span class="featured-courses__spinner" aria-hidden="true"></span>
+        <span>Carregando cursos...</span>
+      </div>
     }
 
     <div class="featured-courses__more" appReveal>

@@ -18,6 +18,30 @@
   width: calc(100% + 9px);
 }
 
+.featured-courses__loading {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.85rem;
+  min-height: 26rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.featured-courses__spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgba(var(--color-primary-rgb), 0.22);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: featured-courses-spin 800ms linear infinite;
+}
+
+@keyframes featured-courses-spin {
+  to { transform: rotate(360deg); }
+}
+
 .featured-courses__more {
   display: grid;
   justify-items: center;
@@ -44,4 +68,8 @@
   .featured-courses__grid app-course-card {
     width: 100%;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-courses__spinner { animation: none; }
 }

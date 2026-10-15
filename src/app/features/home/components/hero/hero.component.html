@@ -111,14 +111,9 @@
     <div class="hero__lesson" aria-label="Destaque de conteúdo">
       @switch (state()) {
       @case ('loading') {
-      <div class="lesson-skeleton" aria-hidden="true">
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--kicker"></span>
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--title"></span>
-        <div class="lesson-skeleton__body">
-          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
-          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
-        </div>
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--footer"></span>
+      <div class="hero-loading" role="status" aria-live="polite">
+        <span class="hero-loading__spinner" aria-hidden="true"></span>
+        <span class="hero-loading__label">Carregando conteúdo...</span>
       </div>
       }
       @case ('resume') {
@@ -134,14 +129,9 @@
         [isLcp]="true"
       />
       } @else {
-      <div class="lesson-skeleton" aria-hidden="true">
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--kicker"></span>
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--title"></span>
-        <div class="lesson-skeleton__body">
-          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
-          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
-        </div>
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--footer"></span>
+      <div class="hero-loading" role="status" aria-live="polite">
+        <span class="hero-loading__spinner" aria-hidden="true"></span>
+        <span class="hero-loading__label">Carregando conteúdo...</span>
       </div>
       }
       }
@@ -180,14 +170,9 @@
       </div>
       }
       } @else {
-      <div class="lesson-skeleton" aria-hidden="true">
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--kicker"></span>
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--title"></span>
-        <div class="lesson-skeleton__body">
-          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
-          <span class="lesson-skeleton__bar lesson-skeleton__bar--col"></span>
-        </div>
-        <span class="lesson-skeleton__bar lesson-skeleton__bar--footer"></span>
+      <div class="hero-loading" role="status" aria-live="polite">
+        <span class="hero-loading__spinner" aria-hidden="true"></span>
+        <span class="hero-loading__label">Carregando conteúdo...</span>
       </div>
       }
       }

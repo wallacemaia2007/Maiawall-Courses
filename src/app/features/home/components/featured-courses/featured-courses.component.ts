@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { catchError, of } from 'rxjs';
 
 import { CourseCardComponent } from '../../../courses/components/course-card/course-card.component';
 import {
@@ -21,5 +22,5 @@ import { SectionHeadComponent } from '../section-head/section-head.component';
 export class FeaturedCoursesComponent {
   private readonly catalog: CourseCatalogService = inject(COURSE_CATALOG_SERVICE);
 
-  protected readonly courses$ = this.catalog.getFeatured(3);
+  protected readonly courses$ = this.catalog.getFeatured(3).pipe(catchError(() => of([])));
 }

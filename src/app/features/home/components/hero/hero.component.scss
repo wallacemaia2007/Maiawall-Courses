@@ -227,32 +227,29 @@
 }
 .lesson__empty p { margin: 0; max-width: 36ch; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65; }
 
-/* ---- Skeleton ---- */
+/* ---- Indicador de carregamento ---- */
 
-.lesson-skeleton {
+.hero-loading {
   display: grid;
-  align-content: start;
-  gap: 1rem;
+  place-content: center;
+  justify-items: center;
+  gap: 0.9rem;
   min-height: 420px;
   padding: 1.4rem;
+  color: rgba(255, 255, 255, 0.72);
 }
-.lesson-skeleton__bar {
-  display: block;
-  height: 14px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #efede7 25%, #e2dfd7 50%, #efede7 75%);
-  background-size: 200% 100%;
-  animation: mw-skeleton 1.6s ease-in-out infinite;
+.hero-loading__spinner {
+  width: 2.35rem;
+  height: 2.35rem;
+  border: 3px solid rgba(230, 168, 92, 0.28);
+  border-top-color: #e6a85c;
+  border-radius: 50%;
+  animation: hero-spinner-rotate 800ms linear infinite;
 }
-.lesson-skeleton__bar--kicker { width: 44%; height: 10px; }
-.lesson-skeleton__bar--title { width: 72%; height: 20px; margin-bottom: 0.75rem; }
-.lesson-skeleton__body { display: grid; grid-template-columns: 0.82fr 1.18fr; min-height: 248px; }
-.lesson-skeleton__bar--col { height: 248px; border-radius: 0; }
-.lesson-skeleton__bar--footer { height: 48px; margin-top: 0.6rem; }
+.hero-loading__label { font-size: 0.86rem; }
 
-@keyframes mw-skeleton {
-  from { background-position: 200% 0; }
-  to { background-position: -200% 0; }
+@keyframes hero-spinner-rotate {
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 960px) {
@@ -293,8 +290,6 @@
   .lesson__checklist span { max-width: 100%; white-space: normal; }
   .hero-carousel__nav { gap: 0.7rem; padding-inline: 1rem; }
   .lesson__meta { gap: 0.4rem; }
-  .lesson-skeleton__body { grid-template-columns: 1fr; min-height: 200px; }
-  .lesson-skeleton__bar--col { height: 200px; }
 }
 
 @media (max-width: 380px) {
@@ -305,6 +300,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-carousel__slide { transition: none; }
-  .lesson-skeleton__bar { animation: none; }
+  .hero-loading__spinner { animation: none; }
   .hero__blob { will-change: auto; }
 }
