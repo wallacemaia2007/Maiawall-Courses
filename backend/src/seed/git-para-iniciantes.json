@@ -2,8 +2,8 @@
   "slug": "git-para-iniciantes",
   "bannerUrl": "/assets/banners/ufu.git.webp",
   "title": "Git para Iniciantes",
-  "shortDescription": "Aprenda Git e GitHub em um fluxo completo: histórico, commits, branches, remotos, Pull Requests, conflitos e boas práticas.",
-  "description": "Minicurso prático de 180 minutos para sair do primeiro git init e chegar a um fluxo de colaboração reproduzível. Você vai construir um repositório, revisar diffs, criar commits claros, trabalhar com branches, sincronizar com um remoto, abrir Pull Requests, resolver conflitos e conhecer recursos do GitHub sem perder o controle do histórico.",
+  "shortDescription": "Aprenda Git e GitHub do zero: registre versões, trabalhe com branches, sincronize repositórios e colabore por Pull Requests com segurança.",
+  "description": "Curso introdutório baseado na apresentação Git para Iniciantes, do TechnoMonte 2026. Pratique o fluxo local e remoto com Git: configuração, staging, commits, histórico, branches, merge, conflitos, Pull Requests, .gitignore, recuperação de mudanças, tags e recursos do GitHub. O projeto final percorre o ciclo de contribuição que outra pessoa consegue repetir.",
   "category": "desenvolvimento",
   "level": "iniciante",
   "durationMinutes": 180,
@@ -25,7 +25,15 @@
     "Conhecer comandos e conceitos avançados para aprofundamento",
     "Revisar diffs antes de registrar ou compartilhar mudanças",
     "Escolher entre restore, reset, revert, stash e rebase com consciência do impacto no histórico",
-    "Organizar um projeto no GitHub com documentação, Issues, Releases e automações"
+    "Organizar um projeto no GitHub com documentação, Issues, Releases e automações",
+    "Diferenciar Git, GitHub, repositório local, repositório remoto, working tree e staging area",
+    "Configurar identidade e entender precedência entre configuração global e local",
+    "Criar commits pequenos, coerentes, revisados e com mensagens que expressem intenção",
+    "Sincronizar alterações com push, fetch e pull sem confundir busca com integração",
+    "Criar branches de trabalho e integrar alterações com merge e Pull Request",
+    "Resolver conflitos preservando o comportamento pretendido e validando o resultado",
+    "Evitar expor credenciais e recuperar alterações com restore, reset, revert e stash",
+    "Reconhecer quando rebase, cherry-pick, amend e tags anotadas são apropriados"
   ],
   "requirements": [
     "Git instalado no computador",
@@ -61,7 +69,10 @@
     "Continuar os estudos de Git a partir de conceitos avançados",
     "Explicar o caminho de uma alteração entre working tree, staging area, commit e remoto",
     "Diagnosticar divergências e conflitos usando status, log e diff",
-    "Executar um fluxo de branch, Pull Request, revisão e merge com segurança"
+    "Executar um fluxo de branch, Pull Request, revisão e merge com segurança",
+    "Explicar por que commits locais podem ser criados e comparados sem conexão com o GitHub",
+    "Reproduzir o fluxo de contribuição por branch, push, Pull Request, revisão e integração",
+    "Documentar objetivo, instalação, execução, variáveis e contribuição em um README"
   ],
   "published": true,
   "chapters": [
@@ -76,7 +87,7 @@
         {
           "title": "O que é Git?",
           "type": "article",
-          "content": "<p>Git é um sistema distribuído de controle de versão utilizado para registrar alterações em arquivos e acompanhar a evolução de projetos. Ele permite criar históricos, comparar versões, recuperar estados anteriores e trabalhar em paralelo com outras pessoas.</p><p>Git é *distribuído*: cada clone possui uma cópia do histórico necessário para trabalhar localmente. Muitas operações de leitura e criação de commits funcionam sem conexão.</p><p>O Git registra snapshots e relações entre commits. Assim, é possível descobrir quem mudou um arquivo, comparar versões e recuperar um estado anterior.</p>",
+          "content": "<p>Git é um sistema distribuído de controle de versão utilizado para registrar alterações em arquivos e acompanhar a evolução de projetos. Ele permite criar históricos, comparar versões, recuperar estados anteriores e trabalhar em paralelo com outras pessoas.</p><p>Git é *distribuído*: cada clone possui uma cópia do histórico necessário para trabalhar localmente. Muitas operações de leitura e criação de commits funcionam sem conexão.</p><p>O Git registra snapshots e relações entre commits. Assim, é possível descobrir quem mudou um arquivo, comparar versões e recuperar um estado anterior.</p>\n\nEste curso acompanha a apresentação **Git para Iniciantes**, de Wallace Candido Maia Sousa, desenvolvedor full stack na MaiaWall, formado em Sistemas de Informação (BSI) pela UFU e atuante em projetos pessoais e para clientes. A palestra ocorreu no **TechnoMonte 2026, em Monte Carmelo-MG**. A stack apresentada inclui Angular, Spring Boot, Node.js, NestJS, AWS e Firebase; o foco do encontro é versionar projetos e colaborar usando Git e GitHub.\n\nPara mapear o ponto de partida da turma: você já usou Git ou GitHub? Já salvou algo como `projeto_final_v2_agora_vai`? Já perdeu código ao sobrescrever um arquivo? Não tem problema se todos os termos forem novos: a trilha começa do zero.\n\nGit é distribuído: cada clone recebe o histórico do repositório e permite trabalhar localmente. Commits podem ser criados e consultados sem internet. Cada commit registra snapshot, autor, data, mensagem e relação com o commit pai; `git log` e `git blame` ajudam a investigar quando e por quem uma linha foi alterada. A cópia local é completa o bastante para comparar versões e recuperar estados anteriores sem sobrescrever o trabalho atual.",
           "order": 1,
           "isPublic": true,
           "image": null,
@@ -236,7 +247,7 @@
         {
           "title": "Área de staging",
           "type": "code",
-          "content": "```bash\ngit add arquivo.js\ngit status\n```\n<p><code>git add</code> *não cria um commit*: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas *pode incluir arquivos indesejados*; combine-o com um <code>.gitignore</code> bem definido.</p>",
+          "content": "```bash\ngit add arquivo.js\ngit status\n```\n<p><code>git add</code> *não cria um commit*: ele atualiza o índice, que será a base do próximo commit. Depois de adicionar, confira <code>git diff --staged</code> para validar a seleção.</p><p><code>git add .</code> é conveniente, mas *pode incluir arquivos indesejados*; combine-o com um <code>.gitignore</code> bem definido.</p>\n\nUm ciclo seguro antes de registrar uma alteração é: confira `git status`, veja o que mudou com `git diff`, selecione apenas os arquivos desejados com `git add arquivo`, revise o índice com `git diff --staged` e só então faça o commit. `git add` atualiza a staging area; **não cria commit**. `git add .` é conveniente, mas pode incluir arquivos que você não pretendia enviar, por isso revise o staged diff e mantenha um `.gitignore` adequado.",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -274,7 +285,7 @@
         {
           "title": "Boas mensagens de commit",
           "type": "article",
-          "content": "<p>Mensagens de commit devem *ser claras* e representar a alteração realizada. Um projeto pode adotar convenções como feat para funcionalidades, fix para correções e docs para documentação.</p><p>Use uma convenção consistente, como <code>feat</code>, <code>fix</code>, <code>docs</code>, <code>refactor</code> e <code>chore</code>. Evite *mensagens vagas* como “ajustes”; use o corpo do commit quando for necessário contexto.</p>",
+          "content": "<p>Mensagens de commit devem *ser claras* e representar a alteração realizada. Um projeto pode adotar convenções como feat para funcionalidades, fix para correções e docs para documentação.</p><p>Use uma convenção consistente, como <code>feat</code>, <code>fix</code>, <code>docs</code>, <code>refactor</code> e <code>chore</code>. Evite *mensagens vagas* como “ajustes”; use o corpo do commit quando for necessário contexto.</p>\n\nExemplos de uma convenção simples: `feat: adiciona busca de cursos` para funcionalidade, `fix: corrige timeout` para correção, `docs: atualiza guia de instalação` para documentação, `refactor: extrai serviço de autenticação` para reorganização sem mudança de comportamento e `chore: atualiza dependências` para manutenção. Evite mensagens vagas como `ajustes` ou `arrumei`. Quando a intenção exigir contexto adicional, use o corpo do commit.",
           "order": 5,
           "isPublic": true,
           "attachments": []
@@ -314,7 +325,7 @@
         {
           "title": "Comparando alterações",
           "type": "code",
-          "content": "```bash\ngit diff\ngit diff --staged\n```\n<p>Use o histórico como *ferramenta de diagnóstico*: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>",
+          "content": "```bash\ngit diff\ngit diff --staged\n```\n<p>Use o histórico como *ferramenta de diagnóstico*: localize o commit, observe o diff e confirme qual par de estados está sendo comparado. <code>git diff</code> mostra alterações no working tree; <code>git diff --staged</code> mostra o que será commitado.</p>\n\nPara descobrir quem alterou uma linha e em qual commit, use `git blame arquivo.js`; depois abra o commit indicado com `git show <commit>`. O histórico é uma ferramenta de diagnóstico: compare os estados antes de decidir como corrigir um problema.",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -354,7 +365,7 @@
         {
           "title": "Criando um repositório no GitHub",
           "type": "article",
-          "content": "<p>Um repositório remoto pode ser criado no GitHub para receber o projeto local. Ao criar o repositório, é possível definir seu nome, visibilidade e outras configurações.</p><p>O GitHub combina *hospedagem de código e colaboração*. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma *simplificar o primeiro push*.</p>",
+          "content": "<p>Um repositório remoto pode ser criado no GitHub para receber o projeto local. Ao criar o repositório, é possível definir seu nome, visibilidade e outras configurações.</p><p>O GitHub combina *hospedagem de código e colaboração*. Ações feitas no navegador podem produzir commits ou metadados no servidor, que depois podem ser buscados pelo repositório local.</p><p>Para um projeto local já existente, criar um remoto vazio costuma *simplificar o primeiro push*.</p>\n\nPara conectar um projeto local existente, crie no GitHub um repositório **vazio** (sem README, licença ou `.gitignore` inicial), evitando duas histórias independentes no primeiro push. Depois, conecte o remoto, confira a URL e publique a branch principal. `origin` é um apelido local; `main` é uma convenção de nome, não uma exigência técnica. **Nunca inclua token ou senha na URL do remoto**: a URL fica salva na configuração e pode ser exibida por `git remote -v`. Use o credential manager ou o fluxo de autenticação recomendado pela plataforma.",
           "order": 2,
           "isPublic": true,
           "attachments": []
@@ -418,7 +429,7 @@
         {
           "title": "Push, Pull e Fetch: qual a diferença?",
           "type": "article",
-          "content": "<p>Push envia commits do repositório local para o remoto. Fetch busca informações e novos commits do remoto sem integrar automaticamente essas alterações à branch atual. Pull busca alterações e realiza a integração dessas alterações ao repositório local.</p><ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> *traz referências sem integrar na branch atual*.</li><li>• <strong>Pull:</strong> *busca e integra* por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, *preserve o trabalho local* e leia a mensagem do Git quando houver divergência ou rejeição.</p>",
+          "content": "<p>Push envia commits do repositório local para o remoto. Fetch busca informações e novos commits do remoto sem integrar automaticamente essas alterações à branch atual. Pull busca alterações e realiza a integração dessas alterações ao repositório local.</p><ul><li>• <strong>Push:</strong> leva commits locais ao remoto.</li><li>• <strong>Fetch:</strong> *traz referências sem integrar na branch atual*.</li><li>• <strong>Pull:</strong> *busca e integra* por merge ou rebase conforme a configuração.</li></ul><p>Antes de sincronizar, *preserve o trabalho local* e leia a mensagem do Git quando houver divergência ou rejeição.</p>\n\nUm modelo mental: `git push` envia commits locais ao remoto; `git fetch` atualiza as referências remotas locais, sem integrar os commits à branch atual; `git pull` combina fetch com integração por merge ou rebase, conforme a configuração. Ao criar a branch principal no primeiro envio, `git push -u origin main` também registra o upstream para os próximos pushes e pulls.",
           "order": 4,
           "isPublic": true,
           "attachments": []
@@ -488,7 +499,7 @@
         {
           "title": "O que é Merge?",
           "type": "article",
-          "content": "<p>Merge é a operação utilizada para integrar o histórico de uma branch em outra. Um exemplo comum é integrar uma branch de funcionalidade à branch principal.</p><p>Merge integra o histórico de uma branch em outra. Antes de integrar, *atualize a branch de destino*, rode os testes e revise o histórico. Fast-forward e commit de merge são *resultados diferentes* da mesma operação.</p>",
+          "content": "<p>Merge é a operação utilizada para integrar o histórico de uma branch em outra. Um exemplo comum é integrar uma branch de funcionalidade à branch principal.</p><p>Merge integra o histórico de uma branch em outra. Antes de integrar, *atualize a branch de destino*, rode os testes e revise o histórico. Fast-forward e commit de merge são *resultados diferentes* da mesma operação.</p>\n\nAntes de integrar uma funcionalidade, volte à branch de destino, atualize-a com o remoto, confira o estado e rode os testes. O merge pode avançar a referência (*fast-forward*) quando não há divergência ou criar um commit de merge quando é necessário registrar a junção das linhas de desenvolvimento. São resultados diferentes da mesma operação, não sinal de erro.",
           "order": 1,
           "isPublic": true,
           "attachments": []
@@ -572,7 +583,7 @@
         {
           "title": "Resolvendo um conflito",
           "type": "article",
-          "content": "<p>Para resolver um conflito, é necessário analisar as versões envolvidas, escolher ou combinar as alterações desejadas, remover os marcadores de conflito e então adicionar e registrar o resultado.</p><p>*Conflito é uma decisão pendente, não corrupção do repositório*. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>",
+          "content": "<p>Para resolver um conflito, é necessário analisar as versões envolvidas, escolher ou combinar as alterações desejadas, remover os marcadores de conflito e então adicionar e registrar o resultado.</p><p>*Conflito é uma decisão pendente, não corrupção do repositório*. Use <code>git status</code>, leia os marcadores, escolha o comportamento correto, remova os marcadores, teste e só então faça <code>git add</code> e finalize o merge ou rebase.</p>\n\nOs marcadores `<<<<<<<`, `=======` e `>>>>>>>` delimitam versões concorrentes; eles não devem permanecer no arquivo final. Leia ambas as propostas e escolha o comportamento correto (às vezes, combine as duas). Depois remova os marcadores, revise o arquivo inteiro, rode os testes e use `git status` para localizar todos os conflitos. Só então marque os arquivos resolvidos com `git add` e conclua a integração conforme o estado do merge.",
           "order": 3,
           "isPublic": true,
           "attachments": [],
@@ -607,7 +618,7 @@
         {
           "title": "Criando um .gitignore",
           "type": "code",
-          "content": "```bash\nnode_modules/\n.env\ndist/\ntarget/\n*.log\n```\n<p><code>.gitignore</code> vale para arquivos ainda não rastreados; **ele não remove um segredo já commitado**. Use padrões para dependências, builds, caches, logs e arquivos de ambiente.</p>\n```bash\nnode_modules/\ndist/\n.env\n*.log\n```",
+          "content": "```bash\nnode_modules/\n.env\ndist/\ntarget/\n*.log\n```\n<p><code>.gitignore</code> vale para arquivos ainda não rastreados; **ele não remove um segredo já commitado**. Use padrões para dependências, builds, caches, logs e arquivos de ambiente.</p>\n```bash\nnode_modules/\ndist/\n.env\n*.log\n```\n\nExemplo de padrões comuns: `node_modules/`, `dist/`, `target/`, `.env` e `*.log`. O `.gitignore` evita adicionar arquivos ainda não rastreados; **não remove do Git algo que já foi commitado**. Antes de compartilhar, confirme com `git status` e revise o que está no staged diff.",
           "order": 2,
           "isPublic": true,
           "attachments": [
@@ -622,7 +633,7 @@
         {
           "title": "Não envie informações sensíveis",
           "type": "article",
-          "content": "<p>Senhas, tokens, chaves privadas, credenciais e outras informações sensíveis não devem ser armazenadas diretamente no repositório. Arquivos como .env podem ser ignorados e os valores devem ser configurados de maneira apropriada para cada ambiente.</p><p>**Senhas, tokens e chaves privadas não devem entrar no histórico**. Se um segredo foi publicado, **revogue-o imediatamente**, gere outro e faça a limpeza adequada do histórico.</p>",
+          "content": "<p>Senhas, tokens, chaves privadas, credenciais e outras informações sensíveis não devem ser armazenadas diretamente no repositório. Arquivos como .env podem ser ignorados e os valores devem ser configurados de maneira apropriada para cada ambiente.</p><p>**Senhas, tokens e chaves privadas não devem entrar no histórico**. Se um segredo foi publicado, **revogue-o imediatamente**, gere outro e faça a limpeza adequada do histórico.</p>\n\nSe uma credencial for publicada, trate-a como comprometida: **revogue-a imediatamente e gere/rotacione uma nova**. Remover o valor do arquivo atual não apaga cópias nos commits, clones, caches ou logs. Depois de revogar, siga o procedimento do projeto para limpar o histórico e notifique as pessoas que possam ter copiado o segredo; limpeza do histórico não substitui a revogação.",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -671,7 +682,7 @@
         {
           "title": "Git Stash",
           "type": "code",
-          "content": "```bash\ngit stash\ngit stash list\ngit stash pop\n```\n<p><code>stash</code> *guarda temporariamente alterações* para permitir troca de contexto. Use uma mensagem e recupere com cuidado; quando a mudança já está coerente, *um commit temporário é mais rastreável*.</p>",
+          "content": "```bash\ngit stash\ngit stash list\ngit stash pop\n```\n<p><code>stash</code> *guarda temporariamente alterações* para permitir troca de contexto. Use uma mensagem e recupere com cuidado; quando a mudança já está coerente, *um commit temporário é mais rastreável*.</p>\n\nO fluxo básico é `git stash` para guardar temporariamente mudanças, `git stash list` para consultar entradas e `git stash pop` para reaplicar e remover a entrada recuperada. O stash é útil para trocar de contexto sem criar commit, mas confira o resultado após reaplicar, pois as alterações podem conflitar com a branch atual.",
           "order": 3,
           "isPublic": true,
           "attachments": []
@@ -679,7 +690,7 @@
         {
           "title": "Git Rebase",
           "type": "article",
-          "content": "<p>Rebase é uma operação que reaplica commits sobre uma nova base, podendo produzir um histórico linear. É um conceito importante para aprofundar os estudos de Git e deve ser utilizado com cuidado em históricos compartilhados.</p><p>Rebase reaplica commits sobre uma nova base e *cria novos hashes*. Ele pode deixar o histórico linear, mas **não deve ser usado sem cuidado** em commits que outras pessoas já consumiram.</p>\n```bash\ngit fetch origin\ngit rebase origin/main\n```",
+          "content": "<p>Rebase é uma operação que reaplica commits sobre uma nova base, podendo produzir um histórico linear. É um conceito importante para aprofundar os estudos de Git e deve ser utilizado com cuidado em históricos compartilhados.</p><p>Rebase reaplica commits sobre uma nova base e *cria novos hashes*. Ele pode deixar o histórico linear, mas **não deve ser usado sem cuidado** em commits que outras pessoas já consumiram.</p>\n```bash\ngit fetch origin\ngit rebase origin/main\n```\n\nExemplo para atualizar a branch atual sobre a principal remota: `git fetch origin` seguido de `git rebase origin/main`. O rebase reaplica os commits e cria novos hashes. O mesmo cuidado vale para `rebase`, `cherry-pick` e `commit --amend`: eles reescrevem ou reaplicam histórico; use em branches sob seu controle, não em commits compartilhados que outras pessoas já consumiram.",
           "order": 4,
           "isPublic": true,
           "attachments": [
@@ -767,7 +778,7 @@
         {
           "title": "GitHub Actions",
           "type": "article",
-          "content": "<p>GitHub Actions é uma plataforma de automação integrada ao GitHub que pode ser utilizada para executar testes, builds, deploys e outros workflows automaticamente.</p><p>Actions executa workflows disparados por push, Pull Request ou tags. Um workflow pode instalar dependências, rodar testes, gerar artefatos e publicar deploy. **Segredos devem ficar no mecanismo de secrets do GitHub, nunca no YAML ou nos logs**.</p>",
+          "content": "<p>GitHub Actions é uma plataforma de automação integrada ao GitHub que pode ser utilizada para executar testes, builds, deploys e outros workflows automaticamente.</p><p>Actions executa workflows disparados por push, Pull Request ou tags. Um workflow pode instalar dependências, rodar testes, gerar artefatos e publicar deploy. **Segredos devem ficar no mecanismo de secrets do GitHub, nunca no YAML ou nos logs**.</p>\n\nAo automatizar testes, builds e deploys, guarde tokens e credenciais em **GitHub Secrets**. Não os escreva no YAML do workflow nem os imprima nos logs. Pull Requests e pushes podem disparar verificações automaticamente; consulte o resultado dos checks antes de integrar.",
           "order": 5,
           "isPublic": true,
           "attachments": [
@@ -847,7 +858,7 @@
         {
           "title": "Desafio final",
           "type": "article",
-          "content": "<p>Crie um pequeno projeto, publique-o no GitHub, faça pelo menos um commit inicial, crie uma branch para uma nova funcionalidade, realize alterações, envie a branch para o GitHub, abra uma Pull Request e integre a alteração à branch principal.</p><p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>",
+          "content": "<p>Crie um pequeno projeto, publique-o no GitHub, faça pelo menos um commit inicial, crie uma branch para uma nova funcionalidade, realize alterações, envie a branch para o GitHub, abra uma Pull Request e integre a alteração à branch principal.</p><p>O objetivo prático é produzir *um fluxo reproduzível*: projeto executável, histórico legível, remoto configurado, branch de funcionalidade, revisão documentada e integração que outra pessoa consiga repetir.</p>\n\nCritério de conclusão: outra pessoa deve conseguir repetir o fluxo lendo a documentação. Crie e publique um pequeno projeto, faça o commit inicial, abra uma branch de funcionalidade, implemente e commite a mudança, envie a branch, abra uma Pull Request, revise e integre-a à `main`. Como próximos passos, use Git em todos os projetos, escreva commits e READMEs claros, pratique PRs e code review, automatize testes com GitHub Actions e estude rebase e fluxos de equipe. A apresentação agradece à organização e à turma, à FACOM e à UFU.",
           "order": 7,
           "isPublic": true,
           "attachments": []

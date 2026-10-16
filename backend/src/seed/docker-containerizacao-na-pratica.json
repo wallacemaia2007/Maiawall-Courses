@@ -2,8 +2,8 @@
   "slug": "docker-containerizacao-na-pratica",
   "bannerUrl": "/assets/banners/ufu.docker.webp",
   "title": "Docker: Conteinerização na Prática",
-  "shortDescription": "Aprenda Docker na prática: containers, imagens, Dockerfiles, volumes, redes, Compose, publicação de imagens e troubleshooting com uma API e PostgreSQL.",
-  "description": "Minicurso prático para compreender e aplicar conteinerização do primeiro docker run ao projeto final com API, PostgreSQL, persistência, redes e Docker Compose. A trilha combina conceitos, comandos de terminal, Dockerfiles, otimização com multi-stage, gerenciamento de variáveis e secrets, publicação em registry, boas práticas de segurança e diagnóstico de aplicações containerizadas.",
+  "shortDescription": "Entenda containers e imagens Docker e pratique Dockerfile, portas, volumes, redes, Compose, publicação e diagnóstico com uma API e PostgreSQL.",
+  "description": "Curso prático baseado na apresentação Docker: Conteinerização na Prática, do TechnoMonte 2026. Do primeiro container ao projeto final com API Node.js e PostgreSQL, aprenda imagens, CLI, Dockerfile, build context, multi-stage, persistência, redes, configuração, Docker Compose, registries, segurança e troubleshooting com exemplos reproduzíveis.",
   "category": "devops",
   "level": "iniciante",
   "durationMinutes": 360,
@@ -19,7 +19,12 @@
     "Integrar uma API Node.js a um PostgreSQL com healthchecks",
     "Publicar e versionar imagens em um registry",
     "Diagnosticar problemas usando logs, inspect, exec e stats",
-    "Aplicar boas práticas de segurança, tamanho, tags e observabilidade"
+    "Aplicar boas práticas de segurança, tamanho, tags e observabilidade",
+    "Diferenciar imagem, container, Docker Engine, CLI, daemon e registry",
+    "Escolher tags e imagens base adequadas e reconhecer riscos de latest e de imagens sem origem confiável",
+    "Aplicar cache de camadas, .dockerignore e multi-stage para reduzir builds e imagens",
+    "Evitar exposição acidental de portas, dados, credenciais e socket do Docker",
+    "Publicar imagens versionadas em registries e promover o mesmo artefato validado entre ambientes"
   ],
   "requirements": [
     "Docker Desktop instalado ou Docker Engine disponível",
@@ -55,7 +60,11 @@
     "Persistir dados e conectar serviços por nome em uma rede Docker",
     "Subir uma aplicação API + PostgreSQL com Compose",
     "Publicar uma imagem versionada em um registry",
-    "Diagnosticar logs, portas, volumes e consumo de recursos"
+    "Diagnosticar logs, portas, volumes e consumo de recursos",
+    "Explicar o fluxo de docker run entre CLI, daemon, imagem local e registry",
+    "Diagnosticar containers por status, logs, configuração, terminal, rede e portas",
+    "Aplicar um checklist de imagem e execução segura, incluindo limites de recursos e usuário não-root",
+    "Planejar a evolução de um projeto containerizado para CI/CD, cloud e Kubernetes"
   ],
   "published": true,
   "chapters": [
@@ -70,7 +79,7 @@
         {
           "title": "O que é Docker?",
           "type": "article",
-          "content": "O *Docker* é uma plataforma para empacotar e executar aplicações em *containers*. Um container é um processo (ou grupo de processos) rodando com um ambiente isolado: filesystem, rede, processos e variáveis próprios.\n\nO container *compartilha o kernel* do sistema hospedeiro. Por isso ele não precisa de um sistema operacional completo dentro dele e inicia em segundos.\n\nNa prática: você descreve a aplicação e suas dependências uma vez e roda o mesmo pacote no seu notebook, no servidor da faculdade ou na nuvem.",
+          "content": "O *Docker* é uma plataforma para empacotar e executar aplicações em *containers*. Um container é um processo (ou grupo de processos) rodando com um ambiente isolado: filesystem, rede, processos e variáveis próprios.\n\nO container *compartilha o kernel* do sistema hospedeiro. Por isso ele não precisa de um sistema operacional completo dentro dele e inicia em segundos.\n\nNa prática: você descreve a aplicação e suas dependências uma vez e roda o mesmo pacote no seu notebook, no servidor da faculdade ou na nuvem.\n\nEste curso acompanha a apresentação <strong>Docker: Conteinerização na Prática</strong>, de Wallace Candido Maia Sousa, desenvolvedor full stack na MaiaWall, formado em Sistemas de Informação (BSI) pela UFU e atuante em projetos pessoais e para clientes. A palestra ocorreu no <strong>TechnoMonte 2026, em Monte Carmelo-MG</strong>. A stack apresentada inclui Angular, Spring Boot, Node.js, NestJS, AWS e Firebase; o foco do encontro é empacotar uma aplicação e executá-la em diferentes ambientes.\n\nPara começar, pense: você já instalou Docker — em qual sistema? Já ouviu ou disse “funciona na minha máquina”? Já instalou um banco de dados apenas para testar um projeto? Não é preciso conhecer os termos Container, Imagem, Dockerfile, Volume, Docker Compose, Docker Hub, Registry, Kubernetes, Alpine, Nginx, PostgreSQL ou CI/CD: começamos do zero.",
           "order": 1,
           "isPublic": true
         },
@@ -157,7 +166,7 @@
         {
           "title": "Container x Imagem",
           "type": "article",
-          "content": "A analogia mais usada: a *imagem* é a receita (ou a classe, na programação orientada a objetos) e o *container* é o prato pronto (o objeto, a instância).\n\nUma única imagem pode gerar *vários containers* independentes. Alterações feitas dentro de um container *não modificam a imagem*: ficam na camada gravável daquele container e somem quando ele é removido.\n\nPara conferir: `docker images` lista imagens, `docker ps -a` lista containers.",
+          "content": "A analogia mais usada: a *imagem* é a receita (ou a classe, na programação orientada a objetos) e o *container* é o prato pronto (o objeto, a instância).\n\nUma única imagem pode gerar *vários containers* independentes. Alterações feitas dentro de um container *não modificam a imagem*: ficam na camada gravável daquele container e somem quando ele é removido.\n\nPara conferir: `docker images` lista imagens, `docker ps -a` lista containers.\n\nEm uma frase: **Docker é a plataforma que constrói, distribui e executa; imagem é o pacote; container é o processo isolado em execução**. A imagem é somente leitura, imutável e formada por camadas que podem ser compartilhadas; cada container tem sua própria camada gravável. Uma imagem pode gerar vários containers independentes, e essa camada temporária desaparece quando o container é removido.",
           "order": 3,
           "isPublic": true
         },
@@ -185,7 +194,7 @@
         {
           "title": "Docker Registry",
           "type": "article",
-          "content": "Um *Registry* é o serviço que armazena e distribui imagens, como um \"GitHub para imagens\". Quando você roda `docker pull` ou `docker run` com uma imagem que não existe localmente, o Docker busca no registry configurado.\n\nO *Docker Hub* é o registry público padrão, mas existem outros: GitHub Container Registry (ghcr.io), Amazon ECR, Google Artifact Registry e registries privados de empresas.",
+          "content": "Um *Registry* é o serviço que armazena e distribui imagens, como um \"GitHub para imagens\". Quando você roda `docker pull` ou `docker run` com uma imagem que não existe localmente, o Docker busca no registry configurado.\n\nO *Docker Hub* é o registry público padrão, mas existem outros: GitHub Container Registry (ghcr.io), Amazon ECR, Google Artifact Registry e registries privados de empresas.\n\nO nome completo costuma seguir o formato `registry/usuario/repo:tag`. Para imagens oficiais do Docker Hub, o atalho `nginx` equivale a `docker.io/library/nginx:latest`; um nome como `maiawall/api-tarefas:1.0.0` identifica usuário, repositório e versão. Prefira Docker Official Image ou Verified Publisher e confira mantenedor, tags e atualização recente antes de baixar.",
           "order": 7,
           "isPublic": true
         },
@@ -237,7 +246,7 @@
         {
           "title": "Conhecendo a interface",
           "type": "article",
-          "content": "Ao abrir o Docker Desktop, o menu lateral concentra as áreas principais: *Containers*, *Images*, *Volumes*, *Builds* e configurações. A barra inferior mostra o estado do Engine e o consumo de CPU e memória.\n\nEm *Settings > Resources* você controla quanto de CPU, memória e disco a VM pode usar. Se seus containers estiverem lentos ou sendo encerrados por falta de memória, este é o primeiro lugar para ajustar.",
+          "content": "Ao abrir o Docker Desktop, o menu lateral concentra as áreas principais: *Containers*, *Images*, *Volumes*, *Builds* e configurações. A barra inferior mostra o estado do Engine e o consumo de CPU e memória.\n\nEm *Settings > Resources* você controla quanto de CPU, memória e disco a VM pode usar. Se seus containers estiverem lentos ou sendo encerrados por falta de memória, este é o primeiro lugar para ajustar.\n\nEm **Settings > Resources** também é possível ajustar a quantidade de CPU, memória e disco disponibilizada à VM que executa o Engine. No Windows, o Docker Desktop usa WSL 2. A CLI continua sendo a referência para automação e para servidores sem interface gráfica.",
           "order": 3,
           "isPublic": true
         },
@@ -589,14 +598,14 @@
         {
           "title": "Imagens latest x versões específicas",
           "type": "article",
-          "content": "A tag *latest* é apenas uma tag padrão (usada quando você não informa nenhuma). Ela **não significa \"a mais recente e estável\"** e pode mudar a qualquer momento.\n\nUsar `latest` em projetos causa builds que funcionam hoje e quebram amanhã. Em ambientes reprodutíveis, *fixe uma versão* (`postgres:16-alpine`) e, quando necessário, um *digest* (hash imutável). Atualize de forma deliberada e teste.",
+          "content": "A tag *latest* é apenas uma tag padrão (usada quando você não informa nenhuma). Ela **não significa \"a mais recente e estável\"** e pode mudar a qualquer momento.\n\nUsar `latest` em projetos causa builds que funcionam hoje e quebram amanhã. Em ambientes reprodutíveis, *fixe uma versão* (`postgres:16-alpine`) e, quando necessário, um *digest* (hash imutável). Atualize de forma deliberada e teste.\n\nA tag `latest` não significa “mais estável” nem “mais segura”: é apenas a tag padrão quando nenhuma é especificada e seu conteúdo pode mudar. Em produção, fixe uma versão como `postgres:16-alpine`; para máxima reprodutibilidade, fixe também o digest. Atualize a base deliberadamente e rode os testes.",
           "order": 10,
           "isPublic": true
         },
         {
           "title": "Imagens Alpine",
           "type": "article",
-          "content": "A imagem base *Alpine Linux* é minúscula (poucos MB) e por isso muito popular (`node:22-alpine`, `nginx:alpine`). Porém ela usa a biblioteca *musl* em vez da glibc, o que pode causar incompatibilidades com alguns binários e pacotes nativos.\n\nTamanho menor não é o único critério: suporte, segurança e compatibilidade também importam. Outras opções são as variantes *slim* (Debian enxuto) e imagens *distroless*.",
+          "content": "A imagem base *Alpine Linux* é minúscula (poucos MB) e por isso muito popular (`node:22-alpine`, `nginx:alpine`). Porém ela usa a biblioteca *musl* em vez da glibc, o que pode causar incompatibilidades com alguns binários e pacotes nativos.\n\nTamanho menor não é o único critério: suporte, segurança e compatibilidade também importam. Outras opções são as variantes *slim* (Debian enxuto) e imagens *distroless*.\n\nCompare variantes comuns de Node: `node:22` é mais completa e traz mais ferramentas; `node:22-slim` usa uma base Debian reduzida e costuma equilibrar tamanho e compatibilidade; `node:22-alpine` é menor, mas usa musl e pode expor incompatibilidades com módulos nativos que esperam glibc. Escolha com base em teste e manutenção, não apenas no tamanho.",
           "order": 11,
           "isPublic": true
         },
@@ -662,7 +671,7 @@
         {
           "title": "Estrutura de um Dockerfile",
           "type": "article",
-          "content": "A estrutura típica de uma aplicação Node.js segue esta ordem lógica:\n\n1) `FROM` escolhe a base. 2) `WORKDIR` define a pasta de trabalho. 3) `COPY` dos arquivos de dependências. 4) `RUN` instala as dependências. 5) `COPY` do restante do código. 6) `EXPOSE` documenta a porta. 7) `CMD` define o comando de inicialização.\n\nEssa ordem não é aleatória: coloca o que muda *pouco* (dependências) antes do que muda *muito* (código), para aproveitar o cache.",
+          "content": "A estrutura típica de uma aplicação Node.js segue esta ordem lógica:\n\n1) `FROM` escolhe a base. 2) `WORKDIR` define a pasta de trabalho. 3) `COPY` dos arquivos de dependências. 4) `RUN` instala as dependências. 5) `COPY` do restante do código. 6) `EXPOSE` documenta a porta. 7) `CMD` define o comando de inicialização.\n\nEssa ordem não é aleatória: coloca o que muda *pouco* (dependências) antes do que muda *muito* (código), para aproveitar o cache.\n\nA diferença entre `RUN` e `CMD` é temporal: `RUN` executa durante o build e pode criar uma camada; `CMD` define o comando padrão executado quando o container inicia. Uma ordem com bom cache costuma copiar `package*.json`, instalar dependências e só então copiar o código, por exemplo `COPY package*.json ./`, `RUN npm install --omit=dev`, `COPY . .`. Assim, mudanças frequentes no código não obrigam a reinstalar dependências.",
           "order": 3,
           "isPublic": true
         },
@@ -798,7 +807,7 @@
         {
           "title": "Por que não devemos copiar todos os arquivos?",
           "type": "article",
-          "content": "O comando `COPY . .` copia *tudo* do contexto. Sem controle, isso leva para a imagem:\n\nA pasta `node_modules` do seu computador (compilada para outro sistema e enorme). O histórico `.git` (pesado e com informações do projeto). Arquivos `.env` com senhas. Logs, builds antigos e arquivos temporários.\n\nO resultado: imagem maior, build mais lento, cache invalidado à toa e **segredos vazando**.",
+          "content": "O comando `COPY . .` copia *tudo* do contexto. Sem controle, isso leva para a imagem:\n\nA pasta `node_modules` do seu computador (compilada para outro sistema e enorme). O histórico `.git` (pesado e com informações do projeto). Arquivos `.env` com senhas. Logs, builds antigos e arquivos temporários.\n\nO resultado: imagem maior, build mais lento, cache invalidado à toa e **segredos vazando**.\n\nO build context é a pasta enviada ao daemon (o `.` final de `docker build`); `COPY` só alcança arquivos dentro dele e não excluídos pelo `.dockerignore`. Um `.env` copiado para uma camada continua recuperável na imagem mesmo se uma instrução posterior executar `RUN rm .env`: remover o arquivo em uma camada nova não apaga o conteúdo da camada anterior. Revise o ignore ao criar novas pastas e exclua, conforme o projeto, `node_modules`, `.git`, `.env`, `.env.*`, `dist`, `*.log` e `.vscode`.",
           "order": 3,
           "isPublic": true
         },
@@ -927,7 +936,7 @@
         {
           "title": "Exemplo prático: front-end Angular com Nginx",
           "type": "article",
-          "content": "Um caso muito comum para quem trabalha com Angular: a etapa `build` usa Node para gerar os arquivos estáticos; a etapa final usa Nginx para servi-los.\n\nA imagem final tem cerca de dezenas de MB (Nginx + arquivos estáticos) em vez de mais de 1 GB (Node + node_modules). Veja o Dockerfile na próxima aula.\n\nNota: a pasta de saída do Angular muda conforme a versão e o nome do projeto (ex.: `dist/meu-app/browser`). Ajuste o caminho do COPY para o seu projeto.",
+          "content": "Um caso muito comum para quem trabalha com Angular: a etapa `build` usa Node para gerar os arquivos estáticos; a etapa final usa Nginx para servi-los.\n\nA imagem final tem cerca de dezenas de MB (Nginx + arquivos estáticos) em vez de mais de 1 GB (Node + node_modules). Veja o Dockerfile na próxima aula.\n\nNota: a pasta de saída do Angular muda conforme a versão e o nome do projeto (ex.: `dist/meu-app/browser`). Ajuste o caminho do COPY para o seu projeto.\n\nEm um exemplo de front-end, a etapa de build com Node e dependências pode ultrapassar 1 GB, enquanto a imagem final com Nginx e arquivos estáticos pode ficar na ordem de dezenas de MB. O valor real depende do projeto e das dependências: meça com `docker images`. Ajuste o caminho de `COPY --from=build` à pasta efetivamente produzida pelo seu projeto.",
           "order": 6,
           "isPublic": true
         },
@@ -1129,7 +1138,7 @@
         {
           "title": "Rede Bridge",
           "type": "article",
-          "content": "A *bridge* é o driver padrão para containers em um único host. Existem dois tipos: a bridge padrão (chamada `bridge`) e as *redes bridge definidas pelo usuário*.\n\nA diferença importante: **somente nas redes criadas por você existe resolução de nomes (DNS)**. Na bridge padrão, os containers só se acham por IP. Por isso, sempre crie uma rede própria para sua aplicação.",
+          "content": "A *bridge* é o driver padrão para containers em um único host. Existem dois tipos: a bridge padrão (chamada `bridge`) e as *redes bridge definidas pelo usuário*.\n\nA diferença importante: **somente nas redes criadas por você existe resolução de nomes (DNS)**. Na bridge padrão, os containers só se acham por IP. Por isso, sempre crie uma rede própria para sua aplicação.\n\nPara a comunicação por nome mostrada neste curso, use uma rede bridge criada para a aplicação (o Compose também cria uma rede própria). O DNS interno de nomes é disponibilizado nessas redes definidas pelo usuário; containers em redes diferentes ficam isolados até serem conectados à rede apropriada. Não configure IP fixo para dependências: use o nome estável do container/serviço.",
           "order": 3,
           "isPublic": true
         },
@@ -1251,7 +1260,7 @@
         {
           "title": "Secrets: o que não é seguro",
           "type": "article",
-          "content": "**Variáveis de ambiente não são um cofre.** Elas aparecem em `docker inspect`, podem vazar em logs de erro e são herdadas por processos filhos. Para ambientes de estudo e desenvolvimento, é aceitável; em produção, prefira mecanismos dedicados.\n\nO que **nunca** fazer: colocar segredos em `ENV` ou `ARG` no Dockerfile, copiar `.env` para a imagem, ou commitar credenciais no Git. Se um segredo vazou, ele deve ser *trocado* (rotacionado), não apenas apagado.",
+          "content": "**Variáveis de ambiente não são um cofre.** Elas aparecem em `docker inspect`, podem vazar em logs de erro e são herdadas por processos filhos. Para ambientes de estudo e desenvolvimento, é aceitável; em produção, prefira mecanismos dedicados.\n\nO que **nunca** fazer: colocar segredos em `ENV` ou `ARG` no Dockerfile, copiar `.env` para a imagem, ou commitar credenciais no Git. Se um segredo vazou, ele deve ser *trocado* (rotacionado), não apenas apagado.\n\nO valor de variáveis pode ser inspecionado com `docker inspect`, então `ARG` e `ENV` não são cofres de segredos. Mantenha `.env` tanto no `.gitignore` quanto no `.dockerignore`, versione somente `.env.example` com valores fictícios e injete segredos em runtime por um mecanismo de secrets adequado ao ambiente. Se uma credencial vazar, revogue-a e **rotacione-a**; apagar o arquivo do diretório atual não invalida uma cópia já enviada a uma imagem ou ao Git.",
           "order": 5,
           "isPublic": true
         },
@@ -1387,7 +1396,7 @@
         {
           "title": "depends_on",
           "type": "article",
-          "content": "*depends_on* define a **ordem de inicialização**: o serviço `api` só é criado depois de `db`. Mas atenção: por padrão isso só espera o container *iniciar*, e não que o banco esteja *pronto* para aceitar conexões.\n\nPara esperar de verdade, combine com `healthcheck` no banco e `condition: service_healthy` na dependência (veja o próximo capítulo). A aplicação também deve tolerar demoras com *retry*.",
+          "content": "*depends_on* define a **ordem de inicialização**: o serviço `api` só é criado depois de `db`. Mas atenção: por padrão isso só espera o container *iniciar*, e não que o banco esteja *pronto* para aceitar conexões.\n\nPara esperar de verdade, combine com `healthcheck` no banco e `condition: service_healthy` na dependência (veja o próximo capítulo). A aplicação também deve tolerar demoras com *retry*.\n\nO `depends_on` simples ordena a inicialização, mas não prova que a aplicação dependente já está pronta para atender conexões. Para um banco, configure um `healthcheck` e condicione a API a `condition: service_healthy`. Em uma topologia API + PostgreSQL, o banco pode ficar apenas na rede interna, sem publicar sua porta para o host. `docker compose down` preserva volumes nomeados; **`docker compose down -v` remove os volumes e os dados persistidos**.",
           "order": 12,
           "isPublic": true
         },
@@ -1617,7 +1626,7 @@
         {
           "title": "Nome de repositório e tags",
           "type": "article",
-          "content": "Para publicar no Docker Hub, o nome da imagem precisa ter o formato `seu-usuario/repositorio:tag`, por exemplo `maiawall/api-tarefas:1.0.0`.\n\nUma boa estratégia de tags: versão completa (`1.0.0`), versão menor (`1.0`) e, se desejar, `latest` apontando para a versão estável atual. Prefira o *versionamento semântico* e **nunca reutilize uma tag de versão** para conteúdos diferentes.",
+          "content": "Para publicar no Docker Hub, o nome da imagem precisa ter o formato `seu-usuario/repositorio:tag`, por exemplo `maiawall/api-tarefas:1.0.0`.\n\nUma boa estratégia de tags: versão completa (`1.0.0`), versão menor (`1.0`) e, se desejar, `latest` apontando para a versão estável atual. Prefira o *versionamento semântico* e **nunca reutilize uma tag de versão** para conteúdos diferentes.\n\nO fluxo de ponta a ponta é: construir (`docker build`), versionar (`docker tag`), autenticar (`docker login` com token), enviar (`docker push`) e usar no servidor (`docker pull`). Uma versão completa como `1.0.0`, uma tag menor como `1.0` e `latest` podem apontar para o mesmo artefato; nunca reutilize uma tag de versão para conteúdo diferente. Antes de tornar um repositório público, inspecione a imagem em busca de segredos e código proprietário.",
           "order": 2,
           "isPublic": true
         },
@@ -1680,7 +1689,7 @@
         {
           "title": "Automatizando com CI/CD (visão geral)",
           "type": "article",
-          "content": "O ideal é não publicar manualmente. Um pipeline (por exemplo, GitHub Actions) deve, a cada push ou tag no Git: 1) construir a imagem; 2) rodar os testes; 3) escanear vulnerabilidades; 4) publicar no registry com a tag da versão.\n\nO login usa secrets do repositório (`DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN`). A plataforma oferece actions oficiais para login, build e push. Em seguida, o deploy é uma *promoção controlada* da imagem já validada.",
+          "content": "O ideal é não publicar manualmente. Um pipeline (por exemplo, GitHub Actions) deve, a cada push ou tag no Git: 1) construir a imagem; 2) rodar os testes; 3) escanear vulnerabilidades; 4) publicar no registry com a tag da versão.\n\nO login usa secrets do repositório (`DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN`). A plataforma oferece actions oficiais para login, build e push. Em seguida, o deploy é uma *promoção controlada* da imagem já validada.\n\nUm pipeline deve fazer build, testes, scan de vulnerabilidades e push com uma tag imutável; credenciais de registry entram como secrets do CI, nunca no Git. Depois, faça deploy promovendo a mesma imagem já validada, em vez de reconstruí-la para cada ambiente. Isso mantém o artefato testado igual ao que chega ao servidor.",
           "order": 11,
           "isPublic": true
         }
@@ -1812,7 +1821,7 @@
         {
           "title": "Um método de diagnóstico",
           "type": "article",
-          "content": "Diante de um problema, siga sempre a mesma ordem: 1) *O container está rodando?* (`docker ps -a`). 2) *O que os logs dizem?* (`docker logs`). 3) *A configuração é a esperada?* (`docker inspect`). 4) *Consigo entrar e testar por dentro?* (`docker exec`). 5) *A rede e as portas estão corretas?*\n\nA maioria dos problemas se resolve nos dois primeiros passos, então crie o hábito de olhar o log antes de qualquer outra coisa.",
+          "content": "Diante de um problema, siga sempre a mesma ordem: 1) *O container está rodando?* (`docker ps -a`). 2) *O que os logs dizem?* (`docker logs`). 3) *A configuração é a esperada?* (`docker inspect`). 4) *Consigo entrar e testar por dentro?* (`docker exec`). 5) *A rede e as portas estão corretas?*\n\nA maioria dos problemas se resolve nos dois primeiros passos, então crie o hábito de olhar o log antes de qualquer outra coisa.\n\nPara erros clássicos, associe sintoma e próximo passo: `ECONNREFUSED 127.0.0.1:5432` costuma indicar que o host do banco foi configurado como localhost (dentro do container ele próprio); `port is already allocated` pede escolher outra porta no host; `permission denied` ao gravar em volume costuma indicar dono/UID incompatível. Códigos de saída úteis: 0 terminou normalmente, 1 erro da aplicação, 137 kill ou encerramento por memória e 139 falha de segmentação.",
           "order": 1,
           "isPublic": true
         },
@@ -1948,7 +1957,7 @@
         {
           "title": "Segurança em containers",
           "type": "article",
-          "content": "Checklist mínimo: rodar como *usuário não-root* (`USER`); não usar `--privileged` sem necessidade; publicar somente as portas necessárias e, sempre que possível, em `127.0.0.1`; montar volumes como somente leitura (`:ro`) quando cabível; limitar memória e CPU; manter imagens atualizadas e escanear vulnerabilidades (`docker scout` ou ferramentas de CI); nunca expor o socket do Docker (`/var/run/docker.sock`) a containers não confiáveis.",
+          "content": "Checklist mínimo: rodar como *usuário não-root* (`USER`); não usar `--privileged` sem necessidade; publicar somente as portas necessárias e, sempre que possível, em `127.0.0.1`; montar volumes como somente leitura (`:ro`) quando cabível; limitar memória e CPU; manter imagens atualizadas e escanear vulnerabilidades (`docker scout` ou ferramentas de CI); nunca expor o socket do Docker (`/var/run/docker.sock`) a containers não confiáveis.\n\nChecklist de execução segura: rode como usuário não-root (`USER`); evite `--privileged`; publique só as portas necessárias e prefira `127.0.0.1` quando o serviço for apenas local; use volumes `:ro` quando couber; limite `--memory` e `--cpus`; nunca exponha o socket `/var/run/docker.sock` a containers não confiáveis; mantenha e escaneie imagens (por exemplo, com Docker Scout).",
           "order": 7,
           "isPublic": true
         },
@@ -1997,7 +2006,7 @@
         {
           "title": "Próximos passos para estudar Docker",
           "type": "article",
-          "content": "Sugestão de trilha depois deste curso: 1) containerizar seus próprios projetos (API Spring Boot, front-end Angular, backend Node); 2) publicar imagens em um registry e automatizar com GitHub Actions; 3) praticar multi-stage e segurança (`docker scout`); 4) subir a aplicação em um serviço de nuvem; 5) estudar Kubernetes e infraestrutura como código (Terraform).\n\nA melhor forma de fixar é praticar: containerize um projeto real e documente o processo no README.",
+          "content": "Sugestão de trilha depois deste curso: 1) containerizar seus próprios projetos (API Spring Boot, front-end Angular, backend Node); 2) publicar imagens em um registry e automatizar com GitHub Actions; 3) praticar multi-stage e segurança (`docker scout`); 4) subir a aplicação em um serviço de nuvem; 5) estudar Kubernetes e infraestrutura como código (Terraform).\n\nA melhor forma de fixar é praticar: containerize um projeto real e documente o processo no README.\n\nUma sequência possível: containerize projetos próprios em Spring Boot, Angular ou Node; publique no registry e automatize com GitHub Actions; pratique multi-stage e segurança; experimente um serviço de nuvem; depois estude Kubernetes e Terraform. A melhor forma de fixar é containerizar um projeto real e documentar os comandos, variáveis, testes e recuperação de dados no README. A apresentação agradece à comunidade do TechnoMonte, à FACOM e à UFU.",
           "order": 14,
           "isPublic": true
         }

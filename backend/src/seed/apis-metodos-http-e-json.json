@@ -2,8 +2,8 @@
   "slug": "apis-metodos-http-e-json",
   "bannerUrl": "/assets/banners/ufu.api.webp",
   "title": "APIs, Métodos HTTP e JSON",
-  "shortDescription": "Aprenda, em duas horas, a ler e construir requisições HTTP: URLs, métodos, headers, JSON, status codes e DevTools.",
-  "description": "Um minicurso introdutório, visual e prático sobre a comunicação entre aplicações Web. A trilha parte do modelo cliente-servidor, desmonta uma requisição e uma resposta HTTP, relaciona métodos ao CRUD, explica URLs, parâmetros, headers, autenticação, JSON, CORS e códigos de status. Ao final, você analisa chamadas reais no DevTools e implementa consultas simples com fetch, entendendo cada parte do contrato de uma API.",
+  "shortDescription": "Aprenda como aplicações conversam por HTTP: servidores, APIs, URLs, métodos, JSON, status codes e ferramentas de diagnóstico, com práticas em APIs públicas.",
+  "description": "Um minicurso introdutório, visual e prático sobre a comunicação entre aplicações Web. Parte das camadas de um produto (front-end, back-end e banco de dados), passa por servidores e protocolos, desmonta mensagens HTTP, URLs, endpoints e métodos CRUD, compara JSON e XML e apresenta REST, autenticação, CORS, cookies e códigos de status. Ao final, você explora JSONPlaceholder e ViaCEP, usa DevTools, Postman ou Thunder Client e implementa consultas simples com fetch.",
   "category": "backend",
   "level": "iniciante",
   "durationMinutes": 120,
@@ -19,7 +19,14 @@
     "Reconhecer o papel do HTTPS, do CORS e dos tokens sem expor credenciais",
     "Diagnosticar respostas 2xx, 3xx, 4xx e 5xx",
     "Observar requisições no DevTools e relacionar a interface com o tráfego de rede",
-    "Consumir uma API com fetch e documentar o contrato mínimo da chamada"
+    "Consumir uma API com fetch e documentar o contrato mínimo da chamada",
+    "Explicar como front-end, back-end, banco de dados e servidor web se relacionam em uma aplicação",
+    "Reconhecer responsabilidades e exemplos de tecnologias de backend, servidores e bancos SQL/NoSQL",
+    "Diferenciar HTTP/HTTPS de WebSocket, WebHook e outros protocolos comuns",
+    "Identificar domínio, hospedagem, subdomínio, DNS e a ativação de HTTPS",
+    "Comparar JSON e XML e usar APIs públicas para observar path params, query params e respostas",
+    "Comparar Local Storage, Session Storage e cookies e aplicar boas práticas básicas para credenciais",
+    "Explorar APIs com DevTools, Postman ou Thunder Client e definir próximos passos de estudo"
   ],
   "requirements": [
     "Navegador atualizado com DevTools (Chrome, Firefox ou Edge)",
@@ -35,7 +42,13 @@
     "JSON, bodies e serialização",
     "Headers, autenticação e CORS",
     "Status codes e diagnóstico de erros",
-    "REST, DevTools e prática com fetch"
+    "REST, DevTools e prática com fetch",
+    "Camadas de desenvolvimento Web, servidores e responsabilidades do backend",
+    "HTTP/HTTPS, portas padrão, WebSocket, WebHook e outros protocolos",
+    "Domínios, hospedagem, subdomínios e registros DNS",
+    "JSON versus XML e prática com JSONPlaceholder e ViaCEP",
+    "Postman, Thunder Client, DevTools, storage e cookies",
+    "Próximos passos: construção de APIs, segurança, documentação, testes e deploy"
   ],
   "outcomes": [
     "Descrever uma chamada HTTP usando método, URL, headers, body e status code",
@@ -44,7 +57,11 @@
     "Enviar e receber JSON com o Content-Type adequado",
     "Distinguir erro de validação, autenticação, autorização, rota inexistente e falha de servidor",
     "Investigar uma integração quebrada pela aba Network antes de alterar o código",
-    "Construir um pequeno cliente JavaScript para consultar e cadastrar dados em uma API"
+    "Construir um pequeno cliente JavaScript para consultar e cadastrar dados em uma API",
+    "Explicar onde entram servidor web, backend e banco de dados no caminho de uma chamada",
+    "Identificar a diferença entre polling, WebSocket e WebHook e reconhecer outros protocolos",
+    "Usar Postman ou Thunder Client para enviar uma chamada e conferir status, tempo e resposta",
+    "Escolher entre Local Storage, Session Storage e cookies sem armazenar senhas ou dados sensíveis"
   ],
   "published": true,
   "chapters": [
@@ -57,10 +74,17 @@
       "requiresLogin": false,
       "lessons": [
         {
+          "title": "Boas-vindas: sobre o curso e seu ponto de partida",
+          "type": "article",
+          "content": "<p>Este material acompanha a apresentação <strong>APIs, Métodos HTTP e JSON</strong>, realizada no TechnoMonte 2026, em Monte Carmelo-MG. O instrutor, Wallace Candido Maia Sousa, é desenvolvedor full stack na MaiaWall, formado em Sistemas de Informação (BSI) pela UFU e atua em projetos pessoais e para clientes. Sua stack inclui Angular, Spring Boot, Node.js, NestJS, AWS e Firebase.</p>\n<p>A pergunta que guia o curso é: <strong>como front-end e back-end conversam?</strong> A meta é entender como uma ação do usuário pode chegar a um dado salvo, sem exigir conhecimento prévio de APIs.</p>\n<h3>Faça um diagnóstico rápido</h3>\n<ol>\n<li>Você já programa? Em qual linguagem?</li>\n<li>Já criou um site, sistema ou aplicativo?</li>\n<li>Já usou uma API sem perceber, por exemplo em clima, mapas ou login com Google?</li>\n</ol>\n<p>Observe também quais termos você já ouviu: HTTP, API, JSON, URL, REST, Postman, fetch/Axios, DevTools, cookies, status code, CORS e WebHook. Se todos forem novos, tudo bem: começamos do zero.</p>",
+          "order": 1,
+          "isPublic": true
+        },
+        {
           "title": "O que acontece quando você abre uma URL?",
           "type": "article",
           "content": "<p>Quando você digita uma URL e pressiona Enter, o navegador não recebe uma página por mágica. Ele descobre o endereço do servidor, abre uma conexão e envia uma <strong>requisição</strong>. O servidor processa essa mensagem e devolve uma <strong>resposta</strong>.</p>\n                    <p>Em uma aplicação moderna, a resposta inicial pode carregar HTML, CSS e JavaScript. Depois, o JavaScript faz novas requisições para buscar dados, autenticar o usuário ou salvar uma ação. É nesse segundo fluxo que as APIs aparecem com mais frequência.</p>\n                    <ol>\n                      <li>• O cliente identifica o destino da URL.</li>\n                      <li>• O cliente envia uma requisição HTTP.</li>\n                      <li>• O servidor valida, processa e, se necessário, consulta outros serviços.</li>\n                      <li>• O servidor devolve uma resposta com status, headers e conteúdo.</li>\n                      <li>• O cliente interpreta a resposta e atualiza a tela.</li>\n                    </ol>\n                    <p>O ponto central é separar <strong>transporte</strong> de <strong>regra de negócio</strong>: *HTTP define como as mensagens viajam*; a API define o contrato que a aplicação oferece.</p>",
-          "order": 1,
+          "order": 2,
           "isPublic": true,
           "image": {
             "url": "/assets/courses/api/apis-metodos-http-e-json--fundamentos-da-comunicacao-web.webp",
@@ -80,15 +104,22 @@
         {
           "title": "Cliente, servidor, API e recurso",
           "type": "article",
-          "content": "<p><strong>Cliente</strong> é quem inicia uma requisição. Pode ser um navegador, um aplicativo mobile, um script ou outro backend. <strong>Servidor</strong> é o processo que recebe a mensagem e produz uma resposta.</p>\n                    <p><strong>API</strong> significa Application Programming Interface. Neste minicurso, usamos o termo para indicar uma interface documentada que permite solicitar dados ou executar operações. Ela pode ser publicada por um backend, por um serviço de terceiros ou por uma plataforma interna.</p>\n                    <p><strong>Recurso</strong> é a entidade que a API expõe. Em uma API de biblioteca, livros e autores podem ser recursos. Em uma API de cursos, cursos e capítulos podem ser recursos. *A URL identifica o recurso e o método HTTP descreve a intenção sobre ele*.</p>\n                    <blockquote><strong>Regra prática:</strong> pense em “qual recurso quero alcançar?” antes de pensar em “qual tela estou implementando?”. A tela é uma preocupação do cliente; o recurso faz parte do contrato da API.</blockquote>",
-          "order": 2,
+          "content": "<p><strong>Cliente</strong> é quem inicia uma requisição. Pode ser um navegador, um aplicativo mobile, um script ou outro backend. <strong>Servidor</strong> é o processo que recebe a mensagem e produz uma resposta.</p>\n                    <p><strong>API</strong> significa Application Programming Interface. Neste minicurso, usamos o termo para indicar uma interface documentada que permite solicitar dados ou executar operações. Ela pode ser publicada por um backend, por um serviço de terceiros ou por uma plataforma interna.</p>\n                    <p><strong>Recurso</strong> é a entidade que a API expõe. Em uma API de biblioteca, livros e autores podem ser recursos. Em uma API de cursos, cursos e capítulos podem ser recursos. *A URL identifica o recurso e o método HTTP descreve a intenção sobre ele*.</p>\n                    <blockquote><strong>Regra prática:</strong> pense em “qual recurso quero alcançar?” antes de pensar em “qual tela estou implementando?”. A tela é uma preocupação do cliente; o recurso faz parte do contrato da API.</blockquote>\n<p>Imagine um site, um app mobile e outro serviço consumindo a mesma API. Ela pode consultar um banco de dados ou conversar com serviços de pagamento, e-mail e APIs de terceiros, como o ViaCEP. Quem consome a API precisa conhecer o contrato documentado — não a implementação interna do backend.</p>",
+          "order": 3,
           "isPublic": true
         },
         {
           "title": "Request e response: o contrato em ação",
           "type": "code",
           "content": "<p>Uma comunicação HTTP sempre deve ser lida em dois sentidos. A <strong>request</strong> leva a intenção do cliente. A <strong>response</strong> informa o resultado do processamento.</p>\n                    <pre><code>REQUEST\nGET /api/courses/42 HTTP/1.1\nHost: api.exemplo.com\nAccept: application/json\n\n\nRESPONSE\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n  \"id\": 42,\n  \"title\": \"APIs e HTTP\"\n}</code></pre>\n                    <p>Observe a correspondência: o cliente pede o curso <code>42</code>, declara que prefere JSON e recebe um status <code>200</code> com um objeto JSON. Se algo der errado, a resposta deve comunicar a causa por meio de outro status e, idealmente, de uma mensagem de erro útil.</p>",
-          "order": 3,
+          "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Camadas da Web, servidores e responsabilidades do backend",
+          "type": "article",
+          "content": "<p>Um produto Web conecta partes com funções diferentes. O <strong>front-end</strong> é o que a pessoa vê e toca; costuma usar HTML, CSS e JavaScript, com frameworks como Angular ou React. O <strong>back-end</strong> roda no servidor, aplica regras de negócio e expõe APIs. O <strong>banco de dados</strong> guarda informações: PostgreSQL e MySQL são exemplos relacionais (SQL), enquanto MongoDB e Firebase aparecem em soluções NoSQL.</p>\n<p>Essas camadas conversam por HTTP e a API define o ponto de encontro. O cliente pode ser navegador, aplicativo ou script; o servidor recebe a requisição e encaminha o trabalho para a aplicação.</p>\n<h3>O que é um servidor Web?</h3>\n<p>É um programa que fica escutando em uma porta, recebe requisições e devolve respostas. Por exemplo, um navegador pode chamar uma aplicação Spring Boot ou Node.js por meio de um servidor escutando na porta 8080.</p>\n<ul>\n<li><strong>Apache Tomcat:</strong> executa aplicações Java baseadas em Servlets e vem embutido em muitos projetos Spring Boot.</li>\n<li><strong>Nginx:</strong> pode servir arquivos estáticos e atuar como proxy reverso.</li>\n<li><strong>Node.js + Express:</strong> permite criar um servidor HTTP com JavaScript.</li>\n</ul>\n<h3>O que o backend engloba?</h3>\n<p>Além de expor endpoints, o backend valida entradas, executa regras de negócio, autentica e autoriza pessoas, acessa bancos de dados e integra serviços externos, como pagamento e e-mail. Exemplos de stacks incluem Java/Spring Boot, Node.js/Express, NestJS com TypeScript, Python/FastAPI, C#/.NET, PHP/Laravel e Go. A tecnologia muda; o papel de receber, processar e responder continua.</p>",
+          "order": 5,
           "isPublic": true
         }
       ]
@@ -104,7 +135,7 @@
         {
           "title": "HTTP, HTTPS e comunicação sem estado",
           "type": "article",
-          "content": "<p><strong>HTTP</strong> é um protocolo de aplicação baseado em mensagens de requisição e resposta. Ele não exige que o servidor mantenha memória da requisição anterior para entender a próxima; por isso, dizemos que *cada requisição é independente por padrão*.</p>\n                    <p><strong>HTTPS</strong> é HTTP transportado por uma conexão protegida por TLS. O TLS ajuda a preservar a confidencialidade, a integridade e a autenticidade do servidor durante o transporte. **HTTPS não corrige uma regra de negócio ruim** nem valida os dados sozinho, mas reduz o risco de alguém ler ou alterar a mensagem no caminho.</p>\n                    <p>Como o HTTP é stateless, aplicações usam mecanismos explícitos para manter contexto, como cookies, sessões ou tokens. Um token enviado no header <code>Authorization</code> **não transforma HTTP em stateful**; ele apenas fornece àquela requisição as credenciais necessárias.</p>",
+          "content": "<p><strong>HTTP</strong> é um protocolo de aplicação baseado em mensagens de requisição e resposta. Ele não exige que o servidor mantenha memória da requisição anterior para entender a próxima; por isso, dizemos que *cada requisição é independente por padrão*.</p>\n                    <p><strong>HTTPS</strong> é HTTP transportado por uma conexão protegida por TLS. O TLS ajuda a preservar a confidencialidade, a integridade e a autenticidade do servidor durante o transporte. **HTTPS não corrige uma regra de negócio ruim** nem valida os dados sozinho, mas reduz o risco de alguém ler ou alterar a mensagem no caminho.</p>\n                    <p>Como o HTTP é stateless, aplicações usam mecanismos explícitos para manter contexto, como cookies, sessões ou tokens. Um token enviado no header <code>Authorization</code> **não transforma HTTP em stateful**; ele apenas fornece àquela requisição as credenciais necessárias.</p>\n<p>As portas padrão são <strong>80 para HTTP</strong> e <strong>443 para HTTPS</strong>; servidores podem usar outras portas, como 8080. HTTP se tornou tão difundido por ter um modelo simples e padronizado, com mensagens legíveis como texto nas versões HTTP/1.x, funcionar em navegadores e dispositivos diferentes e conviver bem com cache, proxies e firewalls.</p>\n<p>Nem toda comunicação precisa ser uma sequência de requisições HTTP curtas. <strong>WebSocket</strong> mantém uma conexão persistente e bidirecional, usando <code>ws://</code> ou <code>wss://</code>, para que cliente e servidor enviem mensagens a qualquer momento; é comum em chat, jogos e cotações em tempo real. Um <strong>WebHook</strong> é uma chamada HTTP que um serviço dispara quando ocorre um evento — por exemplo, confirmação de pagamento ou aviso de push do GitHub — e evita consultar repetidamente por polling.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -142,6 +173,13 @@
           "content": "<p>Ao analisar uma chamada, faça sempre as mesmas perguntas. Esse roteiro *reduz a chance de confundir um problema de frontend com um problema de API*.</p>\n                    <ol>\n                      <li>• <strong>Intenção:</strong> qual método foi usado?</li>\n                      <li>• <strong>Destino:</strong> a URL aponta para o host, rota e recurso esperados?</li>\n                      <li>• <strong>Formato:</strong> os headers e o body combinam?</li>\n                      <li>• <strong>Identidade:</strong> a requisição leva as credenciais exigidas?</li>\n                      <li>• <strong>Resultado:</strong> o status corresponde ao que ocorreu?</li>\n                      <li>• <strong>Dados:</strong> o JSON retornado tem o formato que o cliente espera?</li>\n                    </ol>\n                    <p>Essa sequência é útil tanto para estudar quanto para depurar. Em vez de dizer apenas “a API não funcionou”, descreva qual componente do contrato está divergente.</p>",
           "order": 4,
           "isPublic": true
+        },
+        {
+          "title": "Além do HTTP: outros protocolos que você encontrará",
+          "type": "article",
+          "content": "<p>HTTP é central na Web, mas não é o único protocolo usado entre sistemas. Cada um atende a padrões de comunicação diferentes:</p>\n<ul>\n<li><strong>FTP / SFTP:</strong> transferência de arquivos; SFTP protege a conexão.</li>\n<li><strong>SMTP:</strong> envio de e-mail.</li>\n<li><strong>MQTT:</strong> troca leve de mensagens, comum em dispositivos e cenários de IoT.</li>\n<li><strong>gRPC:</strong> comunicação eficiente entre serviços, frequentemente em sistemas distribuídos.</li>\n<li><strong>WebSocket:</strong> canal persistente nos dois sentidos; <strong>WebHook:</strong> notificação HTTP disparada por evento.</li>\n</ul>\n<p>Escolha o mecanismo de acordo com o problema: polling pergunta repetidamente se algo mudou; um WebHook avisa quando há evento; um WebSocket é útil quando os dois lados precisam conversar continuamente.</p>",
+          "order": 5,
+          "isPublic": true
         }
       ]
     },
@@ -156,7 +194,7 @@
         {
           "title": "Anatomia de uma URL",
           "type": "article",
-          "content": "<p>Uma URL é um identificador de localização. Em APIs, ela combina o endereço do servidor com o caminho do recurso e, opcionalmente, parâmetros de consulta.</p>\n                    <p>Considere <code>https://api.exemplo.com:8080/users/42?active=true</code>. O protocolo é <code>https</code>. O host é <code>api.exemplo.com</code>. A porta é <code>8080</code>. O path é <code>/users/42</code>. A query string é <code>active=true</code>.</p>\n                    <p>O fragmento, como <code>#details</code>, é usado pelo cliente para navegar em uma representação e *não faz parte da requisição HTTP enviada ao servidor*. Essa diferença é importante quando você tenta localizar um valor no DevTools.</p>",
+          "content": "<p>Uma URL é um identificador de localização. Em APIs, ela combina o endereço do servidor com o caminho do recurso e, opcionalmente, parâmetros de consulta.</p>\n                    <p>Considere <code>https://api.exemplo.com:8080/users/42?active=true</code>. O protocolo é <code>https</code>. O host é <code>api.exemplo.com</code>. A porta é <code>8080</code>. O path é <code>/users/42</code>. A query string é <code>active=true</code>.</p>\n                    <p>O fragmento, como <code>#details</code>, é usado pelo cliente para navegar em uma representação e *não faz parte da requisição HTTP enviada ao servidor*. Essa diferença é importante quando você tenta localizar um valor no DevTools.</p>\n<p>Na URL <code>https://api.exemplo.com:8080/users/42?ativo=true#topo</code>, o protocolo é <code>https</code>, o host é <code>api.exemplo.com</code>, a porta é <code>8080</code>, o path é <code>/users/42</code>, a query é <code>ativo=true</code> e o fragmento é <code>#topo</code>. O DNS traduz o domínio para o endereço IP do servidor. Sem uma porta explícita, usam-se normalmente 80 em HTTP e 443 em HTTPS.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -169,14 +207,14 @@
         {
           "title": "Endpoints e rotas",
           "type": "article",
-          "content": "<p>Uma <strong>rota</strong> é a regra implementada no servidor que combina método e caminho. Um <strong>endpoint</strong> é o ponto de acesso que o cliente utiliza, também entendido como *a combinação de método, URL e contrato*.</p>\n                    <pre><code>GET    /api/users       # coleção de usuários\nGET    /api/users/42    # usuário específico\nPOST   /api/users       # cria um usuário\nPATCH  /api/users/42    # altera parte do usuário</code></pre>\n                    <p>*O mesmo path pode representar comportamentos diferentes conforme o método*. Por isso, dizer apenas “a rota <code>/users</code>” pode ser insuficiente; registre também o verbo HTTP e o formato esperado.</p>",
+          "content": "<p>Uma <strong>rota</strong> é a regra implementada no servidor que combina método e caminho. Um <strong>endpoint</strong> é o ponto de acesso que o cliente utiliza, também entendido como *a combinação de método, URL e contrato*.</p>\n                    <pre><code>GET    /api/users       # coleção de usuários\nGET    /api/users/42    # usuário específico\nPOST   /api/users       # cria um usuário\nPATCH  /api/users/42    # altera parte do usuário</code></pre>\n                    <p>*O mesmo path pode representar comportamentos diferentes conforme o método*. Por isso, dizer apenas “a rota <code>/users</code>” pode ser insuficiente; registre também o verbo HTTP e o formato esperado.</p>\n<p>Uma forma prática de memorizar é: <strong>endpoint = método HTTP + URL de um recurso</strong>. A rota é a regra do servidor que combina método e caminho; o endpoint é como o cliente enxerga o acesso. O mesmo caminho pode aceitar ações diferentes conforme o método.</p>\n<p>Em Spring Boot, por exemplo, uma rota pode buscar o usuário identificado pelo parâmetro de caminho:</p>\n<pre><code class=\"language-java\">@GetMapping(\"/api/users/{id}\")\nUser buscar(@PathVariable Long id) {\n    return service.find(id);\n}</code></pre>",
           "order": 2,
           "isPublic": true
         },
         {
           "title": "Path parameters e query parameters",
           "type": "code",
-          "content": "<p>Use <strong>path parameters</strong> para *identificar qual recurso está sendo acessado*. Use <strong>query parameters</strong> para filtros, busca, ordenação, paginação ou outras opções da consulta.</p>\n                    <pre><code>GET /api/users/42\n# path parameter: id = 42\n\nGET /api/users?role=student&page=2&limit=20\n# query parameters: role, page e limit</code></pre>\n                    <p>O primeiro endereço aponta para um item específico. O segundo continua apontando para a coleção, mas pede uma visão filtrada e paginada. Essa separação deixa o contrato mais legível e evita criar uma rota diferente para cada combinação de filtro.</p>",
+          "content": "<p>Use <strong>path parameters</strong> para *identificar qual recurso está sendo acessado*. Use <strong>query parameters</strong> para filtros, busca, ordenação, paginação ou outras opções da consulta.</p>\n                    <pre><code>GET /api/users/42\n# path parameter: id = 42\n\nGET /api/users?role=student&page=2&limit=20\n# query parameters: role, page e limit</code></pre>\n                    <p>O primeiro endereço aponta para um item específico. O segundo continua apontando para a coleção, mas pede uma visão filtrada e paginada. Essa separação deixa o contrato mais legível e evita criar uma rota diferente para cada combinação de filtro.</p>\n<p>Compare estes exemplos públicos do JSONPlaceholder:</p>\n<pre><code class=\"language-http\">GET https://jsonplaceholder.typicode.com/posts/1\nGET https://jsonplaceholder.typicode.com/posts?userId=1</code></pre>\n<p>No primeiro, <code>1</code> está no path e identifica um post. No segundo, <code>userId=1</code> vem depois de <code>?</code> e filtra a coleção. Path params dizem <strong>qual recurso</strong>; query params refinam a consulta com filtro, busca, ordenação ou paginação.</p>",
           "order": 3,
           "isPublic": true
         },
@@ -185,6 +223,20 @@
           "type": "article",
           "content": "<p>*Valores enviados na URL precisam ser codificados*. Espaços, acentos, barras e caracteres reservados podem mudar o significado do endereço. No JavaScript, <code>encodeURIComponent</code> ajuda a codificar um valor usado como parâmetro.</p>\n                    <pre><code>const term = encodeURIComponent('api e métodos HTTP');\nconst url = `/api/courses?search=${term}`;</code></pre>\n                    <p>Prefira nomes de recursos no plural, consistentes e independentes da tela: <code>/users</code>, <code>/courses</code> e <code>/courses/42/lessons</code>. *Evite transformar ações comuns em verbos na URL* quando o método HTTP já comunica a intenção.</p>",
           "order": 4,
+          "isPublic": true
+        },
+        {
+          "title": "Domínio, hospedagem e subdomínios",
+          "type": "article",
+          "content": "<p><strong>Domínio</strong> é o nome registrado para um site, normalmente renovado por período (em geral, anual). <strong>Hospedagem</strong> é a infraestrutura que mantém a aplicação disponível e responde às requisições; pode ser uma VPS, AWS ou Vercel. Um <strong>subdomínio</strong>, como <code>api.exemplo.com.br</code>, separa serviços e pode apontar para outro servidor.</p>\n<p>O DNS direciona o nome ao destino usando registros como <code>A</code> (endereço IPv4) ou <code>CNAME</code> (alias para outro nome). Um fluxo comum é: registrar o domínio, contratar a hospedagem, apontar o DNS, ativar HTTPS e configurar subdomínios conforme necessário.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
+          "title": "Prática guiada: JSONPlaceholder e ViaCEP",
+          "type": "article",
+          "content": "<p>Faça as chamadas no navegador e observe como caminho, parâmetros, representação e resposta mudam.</p>\n<ol>\n<li>Abra <code>https://jsonplaceholder.typicode.com/posts/1</code> e depois <code>https://jsonplaceholder.typicode.com/posts?userId=1</code>. Compare o path param com o filtro na query.</li>\n<li>Abra <code>https://viacep.com.br/ws/01001000/json/</code>. A resposta inclui CEP, logradouro, bairro, localidade e UF; por exemplo, o CEP <code>01001-000</code> corresponde à Praça da Sé, no bairro Sé, em São Paulo-SP.</li>\n<li>Troque o CEP pelo da sua rua: o valor que mudou no caminho é um parâmetro de path.</li>\n<li>Troque <code>json</code> por <code>xml</code>: o recurso consultado é o mesmo, mas a representação muda.</li>\n<li>Teste um CEP inválido, como <code>123</code>, e compare status e corpo da resposta.</li>\n</ol>\n<p>Para ver a chamada acontecer, abra o DevTools com F12 e acompanhe a aba Network.</p>",
+          "order": 6,
           "isPublic": true
         }
       ]
@@ -200,7 +252,7 @@
         {
           "title": "CRUD: quatro operações para pensar em recursos",
           "type": "article",
-          "content": "<p><strong>CRUD</strong> é uma forma didática de agrupar operações comuns sobre dados: <em>Create</em>, <em>Read</em>, <em>Update</em> e <em>Delete</em>. Ele não é um protocolo; *é um mapa mental*.</p>\n                    <ul>\n                      <li>• <strong>Create:</strong> adicionar um recurso, normalmente com POST.</li>\n                      <li>• <strong>Read:</strong> consultar recursos, normalmente com GET.</li>\n                      <li>• <strong>Update:</strong> alterar um recurso, normalmente com PUT ou PATCH.</li>\n                      <li>• <strong>Delete:</strong> remover um recurso, normalmente com DELETE.</li>\n                    </ul>\n                    <p>*A relação não é uma regra mecânica*. Uma API pode ter operações específicas e métodos adicionais. O importante é comunicar uma semântica previsível para que clientes diferentes possam consumir o mesmo contrato.</p>",
+          "content": "<p><strong>CRUD</strong> é uma forma didática de agrupar operações comuns sobre dados: <em>Create</em>, <em>Read</em>, <em>Update</em> e <em>Delete</em>. Ele não é um protocolo; *é um mapa mental*.</p>\n                    <ul>\n                      <li>• <strong>Create:</strong> adicionar um recurso, normalmente com POST.</li>\n                      <li>• <strong>Read:</strong> consultar recursos, normalmente com GET.</li>\n                      <li>• <strong>Update:</strong> alterar um recurso, normalmente com PUT ou PATCH.</li>\n                      <li>• <strong>Delete:</strong> remover um recurso, normalmente com DELETE.</li>\n                    </ul>\n                    <p>*A relação não é uma regra mecânica*. Uma API pode ter operações específicas e métodos adicionais. O importante é comunicar uma semântica previsível para que clientes diferentes possam consumir o mesmo contrato.</p>\n<p>Um mapeamento comum é <strong>POST</strong> para criar (frequentemente <code>201 Created</code>), <strong>GET</strong> para ler (<code>200 OK</code>), <strong>PUT/PATCH</strong> para atualizar (frequentemente <code>200 OK</code>) e <strong>DELETE</strong> para remover (<code>204 No Content</code> quando não há body). <strong>OPTIONS</strong> informa capacidades e pode responder <code>200 OK</code>; navegadores o usam no preflight do CORS.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -259,7 +311,7 @@
         {
           "title": "O que é JSON?",
           "type": "article",
-          "content": "<p><strong>JSON</strong> *é um formato textual para representar dados estruturados*. Apesar do nome mencionar JavaScript, ele é independente de linguagem e é suportado por praticamente todas as plataformas Web.</p>\n                    <p>Um documento JSON pode conter objetos entre chaves, arrays entre colchetes, strings entre aspas duplas, números, os valores booleanos <code>true</code> e <code>false</code> e o valor <code>null</code>.</p>\n                    <p>JSON não aceita comentários, funções, datas como tipo nativo ou chaves sem aspas. Quando uma API documenta seu contrato em JSON, o cliente precisa respeitar a estrutura e os tipos esperados.</p>",
+          "content": "<p><strong>JSON</strong> *é um formato textual para representar dados estruturados*. Apesar do nome mencionar JavaScript, ele é independente de linguagem e é suportado por praticamente todas as plataformas Web.</p>\n                    <p>Um documento JSON pode conter objetos entre chaves, arrays entre colchetes, strings entre aspas duplas, números, os valores booleanos <code>true</code> e <code>false</code> e o valor <code>null</code>.</p>\n                    <p>JSON não aceita comentários, funções, datas como tipo nativo ou chaves sem aspas. Quando uma API documenta seu contrato em JSON, o cliente precisa respeitar a estrutura e os tipos esperados.</p>\n<p>JSON costuma ser leve e legível, e tem suporte nativo no JavaScript; por isso é dominante na comunicação entre APIs. XML também representa dados estruturados, mas usa tags de abertura e fechamento, ficando mais verboso. XML continua comum em SOAP e em sistemas legados.</p>\n<pre><code class=\"language-json\">{\n  \"id\": 42,\n  \"nome\": \"Ana\",\n  \"ativo\": true,\n  \"tags\": [\"web\", \"api\"]\n}</code></pre>\n<pre><code class=\"language-xml\">&lt;usuario&gt;\n  &lt;id&gt;42&lt;/id&gt;\n  &lt;nome&gt;Ana&lt;/nome&gt;\n  &lt;ativo&gt;true&lt;/ativo&gt;\n  &lt;tags&gt;\n    &lt;tag&gt;web&lt;/tag&gt;\n    &lt;tag&gt;api&lt;/tag&gt;\n  &lt;/tags&gt;\n&lt;/usuario&gt;</code></pre>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -356,6 +408,13 @@
               "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/CORS"
             }
           ]
+        },
+        {
+          "title": "Local Storage, Session Storage e cookies",
+          "type": "article",
+          "content": "<p>O navegador oferece mecanismos de armazenamento com comportamentos diferentes:</p>\n<ul>\n<li><strong>Local Storage:</strong> permanece até ser apagado, tem capacidade em torno de 5 MB, embora o limite varie por navegador e não é enviado automaticamente ao servidor. É apropriado para preferências como tema e idioma.</li>\n<li><strong>Session Storage:</strong> é temporário e normalmente dura até fechar a aba; também não segue automaticamente em cada requisição. Pode servir para dados transitórios de um fluxo.</li>\n<li><strong>Cookies:</strong> têm tamanho menor (em torno de 4 KB por cookie), podem ter data de expiração e são enviados automaticamente ao servidor nas requisições compatíveis. São usados para sessão e login.</li>\n</ul>\n<p><strong>Nunca armazene senhas ou dados sensíveis no storage do navegador.</strong> Para credenciais de sessão, prefira cookies com <code>HttpOnly</code> (JavaScript não lê o valor), <code>Secure</code> (envio apenas por HTTPS) e <code>SameSite</code> (controle de envio em contexto cross-site). Invalide a sessão e limpe os dados apropriados ao sair.</p>",
+          "order": 5,
+          "isPublic": true
         }
       ]
     },
@@ -370,7 +429,7 @@
         {
           "title": "Como ler a classe do status code",
           "type": "article",
-          "content": "<p>O status code é um número de três dígitos. O primeiro dígito indica a família do resultado:</p>\n                    <ul>\n                      <li>• <strong>1xx:</strong> informação e processamento provisório.</li>\n                      <li>• <strong>2xx:</strong> a requisição foi entendida e processada com sucesso.</li>\n                      <li>• <strong>3xx:</strong> o cliente precisa seguir uma instrução de redirecionamento ou reutilizar uma representação.</li>\n                      <li>• <strong>4xx:</strong> há um problema na requisição ou nas condições do cliente.</li>\n                      <li>• <strong>5xx:</strong> o servidor não conseguiu concluir uma requisição aparentemente válida.</li>\n                    </ul>\n                    <p>O status não substitui uma mensagem de erro útil, mas fornece uma primeira classificação rápida. *Sempre combine o código com a URL, os headers, o body e os logs disponíveis*.</p>",
+          "content": "<p>O status code é um número de três dígitos. O primeiro dígito indica a família do resultado:</p>\n                    <ul>\n                      <li>• <strong>1xx:</strong> informação e processamento provisório.</li>\n                      <li>• <strong>2xx:</strong> a requisição foi entendida e processada com sucesso.</li>\n                      <li>• <strong>3xx:</strong> o cliente precisa seguir uma instrução de redirecionamento ou reutilizar uma representação.</li>\n                      <li>• <strong>4xx:</strong> há um problema na requisição ou nas condições do cliente.</li>\n                      <li>• <strong>5xx:</strong> o servidor não conseguiu concluir uma requisição aparentemente válida.</li>\n                    </ul>\n                    <p>O status não substitui uma mensagem de erro útil, mas fornece uma primeira classificação rápida. *Sempre combine o código com a URL, os headers, o body e os logs disponíveis*.</p>\n<p>Alguns exemplos que você deve reconhecer: <code>100 Continue</code> (informação), <code>200</code>, <code>201</code> e <code>204</code> (sucesso), <code>301</code> e <code>302</code> (redirecionamentos) e <code>304 Not Modified</code> (a representação pode ser reutilizada do cache). Entre os erros de cliente estão <code>400</code>, <code>401</code>, <code>403</code>, <code>404</code>, <code>422</code> e <code>429</code>; falhas de servidor comuns incluem <code>500</code>, <code>502</code> e <code>503</code>.</p>\n<p><strong>401</strong> responde “quem é você?” (não autenticado); <strong>403</strong> responde “você não pode” (sem permissão). Consulte também o body: o número classifica o resultado, mas não explica sozinho como corrigir o problema.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -405,7 +464,7 @@
         {
           "title": "Respostas 5xx e contrato de erro",
           "type": "code",
-          "content": "<p>Um status 5xx indica falha no processamento do servidor, em uma dependência ou na infraestrutura. Isso **não autoriza o cliente a repetir infinitamente a chamada**: retries precisam considerar idempotência, limite e backoff.</p>\n                    <pre><code>HTTP/1.1 422 Unprocessable Content\nContent-Type: application/json\n\n{\n  \"error\": {\n    \"code\": \"INVALID_FIELD\",\n    \"message\": \"O email informado não é válido.\",\n    \"field\": \"email\"\n  }\n}</code></pre>\n                    <p>Um contrato de erro consistente simplifica o frontend e os logs. Em produção, **não devolva stack trace, senha, token ou detalhes internos ao usuário**. Registre o diagnóstico completo no servidor e devolva uma mensagem segura e acionável.</p>",
+          "content": "<p>Um status 5xx indica falha no processamento do servidor, em uma dependência ou na infraestrutura. Isso **não autoriza o cliente a repetir infinitamente a chamada**: retries precisam considerar idempotência, limite e backoff.</p>\n                    <pre><code>HTTP/1.1 422 Unprocessable Content\nContent-Type: application/json\n\n{\n  \"error\": {\n    \"code\": \"INVALID_FIELD\",\n    \"message\": \"O email informado não é válido.\",\n    \"field\": \"email\"\n  }\n}</code></pre>\n                    <p>Um contrato de erro consistente simplifica o frontend e os logs. Em produção, **não devolva stack trace, senha, token ou detalhes internos ao usuário**. Registre o diagnóstico completo no servidor e devolva uma mensagem segura e acionável.</p>\n<p>No backend: valide entradas, escolha o status correto, padronize o corpo do erro e nunca exponha stack trace, senha, token ou segredo. No frontend, o Fetch API rejeita a Promise em falhas de rede, mas um status HTTP como 404 ou 500 ainda chega como resposta: confira <code>response.ok</code> antes de ler os dados, mostre uma mensagem útil, peça novo login em 401 e tente novamente em 5xx apenas com limite e intervalo apropriado.</p>",
           "order": 4,
           "isPublic": true
         }
@@ -422,7 +481,7 @@
         {
           "title": "REST e desenho de recursos",
           "type": "article",
-          "content": "<p><strong>REST</strong> é um estilo arquitetural para projetar serviços distribuídos. Uma API RESTful costuma modelar recursos, identificá-los com URLs e usar a semântica dos métodos HTTP para operar sobre suas representações.</p>\n                    <p>*Isso não significa que toda API que usa JSON ou URLs seja automaticamente RESTful*. O valor prático para iniciantes está em buscar contratos previsíveis: recursos bem nomeados, métodos coerentes, status apropriados e respostas que representem o estado atual.</p>\n                    <pre><code>GET  /api/courses\nGET  /api/courses/42\nGET  /api/courses/42/lessons\nPOST /api/courses/42/enrollments</code></pre>\n                    <p>Uma rota orientada a recurso não elimina operações específicas. Quando houver uma ação que não se encaixa naturalmente em CRUD, documente a decisão em vez de esconder a intenção em um GET.</p>",
+          "content": "<p><strong>REST</strong> é um estilo arquitetural para projetar serviços distribuídos. Uma API RESTful costuma modelar recursos, identificá-los com URLs e usar a semântica dos métodos HTTP para operar sobre suas representações.</p>\n                    <p>*Isso não significa que toda API que usa JSON ou URLs seja automaticamente RESTful*. O valor prático para iniciantes está em buscar contratos previsíveis: recursos bem nomeados, métodos coerentes, status apropriados e respostas que representem o estado atual.</p>\n                    <pre><code>GET  /api/courses\nGET  /api/courses/42\nGET  /api/courses/42/lessons\nPOST /api/courses/42/enrollments</code></pre>\n                    <p>Uma rota orientada a recurso não elimina operações específicas. Quando houver uma ação que não se encaixa naturalmente em CRUD, documente a decisão em vez de esconder a intenção em um GET.</p>\n<p>REST é um estilo arquitetural descrito por Roy Fielding em 2000; uma API RESTful procura seguir princípios como cliente-servidor, ausência de estado (stateless), cache, interface uniforme e sistema em camadas. Na prática, nomeie recursos em URLs, use métodos com semântica adequada, responda com status coerentes e documente a representação (muitas APIs usam JSON).</p>\n<p>Compare um desenho orientado a ações com um desenho orientado a recursos:</p>\n<pre><code class=\"language-http\"># Evite\nGET  /getUsers\nPOST /deleteUser?id=3\n\n# Prefira\nGET    /users\nDELETE /users/3</code></pre>\n<p>Usar JSON ou URLs, por si só, não torna uma API RESTful: o conjunto do contrato e das restrições importa.</p>",
           "order": 1,
           "isPublic": true,
           "image": {
@@ -442,7 +501,7 @@
         {
           "title": "Investigando uma chamada na aba Network",
           "type": "article",
-          "content": "<p>Abra o DevTools com <code>F12</code> ou <code>Ctrl+Shift+I</code> e selecione a aba <strong>Network</strong>. Recarregue a página ou execute uma ação para capturar as chamadas.</p>\n                    <ol>\n                      <li>• Filtre por <code>Fetch/XHR</code> para reduzir o ruído.</li>\n                      <li>• Selecione a requisição e confira a Request URL e o método.</li>\n                      <li>• Em <strong>Headers</strong>, compare os headers enviados e recebidos.</li>\n                      <li>• Em <strong>Payload</strong>, confira o body enviado.</li>\n                      <li>• Em <strong>Preview</strong> ou <strong>Response</strong>, leia o JSON de retorno.</li>\n                      <li>• Observe status e tempo antes de concluir que o problema está nos dados.</li>\n                    </ol>\n                    <p>*Se a chamada nem aparece, investigue o código do cliente*. *Se aparece com 404, verifique URL e método. Se aparece com 401, verifique autenticação. Se aparece com 500, preserve a requisição e investigue o servidor*.</p>",
+          "content": "<p>Abra o DevTools com <code>F12</code> ou <code>Ctrl+Shift+I</code> e selecione a aba <strong>Network</strong>. Recarregue a página ou execute uma ação para capturar as chamadas.</p>\n                    <ol>\n                      <li>• Filtre por <code>Fetch/XHR</code> para reduzir o ruído.</li>\n                      <li>• Selecione a requisição e confira a Request URL e o método.</li>\n                      <li>• Em <strong>Headers</strong>, compare os headers enviados e recebidos.</li>\n                      <li>• Em <strong>Payload</strong>, confira o body enviado.</li>\n                      <li>• Em <strong>Preview</strong> ou <strong>Response</strong>, leia o JSON de retorno.</li>\n                      <li>• Observe status e tempo antes de concluir que o problema está nos dados.</li>\n                    </ol>\n                    <p>*Se a chamada nem aparece, investigue o código do cliente*. *Se aparece com 404, verifique URL e método. Se aparece com 401, verifique autenticação. Se aparece com 500, preserve a requisição e investigue o servidor*.</p>\n<p>A aba <strong>Application</strong> ajuda a inspecionar storage e cookies; não a confunda com Network, que mostra o tráfego HTTP. Em Network, filtre Fetch/XHR, recarregue a página ou dispare a ação, abra a chamada e confira Request URL, método, status, headers, Payload, Preview/Response e tempo. Comece pelo status e pela duração antes de concluir que os dados estão errados.</p>",
           "order": 3,
           "isPublic": true,
           "image": {
@@ -468,10 +527,17 @@
           ]
         },
         {
+          "title": "Testando APIs com Postman e Thunder Client",
+          "type": "article",
+          "content": "<p>O <strong>Postman</strong> é um aplicativo completo para trabalhar com APIs; oferece coleções, variáveis de ambiente, testes automatizados e documentação, com versão gratuita. O <strong>Thunder Client</strong> é uma extensão leve do VS Code, com coleções e variáveis, útil para testar sem sair do editor.</p>\n<p>O fluxo básico é igual nas duas ferramentas:</p>\n<ol>\n<li>Escolha o método HTTP.</li>\n<li>Cole a URL do endpoint.</li>\n<li>Preencha Params, Headers e Body conforme o contrato.</li>\n<li>Clique em Send e leia status, tempo e resposta.</li>\n</ol>\n<p>Use valores de exemplo e nunca cole credenciais reais em coleções compartilhadas ou capturas públicas.</p>",
+          "order": 5,
+          "isPublic": true
+        },
+        {
           "title": "Desafio final: descreva a chamada completa",
           "type": "article",
           "content": "<p>Escolha uma API pública ou a API do seu próprio projeto e documente uma operação em uma folha ou no editor. O objetivo é conseguir explicar a chamada sem abrir o código.</p>\n                    <ol>\n                      <li>• Qual é a origem e qual é o endpoint?</li>\n                      <li>• Qual método HTTP representa a intenção?</li>\n                      <li>• Há path parameters ou query parameters?</li>\n                      <li>• Quais headers são necessários?</li>\n                      <li>• Existe body? Qual é o JSON esperado?</li>\n                      <li>• Quais respostas de sucesso e erro podem acontecer?</li>\n                      <li>• Como a chamada aparece na aba Network?</li>\n                    </ol>\n                    <p>Para fechar o minicurso, compare a sua descrição com a requisição observada. Se você consegue apontar cada parte da mensagem, justificar o método e interpretar a resposta, já tem o *modelo mental necessário para ler a documentação de uma API* e começar a integrá-la.</p>",
-          "order": 5,
+          "order": 6,
           "isPublic": true,
           "image": {
             "url": "/assets/courses/api/api-flow.webp",
@@ -479,6 +545,13 @@
             "alt": "Fluxo entre cliente, API e banco de dados",
             "caption": "O cliente conversa com a API; a API aplica regras e acessa os dados necessários."
           }
+        },
+        {
+          "title": "O que estudar agora? Agradecimentos e continuidade",
+          "type": "article",
+          "content": "<p>Este conteúdo foi apresentado no TechnoMonte 2026, em Monte Carmelo-MG. Obrigado à organização e à turma pela participação. Para continuar, avance em etapas:</p>\n<ol>\n<li>Construa uma API com Spring Boot ou Node.js/NestJS.</li>\n<li>Consuma essa API no front-end com Angular ou React.</li>\n<li>Estude autenticação, segurança e deploy.</li>\n</ol>\n<p>Para aprofundar, explore autenticação com JWT e OAuth2; CORS e segurança com referências OWASP; documentação com OpenAPI/Swagger; bancos SQL e NoSQL; testes de API; Docker e deploy; WebSockets e WebHooks; GraphQL e gRPC; e Git/GitHub.</p>\n<p>O objetivo do próximo passo não é decorar nomes: é praticar, observar as requisições e consultar a documentação do protocolo ou da API quando surgir uma dúvida.</p>",
+          "order": 7,
+          "isPublic": true
         }
       ]
     }
